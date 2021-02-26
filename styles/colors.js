@@ -11,6 +11,7 @@ const ButtonColors = {
     floating: '#2196F3',
   },
   floatingAdd: '#0A89A7',
+  entryAdd: '#F36C60',
 };
 
 const ListColors = {

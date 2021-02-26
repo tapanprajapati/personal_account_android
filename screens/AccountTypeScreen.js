@@ -132,6 +132,7 @@ export default class AccountType extends Component {
             name="add"
             type="material"
             reverse
+            onPress={() => this.props.navigation.navigate('AddEntry')}
           />
         </View>
       </View>

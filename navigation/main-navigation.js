@@ -2,9 +2,10 @@ import React from 'react';
 import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import Home from '../screens/HomeScreen/home';
+import Home from '../screens/HomeScreen/HomeScreen';
 import {HeaderColors} from '../styles/colors';
-import AccountType from '../screens/AccountType';
+import AccountType from '../screens/AccountTypeScreen';
+import AddEntry from '../screens/DataEntry/AddScreen';
 
 export default function HomeNavigation() {
   const Stack = createStackNavigator();
@@ -27,6 +28,11 @@ export default function HomeNavigation() {
           name="Home"
           component={Home}
           options={{title: 'Personal Account'}}
+        />
+        <Stack.Screen
+          name="AddEntry"
+          component={AddEntry}
+          options={{title: 'Add Entry'}}
         />
         <Stack.Screen
           name="AccountType"

@@ -39,7 +39,7 @@ export default class Year extends Component {
           }}
         />
         <Text style={styles.footer}>
-          {this.getTotal(this.props.data.months)}
+          $ {this.getTotal(this.props.data.months)}
         </Text>
       </View>
     );
