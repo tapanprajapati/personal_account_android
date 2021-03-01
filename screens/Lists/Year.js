@@ -1,47 +1,91 @@
 import React, {Component} from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {ListColors} from '../../styles/colors';
+import {getMonthName} from '../../utils/converters';
+import EntryDBHandler from '../../databasehandler/entryhandler';
 
 export default class Year extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      months: [],
+      amount: 0,
+    };
+
+    this.entryHandler = new EntryDBHandler();
   }
 
-  getTotal(monthsData) {
-    let total = 0;
-
-    monthsData.forEach((monthData) => {
-      total += monthData.amount;
+  getYearData = () => {
+    this.entryHandler.getMonthsOfYear(this.props.year, null).then((result) => {
+      this.setState({
+        months: result,
+      });
     });
+  };
 
-    return total;
+  addToTotal = (amount) => {
+    let total = this.state.amount;
+    total += amount;
+    this.setState({
+      amount: total,
+    });
+  };
+
+  componentDidMount() {
+    this.getYearData();
   }
-
-  listMonth(monthData) {
+  render() {
     return (
-      <View style={styles.monthContainer}>
-        <Text style={styles.monthText}>{monthData.month}</Text>
-        <Text style={styles.amountText}> $ {monthData.amount}</Text>
+      <View style={styles.container}>
+        <Text style={styles.title}>{this.props.year}</Text>
+        <FlatList
+          style={styles.listOfMonths}
+          keyExtractor={(item, index) => {
+            item.month;
+          }}
+          data={this.state.months}
+          renderItem={({item}) => {
+            return (
+              <Month
+                passTotal={this.addToTotal}
+                month={item}
+                year={this.props.year}
+              />
+            );
+          }}
+        />
+        <Text style={styles.footer}>$ {this.state.amount}</Text>
       </View>
     );
+  }
+}
+
+class Month extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      amount: 0,
+    };
+    this.entryHandler = new EntryDBHandler();
+  }
+
+  componentDidMount() {
+    let date = `${this.props.month}/${this.props.year}`;
+    this.entryHandler.getMonthTotal(date, null).then((total) => {
+      this.setState({
+        amount: total,
+      });
+
+      this.props.passTotal(total);
+    });
   }
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.title}>{this.props.data.year}</Text>
-        <FlatList
-          style={styles.listOfMonths}
-          keyExtractor={(item) => item.month}
-          data={this.props.data.months}
-          renderItem={({item}) => {
-            return this.listMonth(item);
-          }}
-        />
-        <Text style={styles.footer}>
-          $ {this.getTotal(this.props.data.months)}
-        </Text>
-      </View>
+      <TouchableOpacity style={styles.monthContainer}>
+        <Text style={styles.monthText}>{getMonthName(this.props.month)}</Text>
+        <Text style={styles.amountText}> $ {this.state.amount}</Text>
+      </TouchableOpacity>
     );
   }
 }

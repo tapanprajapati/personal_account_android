@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Modal,
+  Alert,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import {Button, Icon} from 'react-native-elements';
@@ -26,6 +27,9 @@ export default class EntryForm extends Component {
       showCategoryModal: false,
       selectedType: this.props.type.toLowerCase(),
       selectedCategoryId: 0,
+      title: '',
+      amount: 0,
+      description: '',
       categories: [],
     };
 
@@ -45,15 +49,19 @@ export default class EntryForm extends Component {
     });
   };
 
-  getCategories = () => {
-    this.categoryHandler
-      .getCategories(this.state.selectedType)
-      .then((result) => {
-        console.log(result);
-        this.setState({
-          categories: result,
-        });
+  getCategories = (type) => {
+    this.categoryHandler.getCategories(type).then((result) => {
+      console.log(result);
+      this.setState({
+        categories: result,
       });
+
+      if (result.length > 0) {
+        this.setState({
+          selectedCategoryId: result[0].id,
+        });
+      }
+    });
   };
 
   setEntryDate = (event, selectedDate) => {
@@ -84,12 +92,59 @@ export default class EntryForm extends Component {
         if (result.success) {
           console.log('Category Added');
         }
-        this.getCategories();
+        this.getCategories(this.state.selectedType);
       });
   };
 
+  submitForm = () => {
+    let title = this.state.title;
+    let description = this.state.description;
+    let amount = this.state.amount;
+    let date = this.state.date.toISOString().slice(0, 10);
+    let type = this.state.selectedType;
+    let categoryId = this.state.selectedCategoryId;
+
+    let error = false;
+    let errorMessage = 'Correct Following';
+
+    if (title == '') {
+      error = true;
+      errorMessage += '\nEnter Valid Title';
+    }
+
+    if (amount == '') {
+      error = true;
+      errorMessage += '\nEnter Valid Amount';
+    }
+
+    if (categoryId == 0) {
+      error = true;
+      errorMessage += '\nEnter Valid Category';
+    }
+
+    if (error) {
+      Alert.alert('ERROR', errorMessage, [
+        {
+          text: 'Close',
+        },
+      ]);
+    } else {
+      let entry = {
+        title: title,
+        description: description,
+        amount: amount,
+        date: date,
+        categoryId: categoryId,
+      };
+
+      console.log(entry);
+
+      this.props.handleFormData(entry);
+    }
+  };
+
   componentDidMount() {
-    this.getCategories();
+    this.getCategories(this.state.selectedType);
   }
 
   render() {
@@ -97,23 +152,30 @@ export default class EntryForm extends Component {
       <ScrollView>
         <View style={styles.container}>
           <View style={styles.inputHolder}>
-            <Text style={styles.inputText}>Title</Text>
+            <Text style={styles.inputText}>Title*</Text>
             <TextInput
-              style={[styles.inputElement, styles.textInput]}></TextInput>
+              style={[styles.inputElement, styles.textInput]}
+              onChangeText={(text) => this.setState({title: text})}></TextInput>
           </View>
 
           <View style={styles.inputHolder}>
             <Text style={styles.inputText}>Description</Text>
             <TextInput
               style={[styles.inputElement, styles.textInput]}
-              multiline={true}></TextInput>
+              multiline={true}
+              onChangeText={(text) =>
+                this.setState({description: text})
+              }></TextInput>
           </View>
 
           <View style={styles.inputHolder}>
-            <Text style={styles.inputText}>Amount</Text>
+            <Text style={styles.inputText}>Amount*</Text>
             <TextInput
               style={[styles.inputElement, styles.textInput]}
-              keyboardType="numeric"></TextInput>
+              keyboardType="numeric"
+              onChangeText={(text) =>
+                this.setState({amount: text})
+              }></TextInput>
           </View>
           <View style={styles.inputHolder}>
             <Text style={styles.inputText}>Date</Text>
@@ -134,7 +196,11 @@ export default class EntryForm extends Component {
             <Picker
               style={[styles.inputElement, styles.dropDown]}
               mode="dropdown"
-              selectedValue={this.props.type.toLowerCase()}>
+              onValueChange={(value, index) => {
+                this.setState({selectedType: value});
+                this.getCategories(value);
+              }}
+              selectedValue={this.state.selectedType}>
               <Picker.Item label="Income" value="income" />
               <Picker.Item label="Expense" value="expense" />
             </Picker>
@@ -146,6 +212,7 @@ export default class EntryForm extends Component {
                 onValueChange={(value, index) => {
                   this.setState({selectedCategoryId: value});
                 }}
+                selectedValue={this.state.selectedCategoryId}
                 style={([styles.inputElement, styles.dropDown], {flex: 7})}
                 mode="dropdown">
                 {this.state.categories.map((item) => {
@@ -179,6 +246,7 @@ export default class EntryForm extends Component {
               title="ADD"
               color={ButtonColors.entryAdd}
               titleStyle={{fontSize: 14}}
+              onPress={this.submitForm}
             />
           </View>
         </View>

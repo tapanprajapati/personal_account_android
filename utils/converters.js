@@ -12,10 +12,14 @@ const months = [
   'December',
 ];
 
-function getMonthName(num) {
+export function getMonthName(num) {
+  num = parseInt(num);
+  if (!num) {
+    return;
+  }
   if (num < 1 || num > 12) {
     console.log(`Invalid month number: ${num}`);
     return;
   }
-  return months[num];
+  return months[num - 1];
 }

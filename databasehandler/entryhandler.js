@@ -9,21 +9,17 @@ export default class EntryDBHandler {
   }
 
   addEntry(entry) {
+    console.log('In handler');
     return new Promise((resolve, reject) => {
+      console.log('Starting transaction');
       this.db.transaction((tx) => {
-        const addSQL = `INSERT INTO ${this.table} (
-                    ${this.columns.title.title},
-                    ${this.columns.description.title},
-                    ${this.columns.amount.title},
-                    ${this.columns.date.title},
-                    ${this.columns.categoryId.title}
-                ) VALUES (?,?,?,?,?)`;
+        const addSQL = `INSERT INTO ${this.table} (${this.columns.title.title},${this.columns.description.title},${this.columns.amount.title},${this.columns.date.title},${this.columns.categoryId.title}) VALUES (?,?,?,?,?)`;
         let data = [
           entry.title,
           entry.description,
           entry.amount,
           entry.date,
-          entry.category.id,
+          entry.categoryId,
         ];
 
         tx.executeSql(
@@ -74,9 +70,9 @@ export default class EntryDBHandler {
   getYears(category) {
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
-        const getSQL = `SELECT strftime('%Y',${this.columns.date.title}) as date from ${this.table} where ${this.columns.categoryId.title}=?`;
+        const getSQL = `SELECT distinct(strftime('%Y',${this.columns.date.title})) as date from ${this.table}`;
 
-        tx.executeSql(getSQL, [category.id], (tnx, result) => {
+        tx.executeSql(getSQL, [], (tnx, result) => {
           let temp = [];
 
           for (let i = 0; i < result.rows.length; i++) {
@@ -92,10 +88,10 @@ export default class EntryDBHandler {
   getMonthsOfYear(year, category) {
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
-        const getSQL = `SELECT strftime('%m/%Y',${this.columns.date.title}) as date FROM ${this.table}
-             where ${this.columns.categoryId.title}=? AND strftime('%Y',${this.columns.date.title})=?`;
+        const getSQL = `SELECT distinct(strftime('%m',${this.columns.date.title})) as date FROM ${this.table}
+             where strftime('%Y',${this.columns.date.title})=?`;
 
-        tx.executeSql(getSQL, [category.id, year], (tnx, result) => {
+        tx.executeSql(getSQL, [year], (tnx, result) => {
           let temp = [];
 
           for (let i = 0; i < result.rows.length; i++) {
@@ -111,10 +107,10 @@ export default class EntryDBHandler {
   getDatesFromMonthAndYear(monthYear, category) {
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
-        const getSQL = `SELECT strftime('%d/%m/%Y',${this.columns.date}) as date FROM ${this.table}
-        where ${this.columns.categoryId.title}=? AND strftime('%m/%Y',${this.columns.date.title})=?`;
+        const getSQL = `SELECT distinct(strftime('%d',${this.columns.date})) as date FROM ${this.table}
+        where strftime('%m/%Y',${this.columns.date.title})=?`;
 
-        tx.executeSql(getSQL, [category.id, monthYear], (tnx, result) => {
+        tx.executeSql(getSQL, [monthYear], (tnx, result) => {
           let temp = [];
 
           for (let i = 0; i < result.rows.length; i++) {
@@ -131,9 +127,9 @@ export default class EntryDBHandler {
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
         const getSQL = `SELECT * FROM ${this.table}
-        where ${this.columns.categoryId.title}=? AND strftime('%d/%m/%Y',${this.columns.date.title})=?`;
+        where strftime('%d/%m/%Y',${this.columns.date.title})=?`;
 
-        tx.executeSql(getSQL, [category.id, date], (tnx, result) => {
+        tx.executeSql(getSQL, [date], (tnx, result) => {
           let temp = [];
 
           for (let i = 0; i < result.rows.length; i++) {
@@ -149,6 +145,26 @@ export default class EntryDBHandler {
 
           resolve(temp);
         });
+      });
+    });
+  }
+
+  getMonthTotal(monthAndYear, category) {
+    return new Promise((resolve, reject) => {
+      this.db.transaction((tx) => {
+        const getSQL = `SELECT sum(${this.columns.amount.title}) as total FROM ${this.table}
+        where strftime('%m/%Y',${this.columns.date.title})=?`;
+
+        tx.executeSql(
+          getSQL,
+          [monthAndYear],
+          (tnx, result) => {
+            resolve(result.rows.item(0).total);
+          },
+          (tnx, error) => {
+            resolve(0);
+          },
+        );
       });
     });
   }
