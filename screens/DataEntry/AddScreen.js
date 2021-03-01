@@ -11,7 +11,7 @@ export default class AddEntry extends Component {
   render() {
     return (
       <View style={global.container}>
-        <EntryForm />
+        <EntryForm type={this.props.route.params.type} />
       </View>
     );
   }

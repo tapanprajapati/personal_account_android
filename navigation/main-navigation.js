@@ -32,7 +32,12 @@ export default function HomeNavigation() {
         <Stack.Screen
           name="AddEntry"
           component={AddEntry}
-          options={{title: 'Add Entry'}}
+          options={{
+            title: 'Add Entry',
+            headerTitleContainerStyle: {
+              left: 45,
+            },
+          }}
         />
         <Stack.Screen
           name="AccountType"

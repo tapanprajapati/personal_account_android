@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Button, Icon} from 'react-native-elements';
+import checkAndCreateDatabase from '../../databasehandler/dbinit';
 import {ButtonColors} from '../../styles/colors';
 import {global} from '../../styles/global';
 import HomeButton from './HomeButton';
@@ -10,6 +11,9 @@ class Home extends Component {
     super(props);
   }
 
+  componentDidMount() {
+    checkAndCreateDatabase();
+  }
   render() {
     return (
       <View style={[global.container, styles.center]}>

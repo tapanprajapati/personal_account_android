@@ -1,9 +1,9 @@
 class Entry {
   constructor() {
-    this.type = '';
-    this.category = '';
+    this.id = 0;
+    this.category = Category();
     this.title = '';
-    this.details = '';
+    this.description = '';
     this.date = '';
     this.amount = 0;
   }
@@ -27,5 +27,13 @@ class MonthData {
   constructor() {
     this.month = '';
     this.amount = 0;
+  }
+}
+
+class Category {
+  constructor() {
+    this.id = 0;
+    this.title = '';
+    this.type = '';
   }
 }

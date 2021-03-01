@@ -11,110 +11,7 @@ export default class AccountType extends Component {
   }
 
   render() {
-    let years = [
-      {
-        year: '2021',
-        months: [
-          {
-            month: 'May',
-            amount: 1000,
-          },
-          {
-            month: 'May',
-            amount: 1000,
-          },
-          {
-            month: 'May',
-            amount: 1000,
-          },
-        ],
-      },
-      {
-        year: '2022',
-        months: [
-          {
-            month: 'May',
-            amount: 1000,
-          },
-          {
-            month: 'May',
-            amount: 1000,
-          },
-          {
-            month: 'May',
-            amount: 1000,
-          },
-        ],
-      },
-      {
-        year: '2023',
-        months: [
-          {
-            month: 'May',
-            amount: 1000,
-          },
-          {
-            month: 'May',
-            amount: 1000,
-          },
-          {
-            month: 'May',
-            amount: 1000,
-          },
-        ],
-      },
-      {
-        year: '2024',
-        months: [
-          {
-            month: 'May',
-            amount: 1000,
-          },
-          {
-            month: 'May',
-            amount: 1000,
-          },
-          {
-            month: 'May',
-            amount: 1000,
-          },
-        ],
-      },
-      {
-        year: '2026',
-        months: [
-          {
-            month: 'May',
-            amount: 1000,
-          },
-          {
-            month: 'May',
-            amount: 1000,
-          },
-          {
-            month: 'May',
-            amount: 1000,
-          },
-        ],
-      },
-      {
-        year: '2025',
-        months: [
-          {
-            month: 'May',
-            amount: 1000,
-          },
-          {
-            month: 'May',
-            amount: 1000,
-          },
-          {
-            month: 'May',
-            amount: 1000,
-          },
-        ],
-      },
-    ];
+    let years = [];
     return (
       <View style={global.container}>
         <FlatList
@@ -132,7 +29,11 @@ export default class AccountType extends Component {
             name="add"
             type="material"
             reverse
-            onPress={() => this.props.navigation.navigate('AddEntry')}
+            onPress={() =>
+              this.props.navigation.navigate('AddEntry', {
+                type: this.props.route.params.type,
+              })
+            }
           />
         </View>
       </View>
