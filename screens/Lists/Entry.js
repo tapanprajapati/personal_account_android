@@ -1,44 +1,48 @@
 import React, {Component} from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
-import {ListColors} from '../../styles/colors';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {ButtonColors, ListColors} from '../../styles/colors';
+import {getMonthName} from '../../utils/converters';
+import EntryDBHandler from '../../databasehandler/entryhandler';
+import {Icon} from 'react-native-elements';
 
-export default class Year extends Component {
+export default class Entry extends Component {
   constructor(props) {
     super(props);
-  }
-
-  getTotal(monthsData) {
-    let total = 0;
-
-    monthsData.forEach((monthData) => {
-      total += monthData.amount;
-    });
-
-    return total;
-  }
-
-  listEntry(entry) {
-    return (
-      <View style={styles.monthContainer}>
-        <Text style={styles.monthText}>{monthData.month}</Text>
-        <Text style={styles.amountText}> $ {monthData.amount}</Text>
-      </View>
-    );
+    this.controlButtonSize = 15;
+    this.entryHandler = new EntryDBHandler();
+    console.log(this.props.entry);
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>{this.props.data.date}</Text>
-        <FlatList
-          style={styles.list}
-          keyExtractor={(item) => item.id}
-          data={}
-          renderItem={({item}) => {}}
-        />
-        <Text style={styles.footer}>
-          $ {this.getTotal(this.props.data.months)}
+        <View style={styles.controlButtonsContainer}>
+          <Icon
+            name="create"
+            type="material"
+            size={this.controlButtonSize}
+            style={styles.controlButton}
+            onPress={() =>
+              this.props.navigation.navigate('UpdateEntry', {
+                entry: this.props.entry,
+              })
+            }
+            color={ButtonColors.entryControl.edit}></Icon>
+          <Icon
+            name="delete"
+            type="material"
+            size={this.controlButtonSize}
+            style={styles.controlButton}
+            color={ButtonColors.entryControl.delete}></Icon>
+        </View>
+        <Text style={styles.categoryText}>
+          {this.props.entry.category.title}
         </Text>
+        <View style={styles.entryContainer}>
+          <Text style={styles.entryText}>{this.props.entry.title}</Text>
+          <Text style={styles.amountText}> $ {this.props.entry.amount}</Text>
+        </View>
+        <Text style={styles.descText}>{this.props.entry.description}</Text>
       </View>
     );
   }
@@ -46,33 +50,14 @@ export default class Year extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 1,
-    elevation: 1,
-    marginBottom: 10,
+    marginBottom: 4,
   },
-  title: {
-    textAlign: 'center',
-    color: ListColors.yearList.title,
-    backgroundColor: ListColors.yearList.background,
-    fontSize: 16,
-  },
-  footer: {
-    textAlign: 'center',
-    color: ListColors.yearList.title,
-    backgroundColor: ListColors.yearList.footer,
-    fontSize: 16,
-  },
-  list: {
-    marginHorizontal: 15,
-    marginVertical: 5,
-  },
-  monthContainer: {
+  entryContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    margin: 2,
   },
-  monthText: {
+  entryText: {
     fontSize: 14,
     fontWeight: 'bold',
     flex: 2,
@@ -81,5 +66,23 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     textAlign: 'right',
+  },
+  categoryText: {
+    color: 'grey',
+    fontSize: 10,
+  },
+  descText: {
+    color: 'grey',
+    fontSize: 10,
+  },
+  controlButtonsContainer: {
+    position: 'absolute',
+    top: -2,
+    right: -2,
+    zIndex: 2,
+    flexDirection: 'row',
+  },
+  controlButton: {
+    marginLeft: 2,
   },
 });

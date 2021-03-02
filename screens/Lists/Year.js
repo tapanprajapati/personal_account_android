@@ -50,6 +50,8 @@ export default class Year extends Component {
                 passTotal={this.addToTotal}
                 month={item}
                 year={this.props.year}
+                type={this.props.type}
+                navigation={this.props.navigation}
               />
             );
           }}
@@ -80,9 +82,19 @@ class Month extends Component {
     });
   }
 
+  goToEntryListScreen = () => {
+    this.props.navigation.navigate('EntryList', {
+      type: this.props.type,
+      year: this.props.year,
+      month: this.props.month,
+    });
+  };
+
   render() {
     return (
-      <TouchableOpacity style={styles.monthContainer}>
+      <TouchableOpacity
+        style={styles.monthContainer}
+        onPress={this.goToEntryListScreen}>
         <Text style={styles.monthText}>{getMonthName(this.props.month)}</Text>
         <Text style={styles.amountText}> $ {this.state.amount}</Text>
       </TouchableOpacity>

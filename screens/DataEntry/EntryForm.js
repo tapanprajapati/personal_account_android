@@ -21,18 +21,38 @@ import CategoryDBHandler from '../../databasehandler/categoryhandler';
 export default class EntryForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      showDatePicker: false,
-      date: new Date(),
-      showCategoryModal: false,
-      selectedType: this.props.type.toLowerCase(),
-      selectedCategoryId: 0,
-      title: '',
-      amount: 0,
-      description: '',
-      categories: [],
-    };
+    if (!props.entry) {
+      console.log('In');
+      this.state = {
+        showDatePicker: false,
+        date: new Date(),
+        showCategoryModal: false,
+        selectedType: this.props.type.toLowerCase(),
+        selectedCategoryId: 0,
+        title: '',
+        amount: '',
+        description: '',
+        categories: [],
+      };
+    } else {
+      this.state = {
+        showDatePicker: false,
+        date: new Date(props.entry.date),
+        showCategoryModal: false,
+        selectedType: props.entry.category.type,
+        selectedCategoryId: props.entry.category.id,
+        title: props.entry.title,
+        amount: props.entry.amount.toString(),
+        description: props.entry.description,
+        categories: [],
+      };
+    }
 
+    this.buttonText = 'ADD';
+
+    if (props.entry) {
+      this.buttonText = 'UPDATE';
+    }
     this.entryHandler = new EntryDBHandler();
     this.categoryHandler = new CategoryDBHandler();
   }
@@ -56,7 +76,7 @@ export default class EntryForm extends Component {
         categories: result,
       });
 
-      if (result.length > 0) {
+      if (result.length > 0 && this.state.selectedCategoryId == 0) {
         this.setState({
           selectedCategoryId: result[0].id,
         });
@@ -101,7 +121,6 @@ export default class EntryForm extends Component {
     let description = this.state.description;
     let amount = this.state.amount;
     let date = this.state.date.toISOString().slice(0, 10);
-    let type = this.state.selectedType;
     let categoryId = this.state.selectedCategoryId;
 
     let error = false;
@@ -137,6 +156,10 @@ export default class EntryForm extends Component {
         categoryId: categoryId,
       };
 
+      if (this.props.entry) {
+        entry.id = this.props.entry.id;
+      }
+
       console.log(entry);
 
       this.props.handleFormData(entry);
@@ -154,6 +177,7 @@ export default class EntryForm extends Component {
           <View style={styles.inputHolder}>
             <Text style={styles.inputText}>Title*</Text>
             <TextInput
+              value={this.state.title}
               style={[styles.inputElement, styles.textInput]}
               onChangeText={(text) => this.setState({title: text})}></TextInput>
           </View>
@@ -161,6 +185,7 @@ export default class EntryForm extends Component {
           <View style={styles.inputHolder}>
             <Text style={styles.inputText}>Description</Text>
             <TextInput
+              value={this.state.description}
               style={[styles.inputElement, styles.textInput]}
               multiline={true}
               onChangeText={(text) =>
@@ -171,6 +196,7 @@ export default class EntryForm extends Component {
           <View style={styles.inputHolder}>
             <Text style={styles.inputText}>Amount*</Text>
             <TextInput
+              value={this.state.amount}
               style={[styles.inputElement, styles.textInput]}
               keyboardType="numeric"
               onChangeText={(text) =>
@@ -243,7 +269,7 @@ export default class EntryForm extends Component {
                 marginTop: 10,
               }}
               buttonStyle={styles.button}
-              title="ADD"
+              title={this.buttonText}
               color={ButtonColors.entryAdd}
               titleStyle={{fontSize: 14}}
               onPress={this.submitForm}

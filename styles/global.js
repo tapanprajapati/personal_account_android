@@ -11,6 +11,9 @@ const global = StyleSheet.create({
     bottom: 20,
     right: 20,
   },
+  list: {
+    marginHorizontal: 5,
+  },
 });
 
 export {global};

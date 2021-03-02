@@ -12,6 +12,10 @@ const ButtonColors = {
   },
   floatingAdd: '#0A89A7',
   entryAdd: '#F36C60',
+  entryControl: {
+    edit: '#00E676',
+    delete: '#FF1744',
+  },
 };
 
 const ListColors = {

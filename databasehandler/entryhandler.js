@@ -6,6 +6,7 @@ export default class EntryDBHandler {
     this.db = openDatabase({name: DB.dbname});
     this.table = DB.tables.entries.name;
     this.columns = DB.tables.entries.columns;
+    this.catTable = DB.tables.categories;
   }
 
   addEntry(entry) {
@@ -24,6 +25,49 @@ export default class EntryDBHandler {
 
         tx.executeSql(
           addSQL,
+          data,
+          (tnx, result) => {
+            resolve({
+              success: true,
+              result: result,
+            });
+          },
+          (tnx, error) => {
+            resolve({
+              success: false,
+              result: error,
+            });
+          },
+        );
+      });
+    });
+  }
+
+  updateEntry(entry) {
+    console.log('In update');
+    return new Promise((resolve, reject) => {
+      this.db.transaction((tx) => {
+        const updateSQL = `UPDATE ${this.table} 
+          SET 
+          ${this.columns.title.title}=?,
+          ${this.columns.description.title}=?,
+          ${this.columns.amount.title}=?,
+          ${this.columns.date.title}=?,
+          ${this.columns.categoryId.title}=? 
+          WHERE 
+          ${this.columns.id.title}=?`;
+
+        let data = [
+          entry.title,
+          entry.description,
+          entry.amount,
+          entry.date,
+          entry.categoryId,
+          entry.id,
+        ];
+
+        tx.executeSql(
+          updateSQL,
           data,
           (tnx, result) => {
             resolve({
@@ -107,7 +151,7 @@ export default class EntryDBHandler {
   getDatesFromMonthAndYear(monthYear, category) {
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
-        const getSQL = `SELECT distinct(strftime('%d',${this.columns.date})) as date FROM ${this.table}
+        const getSQL = `SELECT distinct(strftime('%d',${this.columns.date.title})) as date FROM ${this.table}
         where strftime('%m/%Y',${this.columns.date.title})=?`;
 
         tx.executeSql(getSQL, [monthYear], (tnx, result) => {
@@ -126,8 +170,19 @@ export default class EntryDBHandler {
   getEntries(date, category) {
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
-        const getSQL = `SELECT * FROM ${this.table}
-        where strftime('%d/%m/%Y',${this.columns.date.title})=?`;
+        const getSQL = `SELECT 
+          e.${this.columns.id.title} as id,
+          e.${this.columns.categoryId.title} as categoryid,
+          e.${this.columns.title.title} as title,
+          e.${this.columns.description.title} as description,
+          e.${this.columns.amount.title} as amount,
+          e.${this.columns.date.title} as date,
+          c.${this.catTable.columns.title.title} as cTitle,
+          c.${this.catTable.columns.id.title} as cId,
+          c.${this.catTable.columns.type.title} as cType
+        FROM ${this.table} as e, ${this.catTable.name} as c
+        where strftime('%d/%m/%Y',${this.columns.date.title})=?
+        and categoryId=cId`;
 
         tx.executeSql(getSQL, [date], (tnx, result) => {
           let temp = [];
@@ -138,8 +193,12 @@ export default class EntryDBHandler {
               title: result.rows.item(i).title,
               description: result.rows.item(i).description,
               amount: result.rows.item(i).amount,
-              date: date,
-              categoryId: result.rows.item(i).categoryId,
+              date: result.rows.item(i).date,
+              category: {
+                id: result.rows.item(i).cId,
+                title: result.rows.item(i).cTitle,
+                type: result.rows.item(i).cType,
+              },
             });
           }
 

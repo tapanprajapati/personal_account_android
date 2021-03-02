@@ -28,13 +28,20 @@ export default class AccountType extends Component {
     return (
       <View style={global.container}>
         <FlatList
-          style={styles.yearList}
+          style={global.list}
           data={this.state.years}
-          keyExtractor={(item, index) => {
-            item.year;
+          keyExtractor={(item) => {
+            item;
           }}
           renderItem={({item}) => {
-            return <Year key={item} year={item} />;
+            return (
+              <Year
+                type={this.props.route.params.type}
+                key={item}
+                year={item}
+                navigation={this.props.navigation}
+              />
+            );
           }}
         />
         <View style={global.floatingButton}>
@@ -56,8 +63,4 @@ export default class AccountType extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  yearList: {
-    marginHorizontal: 5,
-  },
-});
+const styles = StyleSheet.create({});
