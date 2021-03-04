@@ -23,3 +23,14 @@ export function getMonthName(num) {
   }
   return months[num - 1];
 }
+
+export function getSelectedCategories(categories) {
+  let selectedCats = [];
+  categories.forEach((category) => {
+    if (category.status) {
+      selectedCats.push(category.category.id);
+    }
+  });
+
+  return selectedCats;
+}

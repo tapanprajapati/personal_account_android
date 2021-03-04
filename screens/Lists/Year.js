@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {ListColors} from '../../styles/colors';
-import {getMonthName} from '../../utils/converters';
+import {getMonthName, getSelectedCategories} from '../../utils/converters';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 
 export default class Year extends Component {
@@ -10,17 +10,22 @@ export default class Year extends Component {
     this.state = {
       months: [],
       amount: 0,
+      selectedCats: this.props.categories,
     };
 
     this.entryHandler = new EntryDBHandler();
   }
 
-  getYearData = () => {
-    this.entryHandler.getMonthsOfYear(this.props.year, null).then((result) => {
-      this.setState({
-        months: result,
+  getYearData = (categories) => {
+    this.entryHandler
+      .getMonthsOfYear(this.props.year, categories)
+      .then((result) => {
+        this.setState({
+          months: result,
+        });
+
+        console.log(this.state);
       });
-    });
   };
 
   addToTotal = (amount) => {
@@ -32,7 +37,31 @@ export default class Year extends Component {
   };
 
   componentDidMount() {
-    this.getYearData();
+    this.getYearData(this.props.categories);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    let change = false;
+
+    if (prevProps.categories.length != this.state.selectedCats.length) {
+      change = true;
+    } else {
+      for (let i = 0; i < prevProps.categories.length; i++) {
+        if (prevProps.categories[i] != this.state.selectedCats[i]) {
+          change = true;
+          break;
+        }
+      }
+    }
+
+    if (change) {
+      this.setState({
+        selectedCats: prevProps.categories,
+        amount: 0,
+      });
+
+      this.getYearData(prevProps.categories);
+    }
   }
   render() {
     return (
@@ -40,7 +69,7 @@ export default class Year extends Component {
         <Text style={styles.title}>{this.props.year}</Text>
         <FlatList
           style={styles.listOfMonths}
-          keyExtractor={(item, index) => {
+          keyExtractor={(item) => {
             item.month;
           }}
           data={this.state.months}
@@ -51,6 +80,7 @@ export default class Year extends Component {
                 month={item}
                 year={this.props.year}
                 type={this.props.type}
+                categories={this.state.selectedCats}
                 navigation={this.props.navigation}
               />
             );
@@ -64,22 +94,50 @@ export default class Year extends Component {
 
 class Month extends Component {
   constructor(props) {
+    console.log('Constructor');
     super(props);
     this.state = {
       amount: 0,
+      selectedCats: props.categories,
     };
     this.entryHandler = new EntryDBHandler();
   }
 
-  componentDidMount() {
+  getMonthTotal = (categories) => {
     let date = `${this.props.month}/${this.props.year}`;
-    this.entryHandler.getMonthTotal(date, null).then((total) => {
+    console.log('Month');
+    console.log(this.props.month);
+    this.entryHandler.getMonthTotal(date, categories).then((total) => {
       this.setState({
         amount: total,
       });
-
+      console.log(this.state.amount);
       this.props.passTotal(total);
     });
+  };
+  componentDidMount() {
+    this.getMonthTotal(this.props.categories);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    let change = false;
+    if (prevProps.categories.length != this.state.selectedCats.length) {
+      change = true;
+    } else {
+      for (let i = 0; i < prevProps.categories.length; i++) {
+        if (prevProps.categories[i] != this.state.selectedCats[i]) {
+          change = true;
+          break;
+        }
+      }
+    }
+
+    if (change) {
+      this.getMonthTotal(prevProps.categories);
+      this.setState({
+        selectedCats: prevProps.categories,
+      });
+    }
   }
 
   goToEntryListScreen = () => {

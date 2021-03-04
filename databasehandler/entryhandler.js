@@ -111,10 +111,10 @@ export default class EntryDBHandler {
     });
   }
 
-  getYears(category) {
+  getYears(categories) {
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
-        const getSQL = `SELECT distinct(strftime('%Y',${this.columns.date.title})) as date from ${this.table}`;
+        const getSQL = `SELECT distinct(strftime('%Y',${this.columns.date.title})) as date from ${this.table}  WHERE ${this.columns.categoryId.title} IN (${categories})`;
 
         tx.executeSql(getSQL, [], (tnx, result) => {
           let temp = [];
@@ -122,18 +122,19 @@ export default class EntryDBHandler {
           for (let i = 0; i < result.rows.length; i++) {
             temp.push(result.rows.item(i).date);
           }
-
           resolve(temp);
         });
       });
     });
   }
 
-  getMonthsOfYear(year, category) {
+  getMonthsOfYear(year, categories) {
+    console.log('GEtting months');
+    console.log(categories);
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
         const getSQL = `SELECT distinct(strftime('%m',${this.columns.date.title})) as date FROM ${this.table}
-             where strftime('%Y',${this.columns.date.title})=?`;
+             where strftime('%Y',${this.columns.date.title})=? AND ${this.columns.categoryId.title} IN (${categories})`;
 
         tx.executeSql(getSQL, [year], (tnx, result) => {
           let temp = [];
@@ -148,7 +149,7 @@ export default class EntryDBHandler {
     });
   }
 
-  getDatesFromMonthAndYear(monthYear, category) {
+  getDatesFromMonthAndYear(monthYear, categories) {
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
         const getSQL = `SELECT distinct(strftime('%d',${this.columns.date.title})) as date FROM ${this.table}
@@ -167,7 +168,7 @@ export default class EntryDBHandler {
     });
   }
 
-  getEntries(date, category) {
+  getEntries(date, categories) {
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
         const getSQL = `SELECT 
@@ -182,7 +183,7 @@ export default class EntryDBHandler {
           c.${this.catTable.columns.type.title} as cType
         FROM ${this.table} as e, ${this.catTable.name} as c
         where strftime('%d/%m/%Y',${this.columns.date.title})=?
-        and categoryId=cId`;
+        and categoryid=cId`;
 
         tx.executeSql(getSQL, [date], (tnx, result) => {
           let temp = [];
@@ -208,11 +209,11 @@ export default class EntryDBHandler {
     });
   }
 
-  getMonthTotal(monthAndYear, category) {
+  getMonthTotal(monthAndYear, categories) {
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
         const getSQL = `SELECT sum(${this.columns.amount.title}) as total FROM ${this.table}
-        where strftime('%m/%Y',${this.columns.date.title})=?`;
+        where strftime('%m/%Y',${this.columns.date.title})=? AND ${this.columns.categoryId.title} IN (${categories})`;
 
         tx.executeSql(
           getSQL,

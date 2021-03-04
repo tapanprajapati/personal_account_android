@@ -1,0 +1,118 @@
+import React, {Component} from 'react';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {Icon, Button, CheckBox} from 'react-native-elements';
+import EntryDBHandler from '../databasehandler/entryhandler';
+
+export default class CategoryFilterModal extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      categories: this.props.categories,
+    };
+    this.entryHandler = new EntryDBHandler();
+  }
+
+  changeStatus = (item) => {
+    let tempCategories = this.state.categories;
+    for (let i = 0; i < tempCategories.length; i++) {
+      if (tempCategories[i].category.id == item.category.id) {
+        tempCategories[i].status = !item.status;
+      }
+    }
+
+    this.setState({
+      categories: tempCategories,
+    });
+  };
+
+  saveChanges = () => {
+    this.props.saveChanges(this.state.categories);
+
+    this.props.close();
+  };
+  render() {
+    return (
+      <View style={styles.container}>
+        <Icon
+          onPress={() => this.props.close()}
+          name="close"
+          size={17}
+          type="material"
+          containerStyle={styles.closeIcon}
+        />
+        <Text style={styles.title}>Filter Category</Text>
+        <FlatList
+          data={this.state.categories}
+          keyExtractor={(item) => item.category.id.toString()}
+          style={styles.list}
+          renderItem={({item}) => {
+            return (
+              <CategorySelect
+                category={item.category}
+                status={item.status}
+                handleChecked={() => this.changeStatus(item)}
+              />
+            );
+          }}
+        />
+        <Button
+          titleStyle={{fontSize: 14}}
+          buttonStyle={styles.saveButton}
+          title="SAVE"
+          onPress={this.saveChanges}
+        />
+      </View>
+    );
+  }
+}
+
+class CategorySelect extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <View style={styles.categorySelectContainer}>
+        <CheckBox
+          containerStyle={{margin: 0, padding: 5}}
+          checked={this.props.status}
+          size={15}
+          onPress={this.props.handleChecked}
+        />
+        <Text style={styles.categorySelectText}>
+          {this.props.category.title}
+        </Text>
+      </View>
+    );
+  }
+}
+const styles = StyleSheet.create({
+  container: {
+    margin: 20,
+    padding: 5,
+    backgroundColor: 'white',
+    elevation: 3,
+    borderRadius: 3,
+  },
+  title: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  list: {},
+  categorySelectContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  saveButton: {
+    marginHorizontal: 15,
+    marginVertical: 5,
+    padding: 2,
+  },
+  closeIcon: {
+    position: 'absolute',
+    top: 1,
+    right: 1,
+    zIndex: 2,
+  },
+});
