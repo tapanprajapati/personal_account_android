@@ -3,8 +3,9 @@ import {FlatList, Modal, StyleSheet, Text, View} from 'react-native';
 import {Icon} from 'react-native-elements';
 import CategoryDBHandler from '../databasehandler/categoryhandler';
 import EntryDBHandler from '../databasehandler/entryhandler';
-import {ButtonColors} from '../styles/colors';
+import {ButtonColors, TextBackground} from '../styles/colors';
 import {global} from '../styles/global';
+import {dimensions} from '../utils/constants';
 import {getSelectedCategories} from '../utils/converters';
 import CategoryFilterModal from './CategoryFilterModal';
 import Year from './Lists/Year';
@@ -16,13 +17,13 @@ export default class AccountType extends Component {
       years: [],
       showCategoryModal: false,
       categories: [],
+      total: 0,
     };
     this.entryHandler = new EntryDBHandler();
     this.categoryHandler = new CategoryDBHandler();
   }
 
   getYears = () => {
-    console.log('Get Year Called');
     const categoryString = getSelectedCategories(this.state.categories).join(
       ',',
     );
@@ -30,6 +31,12 @@ export default class AccountType extends Component {
       this.setState({
         years: years,
       });
+    });
+  };
+
+  addToTotal = (amount) => {
+    this.setState({
+      total: this.state.total + amount,
     });
   };
 
@@ -70,26 +77,14 @@ export default class AccountType extends Component {
   saveCategories = (categories) => {
     this.setState({
       categories: categories,
+      total: 0,
     });
     this.getYears();
   };
   render() {
     return (
       <View style={global.container}>
-        <View style={global.list}>
-          {this.state.years.map((year) => {
-            return (
-              <Year
-                type={this.props.route.params.type}
-                key={year}
-                year={year}
-                categories={getSelectedCategories(this.state.categories)}
-                navigation={this.props.navigation}
-              />
-            );
-          })}
-        </View>
-        {/* <FlatList
+        <FlatList
           extraData={this.state.categories}
           style={global.list}
           data={this.state.years}
@@ -102,12 +97,14 @@ export default class AccountType extends Component {
                 type={this.props.route.params.type}
                 key={item}
                 year={item}
-                categories={this.state.categories}
+                categories={getSelectedCategories(this.state.categories)}
                 navigation={this.props.navigation}
+                passTotal={this.addToTotal}
               />
             );
           }}
-        /> */}
+        />
+        <Text style={styles.footer}>Total: $ {this.state.total}</Text>
         <View style={global.floatingButton}>
           <Icon
             raised
@@ -118,6 +115,7 @@ export default class AccountType extends Component {
             onPress={() =>
               this.props.navigation.navigate('AddEntry', {
                 type: this.props.route.params.type,
+                refresh: this.getYears,
               })
             }
           />
@@ -138,4 +136,13 @@ export default class AccountType extends Component {
   }
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  footer: {
+    width: '100%',
+    textAlign: 'center',
+    backgroundColor: TextBackground.footerTotal,
+    color: 'white',
+    fontSize: dimensions.accountType.footerText,
+    fontWeight: 'bold',
+  },
+});

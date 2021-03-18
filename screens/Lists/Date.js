@@ -4,6 +4,7 @@ import {ListColors} from '../../styles/colors';
 import {getMonthName} from '../../utils/converters';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 import Entry from './Entry';
+import {dimensions} from '../../utils/constants';
 
 export default class Date extends Component {
   constructor(props) {
@@ -18,7 +19,7 @@ export default class Date extends Component {
 
   getEntries = () => {
     let date = `${this.props.date}/${this.props.month}/${this.props.year}`;
-    this.entryHandler.getEntries(date, null).then((result) => {
+    this.entryHandler.getEntries(date, this.props.categories).then((result) => {
       this.setState({
         entries: result,
       });
@@ -51,7 +52,13 @@ export default class Date extends Component {
           }}
           data={this.state.entries}
           renderItem={({item}) => {
-            return <Entry navigation={this.props.navigation} entry={item} />;
+            return (
+              <Entry
+                refresh={this.getEntries}
+                navigation={this.props.navigation}
+                entry={item}
+              />
+            );
           }}
         />
         <Text style={styles.footer}>$ {this.state.amount}</Text>
@@ -70,13 +77,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: ListColors.yearList.title,
     backgroundColor: ListColors.yearList.background,
-    fontSize: 16,
+    fontSize: dimensions.date.titleText,
   },
   footer: {
     textAlign: 'center',
     color: ListColors.yearList.title,
     backgroundColor: ListColors.yearList.footer,
-    fontSize: 16,
+    fontSize: dimensions.date.footerText,
   },
   listOfEntries: {
     marginHorizontal: 10,

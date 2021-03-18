@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 import {global} from '../../styles/global';
 import EntryForm from './EntryForm';
@@ -17,6 +17,7 @@ export default class AddEntry extends Component {
       if (result.success) {
         console.log('Entry Added');
         this.props.navigation.goBack();
+        this.props.route.params.refresh();
       } else {
         console.log(result.result);
       }
@@ -24,7 +25,7 @@ export default class AddEntry extends Component {
   };
   render() {
     return (
-      <View style={global.container}>
+      <View style={[global.container, styles.center]}>
         <EntryForm
           handleFormData={this.addEntry}
           type={this.props.route.params.type}
@@ -33,3 +34,9 @@ export default class AddEntry extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  center: {
+    justifyContent: 'space-around',
+  },
+});

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {Icon, Button, CheckBox} from 'react-native-elements';
 import EntryDBHandler from '../databasehandler/entryhandler';
+import {dimensions} from '../utils/constants';
 
 export default class CategoryFilterModal extends Component {
   constructor(props) {
@@ -56,7 +57,7 @@ export default class CategoryFilterModal extends Component {
           }}
         />
         <Button
-          titleStyle={{fontSize: 14}}
+          titleStyle={{fontSize: dimensions.categoryFilter.buttonText}}
           buttonStyle={styles.saveButton}
           title="SAVE"
           onPress={this.saveChanges}
@@ -77,7 +78,7 @@ class CategorySelect extends Component {
         <CheckBox
           containerStyle={{margin: 0, padding: 5}}
           checked={this.props.status}
-          size={15}
+          size={dimensions.categoryFilter.checkBox}
           onPress={this.props.handleChecked}
         />
         <Text style={styles.categorySelectText}>
@@ -98,6 +99,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     fontWeight: 'bold',
+    fontSize: dimensions.categoryFilter.headerText,
   },
   list: {},
   categorySelectContainer: {
@@ -111,8 +113,11 @@ const styles = StyleSheet.create({
   },
   closeIcon: {
     position: 'absolute',
-    top: 1,
-    right: 1,
+    top: 4,
+    right: 4,
     zIndex: 2,
+  },
+  categorySelectText: {
+    fontSize: dimensions.categoryFilter.titleText,
   },
 });

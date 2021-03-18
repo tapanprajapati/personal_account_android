@@ -9,6 +9,7 @@ import AddEntry from '../screens/DataEntry/AddScreen';
 import EntryList from '../screens/EntryListScreen';
 import {getMonthName} from '../utils/converters';
 import UpdateEntry from '../screens/DataEntry/UpdateScreen';
+import RemoteConnection from '../screens/RemoteConnection';
 
 export default function HomeNavigation() {
   const Stack = createStackNavigator();
@@ -19,12 +20,8 @@ export default function HomeNavigation() {
         screenOptions={{
           headerStyle: {
             backgroundColor: HeaderColors.background,
-            height: 35,
           },
           headerTintColor: HeaderColors.titleText,
-          headerTitleStyle: {
-            fontSize: 16,
-          },
         }}
         initialRouteName="Home">
         <Stack.Screen
@@ -57,7 +54,6 @@ export default function HomeNavigation() {
           component={AccountType}
           options={({route}) => ({
             title: route.params.type,
-
             headerTitleContainerStyle: {
               left: 45,
             },
@@ -71,6 +67,18 @@ export default function HomeNavigation() {
             title: `${route.params.type}: ${
               route.params.year
             } -> ${getMonthName(route.params.month)}`,
+
+            headerTitleContainerStyle: {
+              left: 45,
+            },
+          })}
+        />
+
+<Stack.Screen
+          name="RemoteConnection"
+          component={RemoteConnection}
+          options={({route}) => ({
+            title: `Remote Connection`,
 
             headerTitleContainerStyle: {
               left: 45,

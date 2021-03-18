@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Button, Icon} from 'react-native-elements';
 import checkAndCreateDatabase from '../../databasehandler/dbinit';
+import EntryDBHandler from '../../databasehandler/entryhandler';
 import {ButtonColors} from '../../styles/colors';
 import {global} from '../../styles/global';
 import HomeButton from './HomeButton';
@@ -9,10 +10,42 @@ import HomeButton from './HomeButton';
 class Home extends Component {
   constructor(props) {
     super(props);
+    this.entryHandler = new EntryDBHandler();
+    this.state = {
+      expenseTotal: 0,
+      incomeTotal: 0,
+    };
   }
 
+  getTotal = () => {
+    this.entryHandler.getCategoryTotal('income').then((total) => {
+      this.setState({
+        incomeTotal: total,
+      });
+    });
+    this.entryHandler.getCategoryTotal('expense').then((total) => {
+      this.setState({
+        expenseTotal: total,
+      });
+    });
+  };
+
   componentDidMount() {
+    this.props.navigation.setOptions({
+      headerRight: () => (
+        <Icon
+          containerStyle={{marginRight: 10}}
+          name="devices"
+          type="material"
+          color="white"
+          onPress={() => {
+            this.props.navigation.navigate('RemoteConnection');
+          }}
+        />
+      ),
+    });
     checkAndCreateDatabase();
+    this.getTotal();
   }
   render() {
     return (
@@ -21,7 +54,7 @@ class Home extends Component {
           <HomeButton
             color={ButtonColors.homeButton.income}
             title="INCOME"
-            total={50}
+            total={this.state.incomeTotal}
             onPress={() =>
               this.props.navigation.navigate('AccountType', {type: 'Income'})
             }
@@ -29,7 +62,7 @@ class Home extends Component {
           <HomeButton
             color={ButtonColors.homeButton.expense}
             title="EXPENSE"
-            total={50}
+            total={this.state.expenseTotal}
             onPress={() =>
               this.props.navigation.navigate('AccountType', {type: 'Expense'})
             }
@@ -37,7 +70,7 @@ class Home extends Component {
           <HomeButton
             color={ButtonColors.homeButton.difference}
             title="DIFFERENCE"
-            total={50}
+            total={this.state.incomeTotal - this.state.expenseTotal}
           />
         </View>
 

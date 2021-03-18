@@ -3,6 +3,7 @@ import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {ListColors} from '../../styles/colors';
 import {getMonthName, getSelectedCategories} from '../../utils/converters';
 import EntryDBHandler from '../../databasehandler/entryhandler';
+import {dimensions} from '../../utils/constants';
 
 export default class Year extends Component {
   constructor(props) {
@@ -23,8 +24,6 @@ export default class Year extends Component {
         this.setState({
           months: result,
         });
-
-        console.log(this.state);
       });
   };
 
@@ -34,6 +33,8 @@ export default class Year extends Component {
     this.setState({
       amount: total,
     });
+
+    this.props.passTotal(amount);
   };
 
   componentDidMount() {
@@ -70,7 +71,7 @@ export default class Year extends Component {
         <FlatList
           style={styles.listOfMonths}
           keyExtractor={(item) => {
-            item.month;
+            item;
           }}
           data={this.state.months}
           renderItem={({item}) => {
@@ -94,7 +95,6 @@ export default class Year extends Component {
 
 class Month extends Component {
   constructor(props) {
-    console.log('Constructor');
     super(props);
     this.state = {
       amount: 0,
@@ -105,13 +105,10 @@ class Month extends Component {
 
   getMonthTotal = (categories) => {
     let date = `${this.props.month}/${this.props.year}`;
-    console.log('Month');
-    console.log(this.props.month);
     this.entryHandler.getMonthTotal(date, categories).then((total) => {
       this.setState({
         amount: total,
       });
-      console.log(this.state.amount);
       this.props.passTotal(total);
     });
   };
@@ -145,6 +142,7 @@ class Month extends Component {
       type: this.props.type,
       year: this.props.year,
       month: this.props.month,
+      categories: this.state.selectedCats,
     });
   };
 
@@ -170,13 +168,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: ListColors.yearList.title,
     backgroundColor: ListColors.yearList.background,
-    fontSize: 16,
+    fontSize: dimensions.year.titleText,
   },
   footer: {
     textAlign: 'center',
     color: ListColors.yearList.title,
     backgroundColor: ListColors.yearList.footer,
-    fontSize: 16,
+    fontSize: dimensions.year.footerText,
   },
   listOfMonths: {
     marginHorizontal: 15,
@@ -189,13 +187,13 @@ const styles = StyleSheet.create({
     margin: 2,
   },
   monthText: {
-    fontSize: 14,
+    fontSize: dimensions.month.titleText,
     fontWeight: 'bold',
     flex: 2,
   },
   amountText: {
     flex: 1,
-    fontSize: 14,
+    fontSize: dimensions.month.totalText,
     textAlign: 'right',
   },
 });

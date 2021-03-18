@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import {Alert, Button, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Alert, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Button} from 'react-native-elements';
 import {ButtonColors} from '../../styles/colors';
+import {dimensions} from '../../utils/constants';
 
 export default class CategoryForm extends Component {
   constructor(props) {
@@ -46,13 +48,10 @@ export default class CategoryForm extends Component {
         </View>
         <View style={styles.inputHolder}>
           <Button
-            containerStyle={{
-              marginTop: 10,
-            }}
             buttonStyle={styles.button}
             title="ADD"
             color={ButtonColors.entryAdd}
-            titleStyle={{fontSize: 14}}
+            titleStyle={{fontSize: dimensions.categoryModal.buttonFont}}
             onPress={this.addCategory}
           />
         </View>
@@ -72,23 +71,26 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   inputText: {
-    marginBottom: 5,
+    marginBottom: dimensions.categoryModal.textMargin,
+    fontSize: dimensions.categoryModal.titleText,
   },
   inputElement: {},
   inputHolder: {
     flexDirection: 'column',
-    marginBottom: 5,
+    marginBottom: dimensions.categoryModal.buttonMargin,
   },
 
   textInput: {
     borderWidth: 1,
-    paddingVertical: 0,
+    paddingVertical: 5,
+    paddingHorizontal: dimensions.entryForm.input.inputPaddingHorizontal,
     borderColor: '#ccd',
     borderRadius: 4,
+    fontSize: dimensions.entryForm.input.text,
   },
   button: {
-    height: 30,
+    height: 40,
     backgroundColor: ButtonColors.entryAdd,
-    fontSize: 14,
+    fontSize: dimensions.entryForm.input.buttonFont,
   },
 });

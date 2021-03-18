@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {dimensions} from '../../utils/constants';
 
 export default class HomeButton extends Component {
   constructor(props) {
@@ -32,17 +33,17 @@ const styles = StyleSheet.create({
     width: '60%',
     alignSelf: 'center',
     shadowColor: 'grey',
-    padding: 15,
+    padding: dimensions.homeScreen.typeButton.padding,
   },
   cardTitle: {
-    fontSize: 18,
+    fontSize: dimensions.homeScreen.typeButton.titleText,
     fontWeight: 'bold',
     color: 'white',
-    marginBottom: 5,
+    marginBottom: dimensions.homeScreen.typeButton.marginBottom,
     alignSelf: 'center',
   },
   cardSecondaryText: {
-    fontSize: 12,
+    fontSize: dimensions.homeScreen.typeButton.secondaryText,
     color: '#eee',
     alignSelf: 'center',
   },

@@ -18,6 +18,7 @@ export default class UpdateEntry extends Component {
       if (result.success) {
         console.log('Entry Updated');
         this.props.navigation.goBack();
+        this.props.route.params.refresh();
       } else {
         console.log(result.result);
       }

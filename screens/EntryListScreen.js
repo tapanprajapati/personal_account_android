@@ -15,11 +15,13 @@ export default class EntryList extends Component {
 
   getDates = () => {
     let date = `${this.props.route.params.month}/${this.props.route.params.year}`;
-    this.entryHandler.getDatesFromMonthAndYear(date, null).then((dates) => {
-      this.setState({
-        dates: dates,
+    this.entryHandler
+      .getDatesFromMonthAndYear(date, this.props.route.params.categories)
+      .then((dates) => {
+        this.setState({
+          dates: dates,
+        });
       });
-    });
   };
 
   componentDidMount() {
@@ -40,6 +42,7 @@ export default class EntryList extends Component {
                 date={item}
                 month={this.props.route.params.month}
                 year={this.props.route.params.year}
+                categories={this.props.route.params.categories}
               />
             );
           }}></FlatList>

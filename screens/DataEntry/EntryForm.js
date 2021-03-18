@@ -17,6 +17,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import CategoryForm from './CategoryFormModal';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 import CategoryDBHandler from '../../databasehandler/categoryhandler';
+import {dimensions} from '../../utils/constants';
 
 export default class EntryForm extends Component {
   constructor(props) {
@@ -222,6 +223,7 @@ export default class EntryForm extends Component {
             <Picker
               style={[styles.inputElement, styles.dropDown]}
               mode="dropdown"
+              itemStyle={{fontSize: dimensions.entryForm.input.text}}
               onValueChange={(value, index) => {
                 this.setState({selectedType: value});
                 this.getCategories(value);
@@ -271,33 +273,33 @@ export default class EntryForm extends Component {
               buttonStyle={styles.button}
               title={this.buttonText}
               color={ButtonColors.entryAdd}
-              titleStyle={{fontSize: 14}}
+              titleStyle={{fontSize: dimensions.entryForm.input.buttonFont}}
               onPress={this.submitForm}
             />
           </View>
-        </View>
 
-        <Modal
-          visible={this.state.showCategoryModal}
-          transparent={true}
-          animationType="slide"
-          onRequestClose={this.closeCategoryModal}>
-          <View style={styles.categoryModal}>
-            <CategoryForm
-              checkCategory={this.checkCategory}
-              addCategory={this.addCategory}
-              closeModal={this.closeCategoryModal}
+          <Modal
+            visible={this.state.showCategoryModal}
+            transparent={true}
+            animationType="slide"
+            onRequestClose={this.closeCategoryModal}>
+            <View style={styles.categoryModal}>
+              <CategoryForm
+                checkCategory={this.checkCategory}
+                addCategory={this.addCategory}
+                closeModal={this.closeCategoryModal}
+              />
+            </View>
+          </Modal>
+          {this.state.showDatePicker && (
+            <DateTimePicker
+              mode="date"
+              value={this.state.date}
+              display="calendar"
+              onChange={this.setEntryDate}
             />
-          </View>
-        </Modal>
-        {this.state.showDatePicker && (
-          <DateTimePicker
-            mode="date"
-            value={this.state.date}
-            display="calendar"
-            onChange={this.setEntryDate}
-          />
-        )}
+          )}
+        </View>
       </ScrollView>
     );
   }
@@ -307,31 +309,34 @@ const styles = StyleSheet.create({
   container: {
     // height: '100%',
     marginHorizontal: 40,
+    marginTop: 15,
     // justifyContent: 'space-around',
   },
   inputHolder: {
     flexDirection: 'column',
-    marginBottom: 5,
+    marginBottom: dimensions.entryForm.input.margin,
   },
   inputText: {
-    fontSize: 14,
+    fontSize: dimensions.entryForm.input.text,
     color: 'grey',
-    marginBottom: 3,
+    marginBottom: dimensions.entryForm.input.textMargin,
   },
   inputElement: {},
   dropDown: {
-    height: 30,
+    height: dimensions.entryForm.input.dropdownHeight,
   },
   textInput: {
     borderWidth: 1,
-    paddingVertical: 0,
+    paddingVertical: 5,
+    paddingHorizontal: dimensions.entryForm.input.inputPaddingHorizontal,
     borderColor: '#ccd',
     borderRadius: 4,
+    fontSize: dimensions.entryForm.input.text,
   },
   button: {
-    height: 30,
+    height: dimensions.entryForm.input.buttonHeight,
     backgroundColor: ButtonColors.entryAdd,
-    fontSize: 14,
+    fontSize: dimensions.entryForm.input.buttonFont,
   },
   horizontalInputContainer: {
     flexDirection: 'row',

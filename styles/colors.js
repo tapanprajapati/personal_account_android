@@ -26,4 +26,8 @@ const ListColors = {
   },
 };
 
-export {HeaderColors, ButtonColors, ListColors};
+const TextBackground = {
+  footerTotal: '#FF1744',
+};
+
+export {HeaderColors, ButtonColors, ListColors, TextBackground};

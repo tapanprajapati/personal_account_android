@@ -1,17 +1,43 @@
 import React, {Component} from 'react';
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {ButtonColors, ListColors} from '../../styles/colors';
-import {getMonthName} from '../../utils/converters';
+import {Alert, StyleSheet, Text, View} from 'react-native';
+import {ButtonColors} from '../../styles/colors';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 import {Icon} from 'react-native-elements';
+import {dimensions} from '../../utils/constants';
 
 export default class Entry extends Component {
   constructor(props) {
     super(props);
-    this.controlButtonSize = 15;
+    this.controlButtonSize = dimensions.entry.controlButtonSize;
     this.entryHandler = new EntryDBHandler();
-    console.log(this.props.entry);
   }
+
+  confirmAndDelete = () => {
+    let entry = this.props.entry;
+    let message = `Do you want to delete this entry ?\n
+    Title: ${entry.title}
+    Description: ${entry.description}
+    Amount: ${entry.amount}
+    Date: ${entry.date}
+    Category: ${entry.category.title}
+    Type: ${entry.category.type.toUpperCase()}`;
+    Alert.alert('Entry Will Be Delete', message, [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Delete',
+        onPress: () => {
+          this.entryHandler.deleteEntry(entry).then((result) => {
+            if (result.success) {
+              this.props.refresh();
+            }
+          });
+        },
+      },
+    ]);
+  };
 
   render() {
     return (
@@ -21,10 +47,11 @@ export default class Entry extends Component {
             name="create"
             type="material"
             size={this.controlButtonSize}
-            style={styles.controlButton}
+            containerStyle={styles.controlButton}
             onPress={() =>
               this.props.navigation.navigate('UpdateEntry', {
                 entry: this.props.entry,
+                refresh: this.props.refresh,
               })
             }
             color={ButtonColors.entryControl.edit}></Icon>
@@ -32,8 +59,9 @@ export default class Entry extends Component {
             name="delete"
             type="material"
             size={this.controlButtonSize}
-            style={styles.controlButton}
-            color={ButtonColors.entryControl.delete}></Icon>
+            containerStyle={styles.controlButton}
+            color={ButtonColors.entryControl.delete}
+            onPress={this.confirmAndDelete}></Icon>
         </View>
         <Text style={styles.categoryText}>
           {this.props.entry.category.title}
@@ -42,7 +70,9 @@ export default class Entry extends Component {
           <Text style={styles.entryText}>{this.props.entry.title}</Text>
           <Text style={styles.amountText}> $ {this.props.entry.amount}</Text>
         </View>
-        <Text style={styles.descText}>{this.props.entry.description}</Text>
+        {this.props.entry.description != '' && (
+          <Text style={styles.descText}>{this.props.entry.description}</Text>
+        )}
       </View>
     );
   }
@@ -58,31 +88,31 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   entryText: {
-    fontSize: 14,
+    fontSize: dimensions.entry.titleText,
     fontWeight: 'bold',
     flex: 2,
   },
   amountText: {
     flex: 1,
-    fontSize: 14,
+    fontSize: dimensions.entry.amountText,
     textAlign: 'right',
   },
   categoryText: {
     color: 'grey',
-    fontSize: 10,
+    fontSize: dimensions.entry.categoryText,
   },
   descText: {
     color: 'grey',
-    fontSize: 10,
+    fontSize: dimensions.entry.desText,
   },
   controlButtonsContainer: {
     position: 'absolute',
-    top: -2,
+    top: -3,
     right: -2,
     zIndex: 2,
     flexDirection: 'row',
   },
   controlButton: {
-    marginLeft: 2,
+    marginLeft: dimensions.entry.controlButtonMargin,
   },
 });
