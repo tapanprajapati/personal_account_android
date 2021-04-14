@@ -9,7 +9,7 @@ import AddEntry from '../screens/DataEntry/AddScreen';
 import EntryList from '../screens/EntryListScreen';
 import {getMonthName} from '../utils/converters';
 import UpdateEntry from '../screens/DataEntry/UpdateScreen';
-import RemoteConnection from '../screens/RemoteConnection';
+import RemoteConnection from '../screens/RemoteConnection/RemoteConnection';
 
 export default function HomeNavigation() {
   const Stack = createStackNavigator();
@@ -74,7 +74,7 @@ export default function HomeNavigation() {
           })}
         />
 
-<Stack.Screen
+        <Stack.Screen
           name="RemoteConnection"
           component={RemoteConnection}
           options={({route}) => ({

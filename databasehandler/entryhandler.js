@@ -110,11 +110,16 @@ export default class EntryDBHandler {
     });
   }
 
-  getYears(categories) {
+  getYears(categories = '') {
+    console.log('Fetching Years from Database');
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
-        const getSQL = `SELECT distinct(strftime('%Y',${this.columns.date.title})) as date from ${this.table}  WHERE ${this.columns.categoryId.title} IN (${categories})
+        let getSQL = `SELECT distinct(strftime('%Y',${this.columns.date.title})) as date from ${this.table}  WHERE ${this.columns.categoryId.title} IN (${categories})
         order by date`;
+
+        if (categories == '') {
+          getSQL = `SELECT distinct(strftime('%Y',${this.columns.date.title})) as date from ${this.table} order by date`;
+        }
 
         tx.executeSql(getSQL, [], (tnx, result) => {
           let temp = [];
@@ -128,12 +133,17 @@ export default class EntryDBHandler {
     });
   }
 
-  getMonthsOfYear(year, categories) {
+  getMonthsOfYear(year, categories = '') {
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
-        const getSQL = `SELECT distinct(strftime('%m',${this.columns.date.title})) as date FROM ${this.table}
+        let getSQL = `SELECT distinct(strftime('%m',${this.columns.date.title})) as date FROM ${this.table}
              where strftime('%Y',${this.columns.date.title})=? AND ${this.columns.categoryId.title} IN (${categories})
              order by date`;
+
+        if (categories == '') {
+          getSQL = `SELECT distinct(strftime('%m',${this.columns.date.title})) as date FROM ${this.table}
+               where strftime('%Y',${this.columns.date.title})=? order by date`;
+        }
 
         tx.executeSql(getSQL, [year], (tnx, result) => {
           let temp = [];
