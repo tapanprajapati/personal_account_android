@@ -47,9 +47,7 @@ export default class Date extends Component {
         <Text style={styles.title}>{this.props.date}</Text>
         <FlatList
           style={styles.listOfEntries}
-          keyExtractor={(item) => {
-            item.id;
-          }}
+          keyExtractor={(item) => item.id}
           data={this.state.entries}
           renderItem={({item}) => {
             return (

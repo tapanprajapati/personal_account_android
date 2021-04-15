@@ -18,9 +18,7 @@ export default class HomeButton extends Component {
         onPress={this.props.onPress}
         style={[styles.card, customStyle.back]}>
         <Text style={styles.cardTitle}>{this.props.title}</Text>
-        <Text style={styles.cardSecondaryText}>
-          Total: $ {this.props.total}
-        </Text>
+        <Text style={styles.cardSecondaryText}>{this.props.total}</Text>
       </TouchableOpacity>
     );
   }

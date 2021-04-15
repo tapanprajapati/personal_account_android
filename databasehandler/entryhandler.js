@@ -110,16 +110,12 @@ export default class EntryDBHandler {
     });
   }
 
-  getYears(categories = '') {
+  getYears(categories) {
     console.log('Fetching Years from Database');
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
         let getSQL = `SELECT distinct(strftime('%Y',${this.columns.date.title})) as date from ${this.table}  WHERE ${this.columns.categoryId.title} IN (${categories})
         order by date`;
-
-        if (categories == '') {
-          getSQL = `SELECT distinct(strftime('%Y',${this.columns.date.title})) as date from ${this.table} order by date`;
-        }
 
         tx.executeSql(getSQL, [], (tnx, result) => {
           let temp = [];
@@ -133,17 +129,12 @@ export default class EntryDBHandler {
     });
   }
 
-  getMonthsOfYear(year, categories = '') {
+  getMonthsOfYear(year, categories) {
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
         let getSQL = `SELECT distinct(strftime('%m',${this.columns.date.title})) as date FROM ${this.table}
              where strftime('%Y',${this.columns.date.title})=? AND ${this.columns.categoryId.title} IN (${categories})
              order by date`;
-
-        if (categories == '') {
-          getSQL = `SELECT distinct(strftime('%m',${this.columns.date.title})) as date FROM ${this.table}
-               where strftime('%Y',${this.columns.date.title})=? order by date`;
-        }
 
         tx.executeSql(getSQL, [year], (tnx, result) => {
           let temp = [];
@@ -159,6 +150,8 @@ export default class EntryDBHandler {
   }
 
   getDatesFromMonthAndYear(monthYear, categories) {
+    console.log(`Fetching Dates for ${monthYear}`);
+
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
         const getSQL = `SELECT distinct(strftime('%d',${this.columns.date.title})) as date FROM ${this.table}
@@ -179,6 +172,7 @@ export default class EntryDBHandler {
   }
 
   getEntries(date, categories) {
+    console.log('Fetching Entries');
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
         const getSQL = `SELECT 
@@ -196,6 +190,89 @@ export default class EntryDBHandler {
         and categoryid=cId and categoryid IN (${categories}) order by id`;
 
         tx.executeSql(getSQL, [date], (tnx, result) => {
+          let temp = [];
+
+          for (let i = 0; i < result.rows.length; i++) {
+            temp.push({
+              id: result.rows.item(i).id,
+              title: result.rows.item(i).title,
+              description: result.rows.item(i).description,
+              amount: result.rows.item(i).amount,
+              date: result.rows.item(i).date,
+              category: {
+                id: result.rows.item(i).cId,
+                title: result.rows.item(i).cTitle,
+                type: result.rows.item(i).cType,
+              },
+            });
+          }
+
+          resolve(temp);
+        });
+      });
+    });
+  }
+
+  getAllEntries() {
+    console.log('Fetching Entries');
+    return new Promise((resolve, reject) => {
+      this.db.transaction((tx) => {
+        const getSQL = `SELECT 
+          e.${this.columns.id.title} as id,
+          e.${this.columns.categoryId.title} as categoryid,
+          e.${this.columns.title.title} as title,
+          e.${this.columns.description.title} as description,
+          e.${this.columns.amount.title} as amount,
+          e.${this.columns.date.title} as date,
+          c.${this.catTable.columns.title.title} as cTitle,
+          c.${this.catTable.columns.id.title} as cId,
+          c.${this.catTable.columns.type.title} as cType
+        FROM ${this.table} as e, ${this.catTable.name} as c
+        where categoryid=cId order by id`;
+
+        tx.executeSql(getSQL, [], (tnx, result) => {
+          let temp = [];
+
+          for (let i = 0; i < result.rows.length; i++) {
+            temp.push({
+              id: result.rows.item(i).id,
+              title: result.rows.item(i).title,
+              description: result.rows.item(i).description,
+              amount: result.rows.item(i).amount,
+              date: result.rows.item(i).date,
+              category: {
+                id: result.rows.item(i).cId,
+                title: result.rows.item(i).cTitle,
+                type: result.rows.item(i).cType,
+              },
+            });
+          }
+
+          resolve(temp);
+        });
+      });
+    });
+  }
+
+  getRecentEntries() {
+    console.log('Fetching Recent Entries');
+    return new Promise((resolve, reject) => {
+      const limit = 50;
+      this.db.transaction((tx) => {
+        const getSQL = `SELECT 
+          e.${this.columns.id.title} as id,
+          e.${this.columns.categoryId.title} as categoryid,
+          e.${this.columns.title.title} as title,
+          e.${this.columns.description.title} as description,
+          e.${this.columns.amount.title} as amount,
+          e.${this.columns.date.title} as date,
+          c.${this.catTable.columns.title.title} as cTitle,
+          c.${this.catTable.columns.id.title} as cId,
+          c.${this.catTable.columns.type.title} as cType
+        FROM ${this.table} as e, ${this.catTable.name} as c
+        where categoryid=cId order by id limit ${limit}`;
+
+        tx.executeSql(getSQL, [], (tnx, result) => {
           let temp = [];
 
           for (let i = 0; i < result.rows.length; i++) {
@@ -247,12 +324,15 @@ export default class EntryDBHandler {
         FROM ${this.table} as e, ${this.catTable.name} as c
         where e.${this.columns.categoryId.title}=c.${this.catTable.columns.id.title} and c.${this.catTable.columns.type.title} = ?`;
 
-        console.log(getSQL);
+        // console.log(getSQL);
         tx.executeSql(
           getSQL,
           [category],
           (tnx, result) => {
-            resolve(result.rows.item(0).total);
+            let total = result.rows.item(0).total;
+
+            if (total == null) total = 0;
+            resolve(total);
           },
           (tnx, error) => {
             console.log('Error');

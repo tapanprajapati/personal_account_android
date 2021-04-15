@@ -54,7 +54,7 @@ class Home extends Component {
           <HomeButton
             color={ButtonColors.homeButton.income}
             title="INCOME"
-            total={this.state.incomeTotal}
+            total={`Total: $ ${this.state.incomeTotal}`}
             onPress={() =>
               this.props.navigation.navigate('AccountType', {type: 'Income'})
             }
@@ -62,7 +62,7 @@ class Home extends Component {
           <HomeButton
             color={ButtonColors.homeButton.expense}
             title="EXPENSE"
-            total={this.state.expenseTotal}
+            total={`Total: $ ${this.state.expenseTotal}`}
             onPress={() =>
               this.props.navigation.navigate('AccountType', {type: 'Expense'})
             }
@@ -70,7 +70,16 @@ class Home extends Component {
           <HomeButton
             color={ButtonColors.homeButton.difference}
             title="DIFFERENCE"
-            total={this.state.incomeTotal - this.state.expenseTotal}
+            total={`Total: $ ${
+              this.state.incomeTotal - this.state.expenseTotal
+            }`}
+          />
+
+          <HomeButton
+            color={ButtonColors.homeButton.recent}
+            title="RECENT"
+            total="50 Entries"
+            onPress={() => this.props.navigation.navigate('RecentEntries')}
           />
         </View>
 
@@ -98,7 +107,7 @@ const styles = StyleSheet.create({
     backgroundColor: ButtonColors.homeButton.floating,
   },
   buttonContainer: {
-    height: '60%',
+    height: '80%',
     flexDirection: 'column',
     justifyContent: 'space-around',
     alignItems: 'center',

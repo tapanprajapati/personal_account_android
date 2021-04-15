@@ -27,22 +27,22 @@ export default class RemoteConnection extends Component {
   startServer = () => {
     console.log('Starting Listing Remote Server');
     console.log(this.state.remoteURL);
-    const refreshFreq = 4;
-    // intervalid = setInterval(this.listen, 1000 / refreshFreq);
-    // this.setState({
-    //   intervalID: intervalid,
-    // });
-    this.listen();
+    const refreshFreq = 3;
+    let intervalid = setInterval(this.listen, 1000 / refreshFreq);
+    this.setState({
+      intervalID: intervalid,
+    });
+    // this.listen();
   };
 
   componentWillUnmount() {
     console.log('Clearing Interval');
-    // clearInterval(this.state.intervalID);
+    clearInterval(this.state.intervalID);
   }
 
   listen = () => {
     let getURL = `${this.state.remoteURL}/api/request`;
-    console.log(getURL);
+    // console.log(getURL);
     axios
       .get(getURL)
       .then((result) => {
@@ -58,9 +58,12 @@ export default class RemoteConnection extends Component {
         if (request == 'year') {
           console.log('Requesting Year');
           this.sendYear(result.data);
-        } else if (request == 'categories') {
+        } else if (request == 'category') {
           console.log('Requesting Categories');
           this.sendCategories(result.data);
+        } else if (request == 'entry') {
+          console.log('Requesting Entries');
+          this.sendEntries(result.data);
         }
 
         this.setState({lastRequest: result.data});
@@ -73,11 +76,14 @@ export default class RemoteConnection extends Component {
   sendYear = (request) => {
     let yearsList = [];
     this.entryHandler
-      .getYears()
+      .getYears(request.categories)
       .then((years) => {
+        if (years.length == 0) {
+          this.sendData(request, []);
+        }
         years.forEach((year) => {
           this.entryHandler
-            .getMonthsOfYear(year)
+            .getMonthsOfYear(year, request.categories)
             .then((months) => {
               yearsList.push({
                 year: year,
@@ -96,11 +102,41 @@ export default class RemoteConnection extends Component {
 
   sendCategories = (request) => {
     this.categoryHandler
-      .getCategories(request.type)
+      .getCategories(request.type.toLowerCase())
       .then((categories) => {
         this.sendData(request, categories);
       })
       .catch((error) => console.error(error));
+  };
+
+  sendEntries = (request) => {
+    this.entryHandler
+      .getDatesFromMonthAndYear(request.date, request.categories)
+      .then((dates) => {
+        console.log(dates);
+
+        if (dates.length == 0) {
+          this.sendData(request, []);
+        }
+        let entryList = [];
+
+        dates.forEach((date) => {
+          this.entryHandler
+            .getEntries(`${date}/${request.date}`, request.categories)
+            .then((entries) => {
+              let entry = {
+                date: date,
+                entries: entries,
+              };
+
+              entryList.push(entry);
+
+              if (entryList.length == dates.length) {
+                this.sendData(request, entryList);
+              }
+            });
+        });
+      });
   };
 
   sendData = (request, data) => {

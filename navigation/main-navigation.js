@@ -10,6 +10,7 @@ import EntryList from '../screens/EntryListScreen';
 import {getMonthName} from '../utils/converters';
 import UpdateEntry from '../screens/DataEntry/UpdateScreen';
 import RemoteConnection from '../screens/RemoteConnection/RemoteConnection';
+import RecentEntries from '../screens/RecentEntries';
 
 export default function HomeNavigation() {
   const Stack = createStackNavigator();
@@ -72,6 +73,16 @@ export default function HomeNavigation() {
               left: 45,
             },
           })}
+        />
+        <Stack.Screen
+          name="RecentEntries"
+          component={RecentEntries}
+          options={{
+            title: 'Recent Entries',
+            headerTitleContainerStyle: {
+              left: 45,
+            },
+          }}
         />
 
         <Stack.Screen

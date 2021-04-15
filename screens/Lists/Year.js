@@ -70,9 +70,7 @@ export default class Year extends Component {
         <Text style={styles.title}>{this.props.year}</Text>
         <FlatList
           style={styles.listOfMonths}
-          keyExtractor={(item) => {
-            item;
-          }}
+          keyExtractor={(item) => item}
           data={this.state.months}
           renderItem={({item}) => {
             return (
