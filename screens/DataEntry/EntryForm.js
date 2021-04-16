@@ -154,7 +154,7 @@ export default class EntryForm extends Component {
         description: description,
         amount: amount,
         date: date,
-        categoryId: categoryId,
+        category: {id: categoryId},
       };
 
       if (this.props.entry) {

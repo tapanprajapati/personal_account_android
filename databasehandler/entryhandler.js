@@ -20,7 +20,7 @@ export default class EntryDBHandler {
           entry.description,
           entry.amount,
           entry.date,
-          entry.categoryId,
+          entry.category.id,
         ];
 
         tx.executeSql(
@@ -61,7 +61,7 @@ export default class EntryDBHandler {
           entry.description,
           entry.amount,
           entry.date,
-          entry.categoryId,
+          entry.category.id,
           entry.id,
         ];
 

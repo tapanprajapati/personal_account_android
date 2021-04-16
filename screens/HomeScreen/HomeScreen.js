@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Button, Icon} from 'react-native-elements';
+import {Icon} from 'react-native-elements';
 import checkAndCreateDatabase from '../../databasehandler/dbinit';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 import {ButtonColors} from '../../styles/colors';
 import {global} from '../../styles/global';
 import HomeButton from './HomeButton';
+import ActionButton from 'react-native-action-button';
+import RNFileSelector from 'react-native-file-selector';
+import BackupHandler from '../../backupmanager/BackupHandler';
 
 class Home extends Component {
   constructor(props) {
@@ -14,7 +17,11 @@ class Home extends Component {
     this.state = {
       expenseTotal: 0,
       incomeTotal: 0,
+      visible: false,
+      fileSystemMode: '',
     };
+
+    this.backupHandler = new BackupHandler();
   }
 
   getTotal = () => {
@@ -47,6 +54,19 @@ class Home extends Component {
     checkAndCreateDatabase();
     this.getTotal();
   }
+
+  showFab = (active) => {
+    const color = 'white';
+    if (!active) {
+      return <Icon color={color} type="material" name="more-horiz" />;
+    }
+
+    return <Icon color={color} type="material" name="add" />;
+  };
+
+  read = (path) => {
+    this.backupHandler.importData(path);
+  };
   render() {
     return (
       <View style={[global.container, styles.center]}>
@@ -83,15 +103,48 @@ class Home extends Component {
           />
         </View>
 
-        <View style={global.floatingButton}>
-          <Icon
-            raised
-            name="settings"
-            type="material"
-            color={ButtonColors.homeButton.floating}
-            reverse
-          />
-        </View>
+        {/* <View> */}
+        <ActionButton
+          style={[global.floatingButton, styles.floating]}
+          buttonColor={ButtonColors.homeButton.floating}
+          renderIcon={this.showFab}
+          useNativeFeedback={false}>
+          <ActionButton.Item
+            title="Import"
+            style={styles.floating}
+            onPress={() => {
+              this.setState({visible: true, fileSystemMode: 'i'});
+              console.log('Import Pressed');
+            }}
+            buttonColor={ButtonColors.homeButton.import}>
+            <Icon type="material" name="file-download"></Icon>
+          </ActionButton.Item>
+          <ActionButton.Item
+            title="Export"
+            style={styles.floating}
+            onPress={() => {
+              this.setState({visible: true, fileSystemMode: 'e'});
+              console.log('Import Pressed');
+            }}
+            buttonColor={ButtonColors.homeButton.export}>
+            <Icon type="material" name="file-upload"></Icon>
+          </ActionButton.Item>
+        </ActionButton>
+        {/* </View> */}
+
+        <RNFileSelector
+          title={'Select File'}
+          visible={this.state.visible}
+          onDone={(path) => {
+            console.log('file selected: ' + path);
+            if (this.state.fileSystemMode == 'i') {
+              this.read(path);
+            }
+          }}
+          onCancel={() => {
+            console.log('cancelled');
+          }}
+        />
       </View>
     );
   }
@@ -104,9 +157,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   floating: {
-    backgroundColor: ButtonColors.homeButton.floating,
+    elevation: 4,
+    zIndex: 0,
   },
   buttonContainer: {
+    zIndex: 0,
     height: '80%',
     flexDirection: 'column',
     justifyContent: 'space-around',

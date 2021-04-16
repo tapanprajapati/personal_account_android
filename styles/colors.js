@@ -15,6 +15,8 @@ const ButtonColors = {
     difference: '#00B9E6',
     recent: '#673AB7',
     floating: '#2196F3',
+    import: 'white',
+    export: 'white',
   },
   floatingAdd: '#0A89A7',
   entryAdd: '#F36C60',

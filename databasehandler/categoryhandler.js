@@ -15,7 +15,7 @@ export default class CategoryDBHandler {
 
         tx.executeSql(
           addSQL,
-          [category.title, category.type],
+          [category.title, category.type.toLowerCase()],
           (tnx, result) => {
             resolve({
               success: true,
@@ -39,7 +39,7 @@ export default class CategoryDBHandler {
         const getSQL = `SELECT * FROM ${this.table} WHERE ${this.columns.title.title} = ? AND ${this.columns.type.title} = ?`;
         tx.executeSql(
           getSQL,
-          [categoryTitle, type],
+          [categoryTitle, type.toLowerCase()],
           (tnx, result) => {
             if (result.rows.length == 0) {
               resolve(false);
@@ -60,7 +60,7 @@ export default class CategoryDBHandler {
       this.db.transaction((tx) => {
         const getSQL = `SELECT * FROM ${this.table} WHERE ${this.columns.type.title} = ?`;
 
-        tx.executeSql(getSQL, [type], (tnx, result) => {
+        tx.executeSql(getSQL, [type.toLowerCase()], (tnx, result) => {
           let temp = [];
 
           for (let i = 0; i < result.rows.length; i++) {
