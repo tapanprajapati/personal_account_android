@@ -53,6 +53,14 @@ class Home extends Component {
     });
     checkAndCreateDatabase();
     this.getTotal();
+
+    this.unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.getTotal();
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 
   showFab = (active) => {

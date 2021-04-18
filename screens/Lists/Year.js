@@ -40,7 +40,23 @@ export default class Year extends Component {
 
   componentDidMount() {
     this.getYearData(this.props.searchText, this.props.categories);
+    this.unsubscribe = this.props.navigation.addListener(
+      'focus',
+      this.handleStateChange,
+    );
   }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  handleStateChange = () => {
+    console.log(`Refresh ${this.props.year}`);
+    this.setState({
+      amount: 0,
+    });
+    this.getYearData(this.props.searchText, this.props.categories);
+  };
 
   componentDidUpdate(prevProps, prevState) {
     let change = false;
@@ -119,7 +135,19 @@ class Month extends Component {
   };
   componentDidMount() {
     this.getMonthTotal(this.props.searchText, this.props.categories);
+    this.unsubscribe = this.props.navigation.addListener(
+      'focus',
+      this.handleStateChange,
+    );
   }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  handleStateChange = () => {
+    this.getMonthTotal(this.props.searchText, this.props.categories);
+  };
 
   componentDidUpdate(prevProps, prevState) {
     let change = false;

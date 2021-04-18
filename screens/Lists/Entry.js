@@ -48,12 +48,12 @@ export default class Entry extends Component {
             type="material"
             size={this.controlButtonSize}
             containerStyle={styles.controlButton}
-            onPress={() =>
+            onPress={() => {
+              this.props.markDateEdit();
               this.props.navigation.navigate('UpdateEntry', {
                 entry: this.props.entry,
-                refresh: this.props.refresh,
-              })
-            }
+              });
+            }}
             color={ButtonColors.entryControl.edit}></Icon>
           <Icon
             name="delete"

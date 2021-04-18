@@ -23,7 +23,7 @@ export default class EntryForm extends Component {
   constructor(props) {
     super(props);
     if (!props.entry) {
-      console.log('In');
+      // console.log('In');
       this.state = {
         showDatePicker: false,
         date: new Date(),
@@ -72,7 +72,7 @@ export default class EntryForm extends Component {
 
   getCategories = (type) => {
     this.categoryHandler.getCategories(type).then((result) => {
-      console.log(result);
+      // console.log(result);
       this.setState({
         categories: result,
       });
@@ -164,8 +164,17 @@ export default class EntryForm extends Component {
       console.log(entry);
 
       this.props.handleFormData(entry);
+      this.resetInputs();
     }
   };
+
+  resetInputs() {
+    this.setState({
+      title: '',
+      amount: '',
+      description: '',
+    });
+  }
 
   componentDidMount() {
     this.getCategories(this.state.selectedType);

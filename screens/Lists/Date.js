@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {ListColors} from '../../styles/colors';
-import {getMonthName} from '../../utils/converters';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 import Entry from './Entry';
 import {dimensions} from '../../utils/constants';
@@ -12,6 +11,7 @@ export default class Date extends Component {
     this.state = {
       entries: [],
       amount: 0,
+      edit: false,
     };
 
     this.entryHandler = new EntryDBHandler();
@@ -29,6 +29,12 @@ export default class Date extends Component {
       });
   };
 
+  markEdit = () => {
+    this.setState({
+      edit: true,
+    });
+  };
+
   getTotal = (entries) => {
     let total = 0;
     entries.forEach((entry) => {
@@ -42,6 +48,21 @@ export default class Date extends Component {
 
   componentDidMount() {
     this.getEntries('');
+    this.unsubscribe = this.props.navigation.addListener('focus', () => {
+      if (this.state.edit) {
+        this.setState({
+          edit: false,
+          amount: 0,
+        });
+        this.getEntries();
+        console.log(
+          `Edit ${this.props.date}/${this.props.month}/${this.props.year}`,
+        );
+      }
+    });
+  }
+  componentWillUnmount() {
+    this.unsubscribe();
   }
   componentDidUpdate(prevProps, prevState) {
     let change = false;
@@ -59,19 +80,19 @@ export default class Date extends Component {
         <Text style={styles.title}>{this.props.date}</Text>
         <FlatList
           style={styles.listOfEntries}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => `${item.id}`}
           data={this.state.entries}
           renderItem={({item}) => {
             return (
               <Entry
-                refresh={this.getEntries}
                 navigation={this.props.navigation}
                 entry={item}
+                markDateEdit={this.markEdit}
               />
             );
           }}
         />
-        <Text style={styles.footer}>$ {this.state.amount}</Text>
+        <Text style={styles.footer}>$ {this.state.amount.toFixed(2)}</Text>
       </View>
     );
   }

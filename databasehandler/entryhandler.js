@@ -350,7 +350,6 @@ export default class EntryDBHandler {
         and categoryid=cId and categoryid IN (${categories}) order by id`;
 
         tx.executeSql(getSQL, [date], (tnx, result) => {
-          console.log(result);
           resolve(this.fromEntries(result));
         });
       });

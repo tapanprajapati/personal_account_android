@@ -76,7 +76,25 @@ export default class AccountType extends Component {
 
         this.getYears(this.state.searchText);
       });
+
+    this.unsubscribe = this.props.navigation.addListener(
+      'focus',
+      this.handleStateChange,
+    );
   }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+    console.log('Unmounted');
+  }
+
+  handleStateChange = () => {
+    this.getYears(this.state.searchText);
+    this.setState({
+      total: 0,
+    });
+    console.log('Refresh');
+  };
 
   saveCategories = (categories) => {
     this.setState({
@@ -139,7 +157,6 @@ export default class AccountType extends Component {
             onPress={() =>
               this.props.navigation.navigate('AddEntry', {
                 type: this.props.route.params.type,
-                refresh: this.getYears,
               })
             }
           />

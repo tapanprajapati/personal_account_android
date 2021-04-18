@@ -16,8 +16,8 @@ export default class AddEntry extends Component {
       console.log(result);
       if (result.success) {
         console.log('Entry Added');
-        this.props.navigation.goBack();
-        this.props.route.params.refresh();
+        // this.props.navigation.goBack();
+        // this.props.route.params.refresh();
       } else {
         console.log(result.result);
       }
