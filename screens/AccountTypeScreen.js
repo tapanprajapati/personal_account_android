@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {FlatList, Modal, StyleSheet, Text, View} from 'react-native';
-import {Icon} from 'react-native-elements';
+import {Icon, SearchBar} from 'react-native-elements';
 import CategoryDBHandler from '../databasehandler/categoryhandler';
 import EntryDBHandler from '../databasehandler/entryhandler';
 import {ButtonColors, TextBackground} from '../styles/colors';
@@ -18,23 +18,27 @@ export default class AccountType extends Component {
       showCategoryModal: false,
       categories: [],
       total: 0,
+      searchText: '',
     };
     this.entryHandler = new EntryDBHandler();
     this.categoryHandler = new CategoryDBHandler();
   }
 
-  getYears = () => {
+  getYears = (searchText = '') => {
     const categoryString = getSelectedCategories(this.state.categories).join(
       ',',
     );
-    this.entryHandler.getYears(categoryString).then((years) => {
-      this.setState({
-        years: years,
+    this.entryHandler
+      .getSearchYears(searchText, categoryString)
+      .then((years) => {
+        this.setState({
+          years: years,
+        });
       });
-    });
   };
 
   addToTotal = (amount) => {
+    // amount = parseFloat(amount);
     this.setState({
       total: this.state.total + amount,
     });
@@ -70,7 +74,7 @@ export default class AccountType extends Component {
           categories: tempCategories,
         });
 
-        this.getYears();
+        this.getYears(this.state.searchText);
       });
   }
 
@@ -81,9 +85,26 @@ export default class AccountType extends Component {
     });
     this.getYears();
   };
+
+  handleSearch = (text) => {
+    this.setState({
+      searchText: text,
+      total: 0,
+    });
+
+    this.getYears(text);
+  };
   render() {
     return (
       <View style={global.container}>
+        <SearchBar
+          containerStyle={styles.searchBarContainer}
+          placeholder="Type Here..."
+          inputContainerStyle={styles.searchBarInputContainer}
+          onChangeText={this.handleSearch}
+          value={this.state.searchText}
+          onClear={() => this.handleSearch('')}
+        />
         <FlatList
           extraData={this.state.categories}
           style={global.list}
@@ -100,11 +121,14 @@ export default class AccountType extends Component {
                 categories={getSelectedCategories(this.state.categories)}
                 navigation={this.props.navigation}
                 passTotal={this.addToTotal}
+                searchText={this.state.searchText}
               />
             );
           }}
         />
-        <Text style={styles.footer}>Total: $ {this.state.total}</Text>
+        <Text style={styles.footer}>
+          Total: $ {this.state.total.toFixed(2)}
+        </Text>
         <View style={global.floatingButton}>
           <Icon
             raised
@@ -144,5 +168,18 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: dimensions.accountType.footerText,
     fontWeight: 'bold',
+  },
+  searchBarContainer: {
+    backgroundColor: 'white',
+    borderTopWidth: 0,
+    padding: 0,
+    borderBottomWidth: 0,
+  },
+  searchBarInputContainer: {
+    backgroundColor: 'white',
+    elevation: 3,
+    opacity: 1,
+    marginBottom: 10,
+    borderRadius: 55,
   },
 });

@@ -7,8 +7,10 @@ import {ButtonColors} from '../../styles/colors';
 import {global} from '../../styles/global';
 import HomeButton from './HomeButton';
 import ActionButton from 'react-native-action-button';
-import RNFileSelector from 'react-native-file-selector';
+// import RNFileSelector from 'react-native-file-selector';
 import BackupHandler from '../../backupmanager/BackupHandler';
+import DocumentPicker from 'react-native-document-picker';
+import RNFS from 'react-native-fs';
 
 class Home extends Component {
   constructor(props) {
@@ -17,8 +19,6 @@ class Home extends Component {
     this.state = {
       expenseTotal: 0,
       incomeTotal: 0,
-      visible: false,
-      fileSystemMode: '',
     };
 
     this.backupHandler = new BackupHandler();
@@ -67,6 +67,12 @@ class Home extends Component {
   read = (path) => {
     this.backupHandler.importData(path);
   };
+
+  openPicker = () => {
+    DocumentPicker.pick().then((res) => {
+      this.backupHandler.importData(res.uri);
+    });
+  };
   render() {
     return (
       <View style={[global.container, styles.center]}>
@@ -90,9 +96,9 @@ class Home extends Component {
           <HomeButton
             color={ButtonColors.homeButton.difference}
             title="DIFFERENCE"
-            total={`Total: $ ${
+            total={`Total: $ ${(
               this.state.incomeTotal - this.state.expenseTotal
-            }`}
+            ).toFixed(2)}`}
           />
 
           <HomeButton
@@ -105,7 +111,7 @@ class Home extends Component {
 
         {/* <View> */}
         <ActionButton
-          style={[global.floatingButton, styles.floating]}
+          style={[styles.floating]}
           buttonColor={ButtonColors.homeButton.floating}
           renderIcon={this.showFab}
           useNativeFeedback={false}>
@@ -113,8 +119,9 @@ class Home extends Component {
             title="Import"
             style={styles.floating}
             onPress={() => {
-              this.setState({visible: true, fileSystemMode: 'i'});
+              // this.setState({visible: true, fileSystemMode: 'i'});
               console.log('Import Pressed');
+              this.openPicker();
             }}
             buttonColor={ButtonColors.homeButton.import}>
             <Icon type="material" name="file-download"></Icon>
@@ -123,8 +130,8 @@ class Home extends Component {
             title="Export"
             style={styles.floating}
             onPress={() => {
-              this.setState({visible: true, fileSystemMode: 'e'});
-              console.log('Import Pressed');
+              // this.setState({visible: true, fileSystemMode: 'e'});
+              console.log('Export Pressed');
             }}
             buttonColor={ButtonColors.homeButton.export}>
             <Icon type="material" name="file-upload"></Icon>
@@ -132,7 +139,7 @@ class Home extends Component {
         </ActionButton>
         {/* </View> */}
 
-        <RNFileSelector
+        {/* <RNFileSelector
           title={'Select File'}
           visible={this.state.visible}
           onDone={(path) => {
@@ -144,7 +151,7 @@ class Home extends Component {
           onCancel={() => {
             console.log('cancelled');
           }}
-        />
+        /> */}
       </View>
     );
   }

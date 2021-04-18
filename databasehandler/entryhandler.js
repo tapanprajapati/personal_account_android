@@ -129,6 +129,25 @@ export default class EntryDBHandler {
     });
   }
 
+  getSearchYears(searchString, categories) {
+    console.log('Fetching Years from Database');
+    return new Promise((resolve, reject) => {
+      this.db.transaction((tx) => {
+        let getSQL = `SELECT distinct(strftime('%Y',${this.columns.date.title})) as date from ${this.table}  WHERE ${this.columns.categoryId.title} IN (${categories})
+         and ${this.columns.title.title} like '%${searchString}%' order by date`;
+
+        tx.executeSql(getSQL, [], (tnx, result) => {
+          let temp = [];
+
+          for (let i = 0; i < result.rows.length; i++) {
+            temp.push(result.rows.item(i).date);
+          }
+          resolve(temp);
+        });
+      });
+    });
+  }
+
   getMonthsOfYear(year, categories) {
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
@@ -148,6 +167,29 @@ export default class EntryDBHandler {
       });
     });
   }
+  getSearchMonthsOfYear(searchString, year, categories) {
+    return new Promise((resolve, reject) => {
+      this.db.transaction((tx) => {
+        console.log(`Fetching Months for ${year}`);
+
+        let getSQL = `SELECT distinct(strftime('%m',${this.columns.date.title})) as date FROM ${this.table}
+             where strftime('%Y',${this.columns.date.title})=? AND ${this.columns.categoryId.title} IN (${categories}) and 
+             ${this.columns.title.title} like '%${searchString}%'
+             order by date`;
+
+        tx.executeSql(getSQL, [year], (tnx, result) => {
+          let temp = [];
+
+          for (let i = 0; i < result.rows.length; i++) {
+            temp.push(result.rows.item(i).date);
+          }
+          console.log(temp);
+
+          resolve(temp);
+        });
+      });
+    });
+  }
 
   getDatesFromMonthAndYear(monthYear, categories) {
     console.log(`Fetching Dates for ${monthYear}`);
@@ -156,6 +198,29 @@ export default class EntryDBHandler {
       this.db.transaction((tx) => {
         const getSQL = `SELECT distinct(strftime('%d',${this.columns.date.title})) as date FROM ${this.table}
         where strftime('%m/%Y',${this.columns.date.title})=? and ${this.columns.categoryId.title} IN (${categories})
+        order by date`;
+
+        tx.executeSql(getSQL, [monthYear], (tnx, result) => {
+          let temp = [];
+
+          for (let i = 0; i < result.rows.length; i++) {
+            temp.push(result.rows.item(i).date);
+          }
+
+          resolve(temp);
+        });
+      });
+    });
+  }
+
+  getSearchDatesFromMonthAndYear(searchString, monthYear, categories) {
+    console.log(`Fetching Dates for ${monthYear}`);
+
+    return new Promise((resolve, reject) => {
+      this.db.transaction((tx) => {
+        const getSQL = `SELECT distinct(strftime('%d',${this.columns.date.title})) as date FROM ${this.table}
+        where strftime('%m/%Y',${this.columns.date.title})=? and ${this.columns.categoryId.title} IN (${categories}) and 
+        ${this.columns.title.title} like '%${searchString}%' 
         order by date`;
 
         tx.executeSql(getSQL, [monthYear], (tnx, result) => {
@@ -190,24 +255,7 @@ export default class EntryDBHandler {
         and categoryid=cId and categoryid IN (${categories}) order by id`;
 
         tx.executeSql(getSQL, [date], (tnx, result) => {
-          let temp = [];
-
-          for (let i = 0; i < result.rows.length; i++) {
-            temp.push({
-              id: result.rows.item(i).id,
-              title: result.rows.item(i).title,
-              description: result.rows.item(i).description,
-              amount: result.rows.item(i).amount,
-              date: result.rows.item(i).date,
-              category: {
-                id: result.rows.item(i).cId,
-                title: result.rows.item(i).cTitle,
-                type: result.rows.item(i).cType,
-              },
-            });
-          }
-
-          resolve(temp);
+          resolve(this.fromEntries(result));
         });
       });
     });
@@ -231,24 +279,7 @@ export default class EntryDBHandler {
         where categoryid=cId order by id`;
 
         tx.executeSql(getSQL, [], (tnx, result) => {
-          let temp = [];
-
-          for (let i = 0; i < result.rows.length; i++) {
-            temp.push({
-              id: result.rows.item(i).id,
-              title: result.rows.item(i).title,
-              description: result.rows.item(i).description,
-              amount: result.rows.item(i).amount,
-              date: result.rows.item(i).date,
-              category: {
-                id: result.rows.item(i).cId,
-                title: result.rows.item(i).cTitle,
-                type: result.rows.item(i).cType,
-              },
-            });
-          }
-
-          resolve(temp);
+          resolve(this.fromEntries(result));
         });
       });
     });
@@ -270,27 +301,57 @@ export default class EntryDBHandler {
           c.${this.catTable.columns.id.title} as cId,
           c.${this.catTable.columns.type.title} as cType
         FROM ${this.table} as e, ${this.catTable.name} as c
-        where categoryid=cId order by id limit ${limit}`;
+        where categoryid=cId order by id desc limit ${limit}`;
 
         tx.executeSql(getSQL, [], (tnx, result) => {
-          let temp = [];
+          resolve(this.fromEntries(result));
+        });
+      });
+    });
+  }
 
-          for (let i = 0; i < result.rows.length; i++) {
-            temp.push({
-              id: result.rows.item(i).id,
-              title: result.rows.item(i).title,
-              description: result.rows.item(i).description,
-              amount: result.rows.item(i).amount,
-              date: result.rows.item(i).date,
-              category: {
-                id: result.rows.item(i).cId,
-                title: result.rows.item(i).cTitle,
-                type: result.rows.item(i).cType,
-              },
-            });
-          }
+  fromEntries(result) {
+    let temp = [];
 
-          resolve(temp);
+    for (let i = 0; i < result.rows.length; i++) {
+      temp.push({
+        id: result.rows.item(i).id,
+        title: result.rows.item(i).title,
+        description: result.rows.item(i).description,
+        amount: result.rows.item(i).amount,
+        date: result.rows.item(i).date,
+        category: {
+          id: result.rows.item(i).cId,
+          title: result.rows.item(i).cTitle,
+          type: result.rows.item(i).cType,
+        },
+      });
+    }
+    return temp;
+  }
+
+  getSearchEntriesByDate(searchString, date, categories) {
+    console.log(`Fetching Entries from string: ${searchString}`);
+    return new Promise((resolve, reject) => {
+      this.db.transaction((tx) => {
+        const getSQL = `SELECT 
+          e.${this.columns.id.title} as id,
+          e.${this.columns.categoryId.title} as categoryid,
+          e.${this.columns.title.title} as title,
+          e.${this.columns.description.title} as description,
+          e.${this.columns.amount.title} as amount,
+          e.${this.columns.date.title} as date,
+          c.${this.catTable.columns.title.title} as cTitle,
+          c.${this.catTable.columns.id.title} as cId,
+          c.${this.catTable.columns.type.title} as cType
+        FROM ${this.table} as e, ${this.catTable.name} as c
+        where strftime('%d/%m/%Y',${this.columns.date.title})=? 
+        and e.title like '%${searchString}%'
+        and categoryid=cId and categoryid IN (${categories}) order by id`;
+
+        tx.executeSql(getSQL, [date], (tnx, result) => {
+          console.log(result);
+          resolve(this.fromEntries(result));
         });
       });
     });
@@ -306,7 +367,32 @@ export default class EntryDBHandler {
           getSQL,
           [monthAndYear],
           (tnx, result) => {
-            resolve(result.rows.item(0).total);
+            let total = parseFloat(result.rows.item(0).total);
+            resolve(total);
+          },
+          (tnx, error) => {
+            resolve(0);
+          },
+        );
+      });
+    });
+  }
+
+  getSearchMonthTotal(searchString, monthAndYear, categories) {
+    return new Promise((resolve, reject) => {
+      this.db.transaction((tx) => {
+        const getSQL = `SELECT sum(${this.columns.amount.title}) as total FROM ${this.table}
+        where strftime('%m/%Y',${this.columns.date.title})=? AND ${this.columns.categoryId.title} IN (${categories}) 
+        AND ${this.columns.title.title} like '%${searchString}%'`;
+
+        tx.executeSql(
+          getSQL,
+          [monthAndYear],
+          (tnx, result) => {
+            let total = result.rows.item(0).total;
+
+            if (total == null) total = 0;
+            resolve(total);
           },
           (tnx, error) => {
             resolve(0);
@@ -332,7 +418,7 @@ export default class EntryDBHandler {
             let total = result.rows.item(0).total;
 
             if (total == null) total = 0;
-            resolve(total);
+            resolve(total.toFixed(2));
           },
           (tnx, error) => {
             console.log('Error');

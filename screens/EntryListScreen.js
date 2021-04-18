@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
+import {StyleSheet} from 'react-native';
 import {FlatList, View} from 'react-native';
+import {SearchBar} from 'react-native-elements';
 import EntryDBHandler from '../databasehandler/entryhandler';
 import {global} from '../styles/global';
 import Date from './Lists/Date';
@@ -10,13 +12,18 @@ export default class EntryList extends Component {
     this.entryHandler = new EntryDBHandler();
     this.state = {
       dates: [],
+      searchText: '',
     };
   }
 
-  getDates = () => {
+  getDates = (searchText = '') => {
     let date = `${this.props.route.params.month}/${this.props.route.params.year}`;
     this.entryHandler
-      .getDatesFromMonthAndYear(date, this.props.route.params.categories)
+      .getSearchDatesFromMonthAndYear(
+        searchText,
+        date,
+        this.props.route.params.categories,
+      )
       .then((dates) => {
         this.setState({
           dates: dates,
@@ -28,9 +35,25 @@ export default class EntryList extends Component {
     this.getDates();
   }
 
+  handleSearch = (text) => {
+    this.setState({
+      searchText: text,
+    });
+
+    this.getDates(text);
+  };
+
   render() {
     return (
       <View style={global.container}>
+        <SearchBar
+          containerStyle={styles.searchBarContainer}
+          placeholder="Type Here..."
+          inputContainerStyle={styles.searchBarInputContainer}
+          onChangeText={this.handleSearch}
+          value={this.state.searchText}
+          onClear={() => this.handleSearch('')}
+        />
         <FlatList
           style={global.list}
           data={this.state.dates}
@@ -40,6 +63,7 @@ export default class EntryList extends Component {
               <Date
                 navigation={this.props.navigation}
                 date={item}
+                searchText={this.state.searchText}
                 month={this.props.route.params.month}
                 year={this.props.route.params.year}
                 categories={this.props.route.params.categories}
@@ -50,3 +74,19 @@ export default class EntryList extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  searchBarContainer: {
+    backgroundColor: 'white',
+    borderTopWidth: 0,
+    padding: 0,
+    borderBottomWidth: 0,
+  },
+  searchBarInputContainer: {
+    backgroundColor: 'white',
+    elevation: 3,
+    opacity: 1,
+    marginBottom: 10,
+    borderRadius: 55,
+  },
+});

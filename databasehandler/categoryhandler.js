@@ -76,4 +76,26 @@ export default class CategoryDBHandler {
       });
     });
   }
+
+  getAllCategories() {
+    return new Promise((resolve, reject) => {
+      this.db.transaction((tx) => {
+        const getSQL = `SELECT * FROM ${this.table}`;
+
+        tx.executeSql(getSQL, [], (tnx, result) => {
+          let temp = [];
+
+          for (let i = 0; i < result.rows.length; i++) {
+            temp.push({
+              id: result.rows.item(i).id,
+              title: result.rows.item(i).title,
+              type: type,
+            });
+          }
+
+          resolve(temp);
+        });
+      });
+    });
+  }
 }

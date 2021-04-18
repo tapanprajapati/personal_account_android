@@ -17,9 +17,9 @@ export default class Year extends Component {
     this.entryHandler = new EntryDBHandler();
   }
 
-  getYearData = (categories) => {
+  getYearData = (searchText, categories) => {
     this.entryHandler
-      .getMonthsOfYear(this.props.year, categories)
+      .getSearchMonthsOfYear(searchText, this.props.year, categories)
       .then((result) => {
         this.setState({
           months: result,
@@ -28,6 +28,7 @@ export default class Year extends Component {
   };
 
   addToTotal = (amount) => {
+    amount = parseFloat(amount);
     let total = this.state.amount;
     total += amount;
     this.setState({
@@ -38,12 +39,15 @@ export default class Year extends Component {
   };
 
   componentDidMount() {
-    this.getYearData(this.props.categories);
+    this.getYearData(this.props.searchText, this.props.categories);
   }
 
   componentDidUpdate(prevProps, prevState) {
     let change = false;
 
+    if (prevProps.searchText != this.props.searchText) {
+      change = true;
+    }
     if (prevProps.categories.length != this.state.selectedCats.length) {
       change = true;
     } else {
@@ -61,7 +65,7 @@ export default class Year extends Component {
         amount: 0,
       });
 
-      this.getYearData(prevProps.categories);
+      this.getYearData(this.props.searchText, prevProps.categories);
     }
   }
   render() {
@@ -77,6 +81,7 @@ export default class Year extends Component {
               <Month
                 passTotal={this.addToTotal}
                 month={item}
+                searchText={this.props.searchText}
                 year={this.props.year}
                 type={this.props.type}
                 categories={this.state.selectedCats}
@@ -85,7 +90,7 @@ export default class Year extends Component {
             );
           }}
         />
-        <Text style={styles.footer}>$ {this.state.amount}</Text>
+        <Text style={styles.footer}>$ {this.state.amount.toFixed(2)}</Text>
       </View>
     );
   }
@@ -101,22 +106,26 @@ class Month extends Component {
     this.entryHandler = new EntryDBHandler();
   }
 
-  getMonthTotal = (categories) => {
+  getMonthTotal = (searchText, categories) => {
     let date = `${this.props.month}/${this.props.year}`;
-    this.entryHandler.getMonthTotal(date, categories).then((total) => {
-      this.setState({
-        amount: total,
+    this.entryHandler
+      .getSearchMonthTotal(searchText, date, categories)
+      .then((total) => {
+        this.setState({
+          amount: total,
+        });
+        this.props.passTotal(total);
       });
-      this.props.passTotal(total);
-    });
   };
   componentDidMount() {
-    this.getMonthTotal(this.props.categories);
+    this.getMonthTotal(this.props.searchText, this.props.categories);
   }
 
   componentDidUpdate(prevProps, prevState) {
     let change = false;
-    if (prevProps.categories.length != this.state.selectedCats.length) {
+    if (prevProps.searchText != this.props.searchText) {
+      change = true;
+    } else if (prevProps.categories.length != this.state.selectedCats.length) {
       change = true;
     } else {
       for (let i = 0; i < prevProps.categories.length; i++) {
@@ -128,7 +137,7 @@ class Month extends Component {
     }
 
     if (change) {
-      this.getMonthTotal(prevProps.categories);
+      this.getMonthTotal(this.props.searchText, prevProps.categories);
       this.setState({
         selectedCats: prevProps.categories,
       });
@@ -150,7 +159,7 @@ class Month extends Component {
         style={styles.monthContainer}
         onPress={this.goToEntryListScreen}>
         <Text style={styles.monthText}>{getMonthName(this.props.month)}</Text>
-        <Text style={styles.amountText}> $ {this.state.amount}</Text>
+        <Text style={styles.amountText}> $ {this.state.amount.toFixed(2)}</Text>
       </TouchableOpacity>
     );
   }
@@ -164,6 +173,7 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
+    fontWeight: 'bold',
     color: ListColors.yearList.title,
     backgroundColor: ListColors.yearList.background,
     fontSize: dimensions.year.titleText,
@@ -182,7 +192,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    margin: 2,
+    marginVertical: 4,
+    marginHorizontal: 2,
   },
   monthText: {
     fontSize: dimensions.month.titleText,

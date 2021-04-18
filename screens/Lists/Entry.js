@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   entryText: {
     fontSize: dimensions.entry.titleText,
     fontWeight: 'bold',
-    flex: 2,
+    flex: 3,
   },
   amountText: {
     flex: 1,

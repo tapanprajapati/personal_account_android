@@ -17,14 +17,16 @@ export default class Date extends Component {
     this.entryHandler = new EntryDBHandler();
   }
 
-  getEntries = () => {
+  getEntries = (searchText = '') => {
     let date = `${this.props.date}/${this.props.month}/${this.props.year}`;
-    this.entryHandler.getEntries(date, this.props.categories).then((result) => {
-      this.setState({
-        entries: result,
+    this.entryHandler
+      .getSearchEntriesByDate(searchText, date, this.props.categories)
+      .then((result) => {
+        this.setState({
+          entries: result,
+        });
+        this.getTotal(result);
       });
-      this.getTotal(result);
-    });
   };
 
   getTotal = (entries) => {
@@ -39,7 +41,17 @@ export default class Date extends Component {
   };
 
   componentDidMount() {
-    this.getEntries();
+    this.getEntries('');
+  }
+  componentDidUpdate(prevProps, prevState) {
+    let change = false;
+    if (prevProps.searchText != this.props.searchText) {
+      change = true;
+    }
+
+    if (change) {
+      this.getEntries(this.props.searchText);
+    }
   }
   render() {
     return (
@@ -73,6 +85,7 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
+    fontWeight: 'bold',
     color: ListColors.yearList.title,
     backgroundColor: ListColors.yearList.background,
     fontSize: dimensions.date.titleText,

@@ -9,6 +9,7 @@ export default class CategoryFilterModal extends Component {
     super(props);
     this.state = {
       categories: this.props.categories,
+      checkAll: false,
     };
     this.entryHandler = new EntryDBHandler();
   }
@@ -31,6 +32,17 @@ export default class CategoryFilterModal extends Component {
 
     this.props.close();
   };
+
+  handleCheckedAll = () => {
+    let tempCategories = [...this.state.categories];
+    tempCategories.forEach((category) => {
+      category.status = !this.state.checkAll;
+    });
+    this.setState({
+      categories: tempCategories,
+      checkAll: !this.state.checkAll,
+    });
+  };
   render() {
     return (
       <View style={styles.container}>
@@ -42,6 +54,12 @@ export default class CategoryFilterModal extends Component {
           containerStyle={styles.closeIcon}
         />
         <Text style={styles.title}>Filter Category</Text>
+        <CheckBox
+          containerStyle={{margin: 0, padding: 5}}
+          checked={this.state.checkAll}
+          size={dimensions.categoryFilter.checkBox}
+          onPress={this.handleCheckedAll}
+        />
         <FlatList
           data={this.state.categories}
           keyExtractor={(item) => item.category.id.toString()}

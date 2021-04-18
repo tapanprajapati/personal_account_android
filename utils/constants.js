@@ -8,7 +8,7 @@ export const dimensions = {
     typeButton: {
       width: '60%',
       titleText: 24,
-      secondaryText: 20,
+      secondaryText: 18,
       padding: 30,
       marginBottom: 5,
     },
@@ -31,23 +31,23 @@ export const dimensions = {
     buttonMargin: 10,
   },
   accountType: {
-    footerText: 18,
+    footerText: 20,
   },
   year: {
-    titleText: 18,
-    footerText: 18,
+    titleText: 20,
+    footerText: 20,
   },
   month: {
-    titleText: 18,
-    totalText: 18,
+    titleText: 20,
+    totalText: 20,
   },
   date: {
-    titleText: 18,
+    titleText: 20,
     footerText: 18,
   },
   entry: {
-    titleText: 18,
-    amountText: 18,
+    titleText: 20,
+    amountText: 20,
     categoryText: 16,
     desText: 16,
     controlButtonSize: 25,
