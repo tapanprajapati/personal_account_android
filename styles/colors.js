@@ -36,6 +36,11 @@ const ListColors = {
 
 const TextBackground = {
   footerTotal: '#FF1744',
+  differenceTotal: '#2196F3',
+  yearTableTitle: '#2196F3',
+  yearTitle: '#F44336',
+  savingRed: '#F44336',
+  savingGreen: '#00C63C',
 };
 
 export {HeaderColors, TextColors, ButtonColors, ListColors, TextBackground};

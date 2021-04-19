@@ -110,14 +110,51 @@ export default class EntryDBHandler {
     });
   }
 
-  getYears(categories) {
+  // getYears(categories) {
+  //   console.log('Fetching Years from Database');
+  //   return new Promise((resolve, reject) => {
+  //     this.db.transaction((tx) => {
+  //       let getSQL = `SELECT distinct(strftime('%Y',${this.columns.date.title})) as date from ${this.table}  WHERE ${this.columns.categoryId.title} IN (${categories})
+  //       order by date`;
+
+  //       tx.executeSql(getSQL, [], (tnx, result) => {
+  //         let temp = [];
+
+  //         for (let i = 0; i < result.rows.length; i++) {
+  //           temp.push(result.rows.item(i).date);
+  //         }
+  //         resolve(temp);
+  //       });
+  //     });
+  //   });
+  // }
+
+  getYears() {
     console.log('Fetching Years from Database');
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
-        let getSQL = `SELECT distinct(strftime('%Y',${this.columns.date.title})) as date from ${this.table}  WHERE ${this.columns.categoryId.title} IN (${categories})
-        order by date`;
+        let getSQL = `SELECT distinct(strftime('%Y',${this.columns.date.title})) as date from ${this.table} order by date`;
 
         tx.executeSql(getSQL, [], (tnx, result) => {
+          let temp = [];
+
+          for (let i = 0; i < result.rows.length; i++) {
+            temp.push(result.rows.item(i).date);
+          }
+          resolve(temp);
+        });
+      });
+    });
+  }
+
+  getMonths(year) {
+    return new Promise((resolve, reject) => {
+      this.db.transaction((tx) => {
+        let getSQL = `SELECT distinct(strftime('%m',${this.columns.date.title})) as date from ${this.table}
+        where strftime('%Y',${this.columns.date.title})=?
+        order by date`;
+
+        tx.executeSql(getSQL, [year], (tnx, result) => {
           let temp = [];
 
           for (let i = 0; i < result.rows.length; i++) {
@@ -167,6 +204,7 @@ export default class EntryDBHandler {
       });
     });
   }
+
   getSearchMonthsOfYear(searchString, year, categories) {
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
@@ -356,26 +394,26 @@ export default class EntryDBHandler {
     });
   }
 
-  getMonthTotal(monthAndYear, categories) {
-    return new Promise((resolve, reject) => {
-      this.db.transaction((tx) => {
-        const getSQL = `SELECT sum(${this.columns.amount.title}) as total FROM ${this.table}
-        where strftime('%m/%Y',${this.columns.date.title})=? AND ${this.columns.categoryId.title} IN (${categories})`;
+  // getMonthTotal(monthAndYear, categories) {
+  //   return new Promise((resolve, reject) => {
+  //     this.db.transaction((tx) => {
+  //       const getSQL = `SELECT sum(${this.columns.amount.title}) as total FROM ${this.table}
+  //       where strftime('%m/%Y',${this.columns.date.title})=? AND ${this.columns.categoryId.title} IN (${categories})`;
 
-        tx.executeSql(
-          getSQL,
-          [monthAndYear],
-          (tnx, result) => {
-            let total = parseFloat(result.rows.item(0).total);
-            resolve(total);
-          },
-          (tnx, error) => {
-            resolve(0);
-          },
-        );
-      });
-    });
-  }
+  //       tx.executeSql(
+  //         getSQL,
+  //         [monthAndYear],
+  //         (tnx, result) => {
+  //           let total = parseFloat(result.rows.item(0).total);
+  //           resolve(total);
+  //         },
+  //         (tnx, error) => {
+  //           resolve(0);
+  //         },
+  //       );
+  //     });
+  //   });
+  // }
 
   getSearchMonthTotal(searchString, monthAndYear, categories) {
     return new Promise((resolve, reject) => {
@@ -394,6 +432,34 @@ export default class EntryDBHandler {
             resolve(total);
           },
           (tnx, error) => {
+            resolve(0);
+          },
+        );
+      });
+    });
+  }
+
+  getMonthTotal(month, type) {
+    return new Promise((resolve, reject) => {
+      this.db.transaction((tx) => {
+        const getSQL = `SELECT
+        sum(e.${this.columns.amount.title}) as total
+        FROM ${this.table} as e, ${this.catTable.name} as c
+        where e.${this.columns.categoryId.title}=c.${this.catTable.columns.id.title} 
+        and c.${this.catTable.columns.type.title} = ? 
+        and strftime('%m/%Y',e.${this.columns.date.title})=?`;
+
+        tx.executeSql(
+          getSQL,
+          [type, month],
+          (tnx, result) => {
+            let total = result.rows.item(0).total;
+
+            if (total == null) total = 0;
+            resolve(total.toFixed(2));
+          },
+          (tnx, error) => {
+            console.log('Error');
             resolve(0);
           },
         );

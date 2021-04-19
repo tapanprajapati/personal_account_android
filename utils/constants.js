@@ -59,4 +59,9 @@ export const dimensions = {
     checkBox: 18,
     buttonText: 16,
   },
+  difference: {
+    default: 18,
+    yearTitle: 22,
+    monthTitle: 18,
+  },
 };

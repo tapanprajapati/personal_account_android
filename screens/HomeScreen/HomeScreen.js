@@ -72,10 +72,6 @@ class Home extends Component {
     return <Icon color={color} type="material" name="add" />;
   };
 
-  read = (path) => {
-    this.backupHandler.importData(path);
-  };
-
   openPicker = () => {
     DocumentPicker.pick().then((res) => {
       this.backupHandler.importData(res.uri);
@@ -107,6 +103,7 @@ class Home extends Component {
             total={`Total: $ ${(
               this.state.incomeTotal - this.state.expenseTotal
             ).toFixed(2)}`}
+            onPress={() => this.props.navigation.navigate('Difference')}
           />
 
           <HomeButton
@@ -139,6 +136,9 @@ class Home extends Component {
             style={styles.floating}
             onPress={() => {
               // this.setState({visible: true, fileSystemMode: 'e'});
+              this.backupHandler.exportData().then((result) => {
+                console.log(result);
+              });
               console.log('Export Pressed');
             }}
             buttonColor={ButtonColors.homeButton.export}>

@@ -78,6 +78,7 @@ export default class CategoryDBHandler {
   }
 
   getAllCategories() {
+    console.log('Getting Categories');
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
         const getSQL = `SELECT * FROM ${this.table}`;
@@ -89,7 +90,7 @@ export default class CategoryDBHandler {
             temp.push({
               id: result.rows.item(i).id,
               title: result.rows.item(i).title,
-              type: type,
+              type: result.rows.item(i).type,
             });
           }
 

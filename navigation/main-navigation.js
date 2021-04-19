@@ -11,6 +11,7 @@ import {getMonthName} from '../utils/converters';
 import UpdateEntry from '../screens/DataEntry/UpdateScreen';
 import RemoteConnection from '../screens/RemoteConnection/RemoteConnection';
 import RecentEntries from '../screens/RecentEntries';
+import Difference from '../screens/DifferenceScreen/DifferenceScreen';
 
 export default function HomeNavigation() {
   const Stack = createStackNavigator();
@@ -59,6 +60,17 @@ export default function HomeNavigation() {
               left: 45,
             },
           })}
+        />
+
+        <Stack.Screen
+          name="Difference"
+          component={Difference}
+          options={{
+            title: 'Difference',
+            headerTitleContainerStyle: {
+              left: 45,
+            },
+          }}
         />
 
         <Stack.Screen
