@@ -46,8 +46,8 @@ export const dimensions = {
     footerText: 18,
   },
   entry: {
-    titleText: 20,
-    amountText: 20,
+    titleText: 18,
+    amountText: 18,
     categoryText: 16,
     desText: 16,
     controlButtonSize: 25,
@@ -60,7 +60,7 @@ export const dimensions = {
     buttonText: 16,
   },
   difference: {
-    default: 18,
+    default: 16,
     yearTitle: 22,
     monthTitle: 18,
   },

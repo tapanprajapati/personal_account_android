@@ -125,7 +125,7 @@ export default class AccountType extends Component {
         />
         <FlatList
           extraData={this.state.categories}
-          style={global.list}
+          style={[global.list, styles.yearListContainer]}
           data={this.state.years}
           keyExtractor={(item) => {
             return item;
@@ -198,5 +198,8 @@ const styles = StyleSheet.create({
     opacity: 1,
     marginBottom: 10,
     borderRadius: 55,
+  },
+  yearListContainer: {
+    marginBottom: 8,
   },
 });

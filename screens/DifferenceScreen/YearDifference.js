@@ -104,6 +104,9 @@ const styles = StyleSheet.create({
     margin: 2,
     elevation: 10,
   },
+  monthListContainer: {
+    marginHorizontal: 3,
+  },
   title: {
     fontSize: dimensions.difference.yearTitle,
     fontWeight: 'bold',
@@ -163,7 +166,7 @@ const styles = StyleSheet.create({
   },
   totalIncome: {
     flex: 1,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     color: 'white',
     fontSize: dimensions.difference.default,
     textAlignVertical: 'center',
@@ -171,7 +174,7 @@ const styles = StyleSheet.create({
   },
   totalExpense: {
     flex: 1,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     textAlignVertical: 'center',
     fontSize: dimensions.difference.default,
     color: 'white',
@@ -179,7 +182,7 @@ const styles = StyleSheet.create({
   },
   totalSaving: {
     flex: 1,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     textAlignVertical: 'center',
     fontSize: dimensions.difference.default,
     color: 'white',

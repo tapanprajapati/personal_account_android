@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
   totalIncome: {
     flex: 1,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     color: 'white',
     textAlignVertical: 'center',
     fontSize: dimensions.difference.default,
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   },
   totalExpense: {
     flex: 1,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     textAlignVertical: 'center',
     color: 'white',
     fontSize: dimensions.difference.default,
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   },
   totalDifference: {
     flex: 1,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     textAlignVertical: 'center',
     color: 'white',
     fontSize: dimensions.difference.default,
