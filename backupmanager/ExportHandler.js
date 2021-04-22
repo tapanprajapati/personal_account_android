@@ -15,6 +15,8 @@ ExportHandler.prototype.export = async function () {
   const entries = await this.entryHandler.getAllEntries();
   const categories = await this.categoryHandler.getAllCategories();
 
+  console.log('Data Fetched form database');
+
   exportObject.categories = categories;
   exportObject.entries = entries;
 

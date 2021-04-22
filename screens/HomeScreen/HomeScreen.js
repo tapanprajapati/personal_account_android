@@ -11,6 +11,7 @@ import ActionButton from 'react-native-action-button';
 import BackupHandler from '../../backupmanager/BackupHandler';
 import DocumentPicker from 'react-native-document-picker';
 import RNFS from 'react-native-fs';
+import {ToastAndroid} from 'react-native';
 
 class Home extends Component {
   constructor(props) {
@@ -77,6 +78,21 @@ class Home extends Component {
       this.backupHandler.importData(res.uri);
     });
   };
+
+  exportData = () => {
+    this.backupHandler.exportData().then(
+      (success) => {
+        ToastAndroid.show(
+          "Exported to: 'Downloads/personalaccountsbackup.json'",
+          ToastAndroid.LONG,
+        );
+      },
+      (error) => {
+        ToastAndroid.show('Error Exporting Data', ToastAndroid.LONG);
+      },
+    );
+    console.log('Export Pressed');
+  };
   render() {
     return (
       <View style={[global.container, styles.center]}>
@@ -135,11 +151,7 @@ class Home extends Component {
             title="Export"
             style={styles.floating}
             onPress={() => {
-              // this.setState({visible: true, fileSystemMode: 'e'});
-              this.backupHandler.exportData().then((result) => {
-                console.log(result);
-              });
-              console.log('Export Pressed');
+              this.exportData();
             }}
             buttonColor={ButtonColors.homeButton.export}>
             <Icon type="material" name="file-upload"></Icon>

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {ToastAndroid} from 'react-native';
 import {View} from 'react-native';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 import {global} from '../../styles/global';
@@ -17,6 +18,7 @@ export default class UpdateEntry extends Component {
       console.log(result);
       if (result.success) {
         console.log('Entry Updated');
+        ToastAndroid.show('Entry Updated', ToastAndroid.SHORT);
         this.props.navigation.goBack();
       } else {
         console.log(result.result);

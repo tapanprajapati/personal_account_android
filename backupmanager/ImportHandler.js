@@ -16,7 +16,6 @@ ImportHandler.prototype.saveData = function (file) {
 };
 
 ImportHandler.prototype.saveCategories = function (categories) {
-  //   console.log(categories);
   categories.forEach((category) => {
     this.categoryHandler.addCategory(category).then((result) => {
       console.log(result.success);
@@ -30,5 +29,50 @@ ImportHandler.prototype.saveEntries = function (entries) {
       console.log(result.success);
     });
   });
-  //   console.log(entries);
+};
+
+function hasKeys(obj, keyList) {
+  const keysInObj = Object.keys(obj);
+
+  keyList.forEach((key) => {
+    if (!keysInObj.includes(key)) {
+      return false;
+    }
+  });
+
+  return true;
+}
+
+function validateFile(obj) {
+  if (!hasKeys(obj, KEYS.file)) {
+    return false;
+  }
+
+  if (obj.categories.length == undefined || obj.entries.length == undefined) {
+    return false;
+  }
+
+  return true;
+}
+
+function validateCategory(obj) {
+  if (!hasKeys(obj, KEYS.category)) {
+    return false;
+  }
+
+  return true;
+}
+
+function validateEntry(obj) {
+  if (!hasKeys(obj, KEYS.entry)) {
+    return false;
+  }
+
+  return true;
+}
+
+const KEYS = {
+  file: ['categories', 'entries'],
+  category: ['id', 'title', 'type'],
+  entry: ['id', 'title', 'description', 'amount', 'date', 'category'],
 };
