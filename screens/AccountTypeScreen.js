@@ -77,24 +77,24 @@ export default class AccountType extends Component {
         this.getYears(this.state.searchText);
       });
 
-    this.unsubscribe = this.props.navigation.addListener(
-      'focus',
-      this.handleStateChange,
-    );
+    // this.unsubscribe = this.props.navigation.addListener(
+    //   'focus',
+    //   this.handleStateChange,
+    // );
   }
 
   componentWillUnmount() {
-    this.unsubscribe();
+    // this.unsubscribe();
     console.log('Unmounted');
   }
 
-  handleStateChange = () => {
-    this.getYears(this.state.searchText);
-    this.setState({
-      total: 0,
-    });
-    console.log('Refresh');
-  };
+  // handleStateChange = () => {
+  //   this.getYears(this.state.searchText);
+  //   this.setState({
+  //     total: 0,
+  //   });
+  //   console.log('Refresh');
+  // };
 
   saveCategories = (categories) => {
     this.setState({

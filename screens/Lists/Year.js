@@ -4,6 +4,7 @@ import {ListColors} from '../../styles/colors';
 import {getMonthName, getSelectedCategories} from '../../utils/converters';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 import {dimensions} from '../../utils/constants';
+import { global } from '../../styles/global';
 
 export default class Year extends Component {
   constructor(props) {
@@ -40,14 +41,14 @@ export default class Year extends Component {
 
   componentDidMount() {
     this.getYearData(this.props.searchText, this.props.categories);
-    this.unsubscribe = this.props.navigation.addListener(
-      'focus',
-      this.handleStateChange,
-    );
+    // this.unsubscribe = this.props.navigation.addListener(
+    //   'focus',
+    //   this.handleStateChange,
+    // );
   }
 
   componentWillUnmount() {
-    this.unsubscribe();
+    // this.unsubscribe();
   }
 
   handleStateChange = () => {
@@ -86,8 +87,15 @@ export default class Year extends Component {
   }
   render() {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container,global.shadow]}>
+        <View style={styles.titleContainer}>
         <Text style={styles.title}>{this.props.year}</Text>
+        <View style={styles.titleMaterialBack}></View>
+        </View>
+        <View style={styles.titleShadowContainer}>
+        <View style={styles.titleMaterialBackShadow}></View>
+        </View>
+        <Text style={styles.footer}>$ {this.state.amount.toFixed(2)}</Text>
         <FlatList
           style={styles.listOfMonths}
           keyExtractor={(item) => item}
@@ -106,7 +114,6 @@ export default class Year extends Component {
             );
           }}
         />
-        <Text style={styles.footer}>$ {this.state.amount.toFixed(2)}</Text>
       </View>
     );
   }
@@ -135,14 +142,14 @@ class Month extends Component {
   };
   componentDidMount() {
     this.getMonthTotal(this.props.searchText, this.props.categories);
-    this.unsubscribe = this.props.navigation.addListener(
-      'focus',
-      this.handleStateChange,
-    );
+    // this.unsubscribe = this.props.navigation.addListener(
+    //   'focus',
+    //   this.handleStateChange,
+    // );
   }
 
   componentWillUnmount() {
-    this.unsubscribe();
+    // this.unsubscribe();
   }
 
   handleStateChange = () => {
@@ -195,27 +202,77 @@ class Month extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 1,
-    elevation: 1,
+    borderRadius: 2,
     marginBottom: 10,
+    shadowColor: 'grey',
+    marginHorizontal: 10
   },
   title: {
-    textAlign: 'center',
     fontWeight: 'bold',
+    marginHorizontal:10,
     color: ListColors.yearList.title,
-    backgroundColor: ListColors.yearList.background,
     fontSize: dimensions.year.titleText,
+    flex: 1
+  },
+  titleContainer:{
+    position: 'absolute',
+    zIndex: 2,
+    width: '104%',
+    overflow: 'hidden',
+    flexDirection: 'row',
+    start: -10,
+    top: 7,
+
+  },
+  titleShadowContainer:{
+    position: 'absolute',
+    zIndex: 1,
+    overflow: 'hidden',
+
+    width: '100%',
+    height: 35,
+    start: 0,
+    top: 11,
+
+  },
+  titleMaterialBack:{
+    position: 'absolute',
+    start: -15,
+    top: -20,
+    zIndex: -1,
+    backgroundColor: 'orange',
+    height: 100,
+    width: 100,
+    overflow: 'hidden',
+    transform:[{rotate:'-30deg'}]
+  },
+  titleMaterialBackShadow:{
+    position: 'absolute',
+    start: -16,
+    top: -20,
+    zIndex: -2,
+    backgroundColor: '#000',
+    opacity: 0.5,
+    height: 100,
+    width: 100,
+    overflow: 'hidden',
+    transform:[{rotate:'-30deg'}]
   },
   footer: {
-    textAlign: 'center',
-    color: ListColors.yearList.title,
-    backgroundColor: ListColors.yearList.footer,
+    textAlign: 'right',
+    marginTop: 10,
+    marginBottom: 5,
+    marginHorizontal: 5,
+    color: ListColors.yearList.footer,
     fontSize: dimensions.year.footerText,
+    flex: 1
   },
   listOfMonths: {
-    marginHorizontal: 15,
-    marginVertical: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    backgroundColor: 'white'
   },
+
   monthContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -227,6 +284,7 @@ const styles = StyleSheet.create({
     fontSize: dimensions.month.titleText,
     fontWeight: 'bold',
     flex: 2,
+    color: '#396884'
   },
   amountText: {
     flex: 1,

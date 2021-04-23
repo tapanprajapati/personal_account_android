@@ -70,7 +70,7 @@ export default class Entry extends Component {
           <Text style={styles.entryText}>{this.props.entry.title}</Text>
           <Text style={styles.amountText}> $ {this.props.entry.amount}</Text>
         </View>
-        {this.props.entry.description != '' && (
+        {(this.props.entry.description != '' && this.props.entry.description != null) && (
           <Text style={styles.descText}>{this.props.entry.description}</Text>
         )}
       </View>

@@ -4,6 +4,7 @@ import {ListColors} from '../../styles/colors';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 import Entry from './Entry';
 import {dimensions} from '../../utils/constants';
+import { global } from '../../styles/global';
 
 export default class Date extends Component {
   constructor(props) {
@@ -76,8 +77,15 @@ export default class Date extends Component {
   }
   render() {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container,global.shadow]}>
+        <View style={styles.titleContainer}>
         <Text style={styles.title}>{this.props.date}</Text>
+        <View style={styles.titleMaterialBack}></View>
+        </View>
+        <View style={styles.titleShadowContainer}>
+        <View style={styles.titleMaterialBackShadow}></View>
+        </View>
+        <Text style={styles.footer}>$ {this.state.amount.toFixed(2)}</Text>
         <FlatList
           style={styles.listOfEntries}
           keyExtractor={(item) => `${item.id}`}
@@ -92,7 +100,7 @@ export default class Date extends Component {
             );
           }}
         />
-        <Text style={styles.footer}>$ {this.state.amount.toFixed(2)}</Text>
+        {/* <Text style={styles.footer}>$ {this.state.amount.toFixed(2)}</Text> */}
       </View>
     );
   }
@@ -100,22 +108,70 @@ export default class Date extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 1,
-    elevation: 1,
+    borderRadius: 2,
     marginBottom: 10,
+    shadowColor: 'grey',
+    marginHorizontal: 10
   },
   title: {
-    textAlign: 'center',
     fontWeight: 'bold',
+    marginHorizontal:10,
     color: ListColors.yearList.title,
-    backgroundColor: ListColors.yearList.background,
-    fontSize: dimensions.date.titleText,
+    fontSize: dimensions.year.titleText,
+    flex: 1
+  },
+  titleContainer:{
+    position: 'absolute',
+    zIndex: 2,
+    width: '104%',
+    overflow: 'hidden',
+    flexDirection: 'row',
+    start: -10,
+    top: 7,
+
+  },
+  titleShadowContainer:{
+    position: 'absolute',
+    zIndex: 1,
+    overflow: 'hidden',
+
+    width: '100%',
+    height: 35,
+    start: 0,
+    top: 11,
+
+  },
+  titleMaterialBack:{
+    position: 'absolute',
+    start: -40,
+    top: -20,
+    zIndex: -1,
+    backgroundColor: 'orange',
+    height: 100,
+    width: 100,
+    overflow: 'hidden',
+    transform:[{rotate:'-30deg'}]
+  },
+  titleMaterialBackShadow:{
+    position: 'absolute',
+    start: -42,
+    top: -20,
+    zIndex: -2,
+    backgroundColor: '#000',
+    opacity: 0.5,
+    height: 100,
+    width: 100,
+    overflow: 'hidden',
+    transform:[{rotate:'-30deg'}]
   },
   footer: {
-    textAlign: 'center',
-    color: ListColors.yearList.title,
-    backgroundColor: ListColors.yearList.footer,
-    fontSize: dimensions.date.footerText,
+    textAlign: 'right',
+    marginTop: 10,
+    marginBottom: 5,
+    marginHorizontal: 5,
+    color: ListColors.yearList.footer,
+    fontSize: dimensions.year.footerText,
+    flex: 1
   },
   listOfEntries: {
     marginHorizontal: 10,

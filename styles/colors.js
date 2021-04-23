@@ -30,8 +30,13 @@ const ListColors = {
   yearList: {
     title: '#fff',
     background: '#F44336',
-    footer: '#2196F3',
+    footer: '#758698',
   },
+  dateList:{
+    title: '#fff',
+    background: '#F44336',
+    footer: '#758698',
+  }
 };
 
 const TextBackground = {

@@ -1,5 +1,4 @@
 import React from 'react';
-import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Home from '../screens/HomeScreen/HomeScreen';
@@ -12,6 +11,7 @@ import UpdateEntry from '../screens/DataEntry/UpdateScreen';
 import RemoteConnection from '../screens/RemoteConnection/RemoteConnection';
 import RecentEntries from '../screens/RecentEntries';
 import Difference from '../screens/DifferenceScreen/DifferenceScreen';
+import HomeTabNavigation from './home-tab-navigation';
 
 export default function HomeNavigation() {
   const Stack = createStackNavigator();
@@ -28,7 +28,7 @@ export default function HomeNavigation() {
         initialRouteName="Home">
         <Stack.Screen
           name="Home"
-          component={Home}
+          component={HomeTabNavigation}
           options={{title: 'Personal Account'}}
         />
         <Stack.Screen

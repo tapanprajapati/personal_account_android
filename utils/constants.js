@@ -34,8 +34,8 @@ export const dimensions = {
     footerText: 20,
   },
   year: {
-    titleText: 20,
-    footerText: 20,
+    titleText: 26,
+    footerText: 22,
   },
   month: {
     titleText: 20,
