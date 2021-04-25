@@ -3,29 +3,102 @@ import AccountType from '../screens/AccountTypeScreen'
 import React from 'react';
 import Difference from '../screens/DifferenceScreen/DifferenceScreen';
 import { useEffect } from 'react';
+import { View,StyleSheet } from 'react-native'
 import checkAndCreateDatabase from '../databasehandler/dbinit';
 import { Icon } from 'react-native-elements';
+import Menu, { MenuItem } from 'react-native-material-menu';
+import DocumentPicker from 'react-native-document-picker';
+import BackupHandler from '../backupmanager/BackupHandler';
+import { ToastAndroid } from 'react-native';
 
 const Tab = createMaterialTopTabNavigator()
 
 export default function HomeTabNavigation(props){
 
+    backupHandler = new BackupHandler()
+
     useEffect(()=>{
+      _menu = null
+
+    setMenuRef = ref =>{
+      _menu = ref
+    } 
+
+    show = () =>{
+      _menu.show()
+    }
+
+    hide = () => {
+      _menu.hide()
+    }
             props.navigation.setOptions({
               headerRight: () => (
-                <Icon
+                <View style={styles.headerRight}>
+                  <Icon
+                    containerStyle={{marginRight: 10}}
+                    name="history"
+                    type="material"
+                    color="white"
+                    onPress={() => {
+                      props.navigation.navigate('RecentEntries');
+                    }}
+                  />
+
+                  <Menu
+                  ref={setMenuRef}
+                  button={<Icon
+                    containerStyle={{marginRight: 10}}
+                    name="more-vert"
+                    type="material"
+                    color="white"
+                    onPress={
+                    show}
+
+                  />}>
+
+<MenuItem onPress={exportData}>Backup</MenuItem>
+<MenuItem onPress={openPicker}>Restore</MenuItem>
+          
+                  </Menu>
+                {/* <Icon
                   containerStyle={{marginRight: 10}}
-                  name="history"
+                  name="more-vert"
                   type="material"
                   color="white"
                   onPress={() => {
                     props.navigation.navigate('RecentEntries');
                   }}
-                />
+                /> */}
+
+
+
+                </View>
               ),
             });
             checkAndCreateDatabase()
     },[])
+
+
+    openPicker = () => {
+      DocumentPicker.pick().then((res) => {
+        backupHandler.importData(res.uri);
+      });
+    };
+  
+    exportData = () => {
+      backupHandler.exportData().then(
+        (success) => {
+          ToastAndroid.show(
+            "Exported to: 'Downloads/personalaccountsbackup.json'",
+            ToastAndroid.LONG,
+          );
+        },
+        (error) => {
+          ToastAndroid.show('Error Exporting Data', ToastAndroid.LONG);
+        },
+      );
+      console.log('Export Pressed');
+    };
 
     return(
         <Tab.Navigator>
@@ -35,3 +108,9 @@ export default function HomeTabNavigation(props){
         </Tab.Navigator>
     )
 }
+
+const styles = StyleSheet.create({
+  headerRight:{
+    flexDirection: 'row'
+  }
+})

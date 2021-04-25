@@ -61,8 +61,11 @@ export default class Year extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     let change = false;
-
-    if (prevProps.searchText != this.props.searchText) {
+    if(prevProps.edit)
+    {
+      change = true
+    }
+    else if (prevProps.searchText != this.props.searchText) {
       change = true;
     }
     if (prevProps.categories.length != this.state.selectedCats.length) {
@@ -108,6 +111,7 @@ export default class Year extends Component {
                 searchText={this.props.searchText}
                 year={this.props.year}
                 type={this.props.type}
+                edit={this.props.edit}
                 categories={this.state.selectedCats}
                 navigation={this.props.navigation}
               />
@@ -158,7 +162,11 @@ class Month extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     let change = false;
-    if (prevProps.searchText != this.props.searchText) {
+    if(prevProps.edit)
+    {
+      change = true
+    }
+    else if (prevProps.searchText != this.props.searchText) {
       change = true;
     } else if (prevProps.categories.length != this.state.selectedCats.length) {
       change = true;

@@ -19,6 +19,7 @@ export default class AccountType extends Component {
       categories: [],
       total: 0,
       searchText: '',
+      edit: false
     };
     this.entryHandler = new EntryDBHandler();
     this.categoryHandler = new CategoryDBHandler();
@@ -77,24 +78,31 @@ export default class AccountType extends Component {
         this.getYears(this.state.searchText);
       });
 
-    // this.unsubscribe = this.props.navigation.addListener(
-    //   'focus',
-    //   this.handleStateChange,
-    // );
+    this.unsubscribe = this.props.navigation.addListener(
+      'focus',
+      this.handleStateChange,
+    );
   }
 
   componentWillUnmount() {
-    // this.unsubscribe();
+    this.unsubscribe();
     console.log('Unmounted');
   }
 
-  // handleStateChange = () => {
-  //   this.getYears(this.state.searchText);
-  //   this.setState({
-  //     total: 0,
-  //   });
-  //   console.log('Refresh');
-  // };
+  handleStateChange = () => {
+    if(this.state.edit)
+    {
+      this.getYears(this.state.searchText);
+      this.setState({
+        total: 0,
+      });
+      console.log('Refresh');
+
+      this.setState({
+        edit: false
+      })
+    }
+  };
 
   saveCategories = (categories) => {
     this.setState({
@@ -136,6 +144,7 @@ export default class AccountType extends Component {
                 type={this.props.route.params.type}
                 key={item}
                 year={item}
+                edit={this.state.edit}
                 categories={getSelectedCategories(this.state.categories)}
                 navigation={this.props.navigation}
                 passTotal={this.addToTotal}
@@ -154,10 +163,16 @@ export default class AccountType extends Component {
             name="add"
             type="material"
             reverse
-            onPress={() =>
+            onPress={() =>{
+
               this.props.navigation.navigate('AddEntry', {
                 type: this.props.route.params.type,
               })
+
+              this.setState({
+                edit:true
+              })
+            }
             }
           />
         </View>

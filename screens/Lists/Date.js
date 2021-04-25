@@ -96,6 +96,7 @@ export default class Date extends Component {
                 navigation={this.props.navigation}
                 entry={item}
                 markDateEdit={this.markEdit}
+                refresh = {this.getEntries}
               />
             );
           }}
