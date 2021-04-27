@@ -5,6 +5,7 @@ import {getMonthName, getSelectedCategories} from '../../utils/converters';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 import {dimensions} from '../../utils/constants';
 import { global } from '../../styles/global';
+import { Animated } from 'react-native';
 
 export default class Year extends Component {
   constructor(props) {
@@ -13,6 +14,8 @@ export default class Year extends Component {
       months: [],
       amount: 0,
       selectedCats: this.props.categories,
+      posY: new Animated.Value(-50),
+      tagPosX: new Animated.Value(-100),
     };
 
     this.entryHandler = new EntryDBHandler();
@@ -45,6 +48,25 @@ export default class Year extends Component {
     //   'focus',
     //   this.handleStateChange,
     // );
+
+    // Animated.timing(this.state.posY,{
+    //   toValue: 0,
+    //   duration: 1000
+    // }).start(()=>{})
+      
+      Animated.parallel([
+        Animated.timing(this.state.tagPosX,{
+          toValue: 0,
+          useNativeDriver: true,
+          duration: 1000
+        }),Animated.timing(this.state.posY,{
+          toValue: 0,
+          useNativeDriver: true,
+          duration: 1000
+        })
+      ]).start()
+    // this.getYearData(this.props.searchText, this.props.categories);
+    // })
   }
 
   componentWillUnmount() {
@@ -89,15 +111,22 @@ export default class Year extends Component {
     }
   }
   render() {
+
     return (
-      <View style={[styles.container,global.shadow]}>
-        <View style={styles.titleContainer}>
+      <Animated.View style={[styles.container,global.shadow,{transform:[{translateY: this.state.posY}]}]}>
+        <Animated.View style={[styles.titleContainer,{
+      transform:[
+      {translateX: this.state.tagPosX},
+    ]}]}>
         <Text style={styles.title}>{this.props.year}</Text>
         <View style={styles.titleMaterialBack}></View>
-        </View>
-        <View style={styles.titleShadowContainer}>
+        </Animated.View>
+        <Animated.View style={[styles.titleShadowContainer,{
+      transform:[
+      {translateX: this.state.tagPosX},
+    ]}]}>
         <View style={styles.titleMaterialBackShadow}></View>
-        </View>
+        </Animated.View>
         <Text style={styles.footer}>$ {this.state.amount.toFixed(2)}</Text>
         <FlatList
           style={styles.listOfMonths}
@@ -118,7 +147,7 @@ export default class Year extends Component {
             );
           }}
         />
-      </View>
+      </Animated.View>
     );
   }
 }
@@ -225,7 +254,10 @@ const styles = StyleSheet.create({
   titleContainer:{
     position: 'absolute',
     zIndex: 2,
-    width: '104%',
+    // borderWidth: 1,
+    // borderColor: 'black',
+    // transform:[{rotateY: '80deg'}],
+    width: 100,
     overflow: 'hidden',
     flexDirection: 'row',
     start: -10,
@@ -236,8 +268,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 1,
     overflow: 'hidden',
+    width: 100,
 
-    width: '100%',
     height: 35,
     start: 0,
     top: 11,
