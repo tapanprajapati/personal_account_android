@@ -48,4 +48,12 @@ const TextBackground = {
   savingGreen: '#00C63C',
 };
 
-export {HeaderColors, TextColors, ButtonColors, ListColors, TextBackground};
+const Graph = {
+  income: '#00C63C',
+  expense: '#F44336',
+  random: () =>{
+      return ("#" + ((1<<24)*Math.random() | 0).toString(16))
+  }
+}
+
+export {HeaderColors, TextColors, ButtonColors, ListColors, TextBackground, Graph};

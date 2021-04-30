@@ -6,6 +6,7 @@ export default class CategoryDBHandler {
     this.db = openDatabase({name: DB.dbname});
     this.table = DB.tables.categories.name;
     this.columns = DB.tables.categories.columns;
+    this.entryTable = DB.tables.entries
   }
 
   addCategory(category) {
@@ -96,6 +97,109 @@ export default class CategoryDBHandler {
 
           resolve(temp);
         });
+      });
+    });
+  }
+
+  getCategoryTotalByYear(year,type){
+    return new Promise((resolve, reject) => {
+
+      console.log(`${type} categories total of ${year}`)
+
+      this.db.transaction((tx) => {
+        const getSQL = `SELECT 
+        sum(e.${this.entryTable.columns.amount.title}) as total,
+        c.${this.columns.id.title} as id,
+        c.${this.columns.title.title} as title
+        FROM ${this.table} as c, ${this.entryTable.name} as e
+        where c.${this.columns.id.title}=e.${this.entryTable.columns.categoryId.title} 
+        and c.${this.columns.type.title} = ? 
+        and strftime('%Y',e.${this.entryTable.columns.date.title})=? 
+        group by c.${this.columns.id.title}`;
+
+        tx.executeSql(
+          getSQL,
+          [type, year],
+          (tnx, result) => {
+
+          let listCategories = []
+          for (let i = 0; i < result.rows.length; i++) {
+          
+            let total = result.rows.item(i).total
+            if (total == null) total = 0;
+
+            total = parseInt(total)
+
+            let title = result.rows.item(i).title
+            let id = result.rows.item(i).id
+
+            listCategories.push({
+              id: id,
+              title: title,
+              total: total
+            })
+
+          }
+
+            resolve(listCategories);
+          },
+          (tnx, error) => {
+            console.error('Error');
+            console.error(error)
+            resolve(0);
+          },
+        );
+      });
+    });
+  }
+  
+  getCategoryTotal(type){
+    return new Promise((resolve, reject) => {
+
+      console.log(`${type} categories total`)
+
+      this.db.transaction((tx) => {
+        const getSQL = `SELECT 
+        sum(e.${this.entryTable.columns.amount.title}) as total,
+        c.${this.columns.id.title} as id,
+        c.${this.columns.title.title} as title
+        FROM ${this.table} as c, ${this.entryTable.name} as e
+        where c.${this.columns.id.title}=e.${this.entryTable.columns.categoryId.title} 
+        and c.${this.columns.type.title} = ? 
+        group by c.${this.columns.id.title}`;
+
+        tx.executeSql(
+          getSQL,
+          [type],
+          (tnx, result) => {
+
+          let listCategories = []
+          for (let i = 0; i < result.rows.length; i++) {
+          
+            let total = result.rows.item(i).total
+            if (total == null) total = 0;
+
+            total = parseInt(total)
+
+            let title = result.rows.item(i).title
+            let id = result.rows.item(i).id
+
+            listCategories.push({
+              id: id,
+              title: title,
+              total: total
+            })
+
+          }
+
+            resolve(listCategories);
+          },
+          (tnx, error) => {
+            console.error('Error');
+            console.error(error)
+            resolve(0);
+          },
+        );
       });
     });
   }

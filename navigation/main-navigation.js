@@ -1,17 +1,16 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import Home from '../screens/HomeScreen/HomeScreen';
 import {HeaderColors} from '../styles/colors';
 import AccountType from '../screens/AccountTypeScreen';
 import AddEntry from '../screens/DataEntry/AddScreen';
 import EntryList from '../screens/EntryListScreen';
 import {getMonthName} from '../utils/converters';
 import UpdateEntry from '../screens/DataEntry/UpdateScreen';
-import RemoteConnection from '../screens/RemoteConnection/RemoteConnection';
 import RecentEntries from '../screens/RecentEntries';
 import Difference from '../screens/DifferenceScreen/DifferenceScreen';
 import HomeTabNavigation from './home-tab-navigation';
+import YearsGraphScreen from '../screens/Graphs/YearsGraphScreen';
 
 export default function HomeNavigation() {
   const Stack = createStackNavigator();
@@ -98,16 +97,11 @@ export default function HomeNavigation() {
         />
 
         <Stack.Screen
-          name="RemoteConnection"
-          component={RemoteConnection}
-          options={({route}) => ({
-            title: `Remote Connection`,
-
-            headerTitleContainerStyle: {
-              left: 45,
-            },
-          })}
+          name="Graphs"
+          component={YearsGraphScreen}
+          options={{title: 'Graphs'}}
         />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

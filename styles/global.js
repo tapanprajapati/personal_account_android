@@ -23,9 +23,13 @@ const global = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 5,
     elevation: 1,
-    // marginLeft: 5,
-    // marginRight: 5,
-    // marginTop: 10,
+  },
+
+  graphTitle:{
+    color: '#396884',
+    fontSize: 18,
+    margin: 3,
+    textAlign: 'center'
   }
 });
 

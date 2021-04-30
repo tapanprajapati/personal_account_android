@@ -44,6 +44,16 @@ export default function HomeTabNavigation(props){
                     }}
                   />
 
+                  <Icon
+                    containerStyle={{marginRight: 10}}
+                    name="insights"
+                    type="material"
+                    color="white"
+                    onPress={() => {
+                      props.navigation.navigate('Graphs');
+                    }}
+                  />
+
                   <Menu
                   ref={setMenuRef}
                   button={<Icon
