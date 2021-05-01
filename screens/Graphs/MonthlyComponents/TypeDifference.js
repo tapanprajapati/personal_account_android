@@ -6,6 +6,7 @@ import { BarChart } from 'react-native-charts-wrapper';
 import EntryDBHandler from '../../../databasehandler/entryhandler';
 import { Graph } from '../../../styles/colors';
 import { global } from '../../../styles/global';
+import { getMonthName } from '../../../utils/converters';
 
 export default class TypeDifference extends Component{
     constructor(props)
@@ -13,7 +14,7 @@ export default class TypeDifference extends Component{
         super(props)
 
         this.state = {
-          years: [],
+          months: ["01","02","03","04","05","06","07","08","09","10","11","12"],
           incomeData: [],
           expenseData: []
         }
@@ -23,37 +24,26 @@ export default class TypeDifference extends Component{
     }
 
     componentDidMount() {
-      this.entryHandler.getYears().then(years => {
 
-        this.setState({
-          years: years
-        })
+        this.state.months.forEach(month=>{
 
-        years.forEach(year=>{
-          this.entryHandler.getYearsTotal(year,'expense').then(total=>{
+          const monthYear = `${month}/${this.props.year}`
+          this.entryHandler.getMonthTotal(monthYear,"expense").then(total=>{
             total = parseInt(total)
             this.setState({
               expenseData : [...this.state.expenseData,total]
             })
           })
 
-          this.entryHandler.getYearsTotal(year,'income').then(total=>{
+          this.entryHandler.getMonthTotal(monthYear,"income").then(total=>{
             total = parseInt(total)
             this.setState({
               incomeData : [...this.state.incomeData,total]
             })
           })
         })
-      })
     }
 
-    handleSelect = (data) => {
-      let x = parseInt(data.nativeEvent.x)
-
-      const yearSelected = this.state.years[x]
-
-      this.props.navigation.navigate("MonthsGraphs",{year: yearSelected})
-    }
 
     render(){
         return(
@@ -65,12 +55,14 @@ export default class TypeDifference extends Component{
               drawAxisLines: false,
               drawGridLines: false,
               position: "BOTTOM",
-              valueFormatter: this.state.years,
+              valueFormatter: this.state.months,
               granularityEnabled: true,
               granularity: 1,
-              axisMaximum: this.state.years.length,
+              axisMaximum: 12,
               axisMinimum: 0,
               centerAxisLabels: true,
+              labelRotationAngle: 90,
+              labelCount: 12
             }}
             animation={{durationY: 1500}}
             yAxis={{
@@ -88,8 +80,7 @@ export default class TypeDifference extends Component{
                   label:"Income",
                   config:{
                     color: processColor(Graph.income),
-                    valueTextColor: processColor("white"),
-                    valueTextSize: 10,
+                    drawValues: false
                     
                   }
                 },
@@ -98,9 +89,7 @@ export default class TypeDifference extends Component{
                   label: "Expense",
                   config:{
                     color: processColor(Graph.expense),
-                    valueTextColor: processColor("white"),
-                    valueTextSize: 10,
-                    
+                    drawValues: false
                   }
                 }
               ],
@@ -123,7 +112,7 @@ export default class TypeDifference extends Component{
               wordWrapEnabled: true,
             }}
             drawValueAboveBar={false}
-            onSelect={this.handleSelect.bind(this)}
+            // onSelect={this.handleSelect.bind(this)}
             // onChange={(event) => console.log(event.nativeEvent)}
             // highlights={this.state.highlights}
             marker={{

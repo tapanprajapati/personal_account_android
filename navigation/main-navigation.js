@@ -11,6 +11,7 @@ import RecentEntries from '../screens/RecentEntries';
 import Difference from '../screens/DifferenceScreen/DifferenceScreen';
 import HomeTabNavigation from './home-tab-navigation';
 import YearsGraphScreen from '../screens/Graphs/YearsGraphScreen';
+import MonthsGraphScreen from '../screens/Graphs/MonthsGraphScreen';
 
 export default function HomeNavigation() {
   const Stack = createStackNavigator();
@@ -100,6 +101,18 @@ export default function HomeNavigation() {
           name="Graphs"
           component={YearsGraphScreen}
           options={{title: 'Graphs'}}
+        />
+
+        <Stack.Screen
+          name="MonthsGraphs"
+          component={MonthsGraphScreen}
+         options={({route}) => ({
+            title: `Graphs: ${route.params.year}`,
+
+            headerTitleContainerStyle: {
+              left: 45,
+            },
+          })}
         />
 
       </Stack.Navigator>

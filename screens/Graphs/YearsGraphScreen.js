@@ -14,7 +14,7 @@ export default class YearsGraphScreen extends Component{
     render() {
         return (
              <ScrollView style={styles.main}>
-                    <TypeDifference title="Year Summary"></TypeDifference>
+                    <TypeDifference navigation = {this.props.navigation} title="Year Summary"></TypeDifference>
                     <CategoryLine title="Income Summary: Categories" type="income"/>
 
                 

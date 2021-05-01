@@ -34,6 +34,7 @@ export default class AccountType extends Component {
       .then((years) => {
         this.setState({
           years: years,
+          edit: false
         });
       });
   };
@@ -108,6 +109,7 @@ export default class AccountType extends Component {
     this.setState({
       categories: categories,
       total: 0,
+      edit: true
     });
     this.getYears();
   };
@@ -116,6 +118,7 @@ export default class AccountType extends Component {
     this.setState({
       searchText: text,
       total: 0,
+      edit: true
     });
 
     this.getYears(text);
@@ -123,6 +126,8 @@ export default class AccountType extends Component {
   render() {
     return (
       <View style={global.container}>
+        <View>
+
         <SearchBar
           containerStyle={styles.searchBarContainer}
           placeholder="Type Here..."
@@ -131,6 +136,18 @@ export default class AccountType extends Component {
           value={this.state.searchText}
           onClear={() => this.handleSearch('')}
         />
+        <Icon
+          containerStyle={{position: 'absolute',end: 0,margin: 0,top: -2}}
+          name="filter-outline"
+          type="ionicon"
+          raised
+          color="steelblue"
+          // reverse
+          onPress={() => {
+            this.setState({showCategoryModal: true});
+          }}
+        />
+        </View>
         <FlatList
           extraData={this.state.categories}
           style={[global.list, styles.yearListContainer]}
@@ -145,7 +162,7 @@ export default class AccountType extends Component {
                 key={item}
                 year={item}
                 edit={this.state.edit}
-                categories={getSelectedCategories(this.state.categories)}
+                categories={(this.state.categories)}
                 navigation={this.props.navigation}
                 passTotal={this.addToTotal}
                 searchText={this.state.searchText}
@@ -206,6 +223,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 0,
     padding: 0,
     borderBottomWidth: 0,
+    marginEnd: 60
   },
   searchBarInputContainer: {
     backgroundColor: 'white',

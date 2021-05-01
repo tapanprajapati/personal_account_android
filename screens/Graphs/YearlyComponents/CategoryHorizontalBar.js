@@ -19,11 +19,23 @@ export default class CategoryHorizontalBar extends Component{
 
     componentDidMount()
     {
-        this.categoryHanlder.getCategoryTotal(this.props.type).then(categories=>{
+        let method = undefined
+
+        if(this.props.year==undefined)
+        {
+            method = this.categoryHanlder.getCategoryTotal(this.props.type)
+        }
+        else
+        {
+            method = this.categoryHanlder.getCategoryTotalByYear(this.props.year,this.props.type)
+        }
+
+        method.then(categories=>{
             this.setState({
                 categories: categories
             })
         })
+
     }
 
     getData = () => {
@@ -38,7 +50,6 @@ export default class CategoryHorizontalBar extends Component{
             label: 'Bar dataSet',
             config: {
               color: processColor(Graph.random()),
-            // colors: this.state.categories.map(category=> processColor(Graph.random()))
 
             }
         })

@@ -13,7 +13,7 @@ export default class Year extends Component {
     this.state = {
       months: [],
       amount: 0,
-      selectedCats: this.props.categories,
+      selectedCats: getSelectedCategories(this.props.categories),
       posY: new Animated.Value(-50),
       tagPosX: new Animated.Value(-100),
     };
@@ -43,7 +43,7 @@ export default class Year extends Component {
   };
 
   componentDidMount() {
-    this.getYearData(this.props.searchText, this.props.categories);
+    this.getYearData(this.props.searchText, this.state.selectedCats);
     // this.unsubscribe = this.props.navigation.addListener(
     //   'focus',
     //   this.handleStateChange,
@@ -78,7 +78,7 @@ export default class Year extends Component {
     this.setState({
       amount: 0,
     });
-    this.getYearData(this.props.searchText, this.props.categories);
+    this.getYearData(this.props.searchText, this.state.selectedCats);
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -89,16 +89,6 @@ export default class Year extends Component {
     }
     else if (prevProps.searchText != this.props.searchText) {
       change = true;
-    }
-    if (prevProps.categories.length != this.state.selectedCats.length) {
-      change = true;
-    } else {
-      for (let i = 0; i < prevProps.categories.length; i++) {
-        if (prevProps.categories[i] != this.state.selectedCats[i]) {
-          change = true;
-          break;
-        }
-      }
     }
 
     if (change) {
@@ -141,7 +131,7 @@ export default class Year extends Component {
                 year={this.props.year}
                 type={this.props.type}
                 edit={this.props.edit}
-                categories={this.state.selectedCats}
+                categories={this.props.categories}
                 navigation={this.props.navigation}
               />
             );
@@ -157,7 +147,7 @@ class Month extends Component {
     super(props);
     this.state = {
       amount: 0,
-      selectedCats: props.categories,
+      selectedCats: getSelectedCategories(props.categories),
     };
     this.entryHandler = new EntryDBHandler();
   }
@@ -174,7 +164,7 @@ class Month extends Component {
       });
   };
   componentDidMount() {
-    this.getMonthTotal(this.props.searchText, this.props.categories);
+    this.getMonthTotal(this.props.searchText, this.state.selectedCats);
     // this.unsubscribe = this.props.navigation.addListener(
     //   'focus',
     //   this.handleStateChange,
@@ -185,10 +175,6 @@ class Month extends Component {
     // this.unsubscribe();
   }
 
-  handleStateChange = () => {
-    this.getMonthTotal(this.props.searchText, this.props.categories);
-  };
-
   componentDidUpdate(prevProps, prevState) {
     let change = false;
     if(prevProps.edit)
@@ -197,21 +183,12 @@ class Month extends Component {
     }
     else if (prevProps.searchText != this.props.searchText) {
       change = true;
-    } else if (prevProps.categories.length != this.state.selectedCats.length) {
-      change = true;
-    } else {
-      for (let i = 0; i < prevProps.categories.length; i++) {
-        if (prevProps.categories[i] != this.state.selectedCats[i]) {
-          change = true;
-          break;
-        }
-      }
     }
 
     if (change) {
-      this.getMonthTotal(this.props.searchText, prevProps.categories);
+      this.getMonthTotal(this.props.searchText, getSelectedCategories(prevProps.categories));
       this.setState({
-        selectedCats: prevProps.categories,
+        selectedCats: getSelectedCategories(prevProps.categories),
       });
     }
   }
@@ -221,7 +198,7 @@ class Month extends Component {
       type: this.props.type,
       year: this.props.year,
       month: this.props.month,
-      categories: this.state.selectedCats,
+      categories: this.props.categories,
     });
   };
 

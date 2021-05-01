@@ -152,6 +152,58 @@ export default class CategoryDBHandler {
       });
     });
   }
+
+  getCategoryTotalByMonthYear(monthYear,type){
+    return new Promise((resolve, reject) => {
+
+      console.log(`${type} categories total of ${monthYear}`)
+
+      this.db.transaction((tx) => {
+        const getSQL = `SELECT 
+        sum(e.${this.entryTable.columns.amount.title}) as total,
+        c.${this.columns.id.title} as id,
+        c.${this.columns.title.title} as title
+        FROM ${this.table} as c, ${this.entryTable.name} as e
+        where c.${this.columns.id.title}=e.${this.entryTable.columns.categoryId.title} 
+        and c.${this.columns.type.title} = ? 
+        and strftime('%m/%Y',e.${this.entryTable.columns.date.title})=? 
+        group by c.${this.columns.id.title}`;
+
+        tx.executeSql(
+          getSQL,
+          [type, monthYear],
+          (tnx, result) => {
+
+          let listCategories = []
+          for (let i = 0; i < result.rows.length; i++) {
+          
+            let total = result.rows.item(i).total
+            if (total == null) total = 0;
+
+            total = parseInt(total)
+
+            let title = result.rows.item(i).title
+            let id = result.rows.item(i).id
+
+            listCategories.push({
+              id: id,
+              title: title,
+              total: total
+            })
+
+          }
+
+            resolve(listCategories);
+          },
+          (tnx, error) => {
+            console.error('Error');
+            console.error(error)
+            resolve(0);
+          },
+        );
+      });
+    });
+  }
   
   getCategoryTotal(type){
     return new Promise((resolve, reject) => {

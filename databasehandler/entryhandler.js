@@ -448,7 +448,7 @@ export default class EntryDBHandler {
             if (total == null) total = 0;
 
 
-            resolve(parseInt(total.toFixed(2)));
+            resolve((total.toFixed(2)));
           },
           (tnx, error) => {
             console.error('Error');
