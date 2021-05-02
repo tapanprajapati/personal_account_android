@@ -200,7 +200,7 @@ export default class CategoryLine extends Component{
                       }}
 
                       animation={{
-                          durationY: 1500
+                          durationX: 1500
                       }}
                 />
 

@@ -6,7 +6,6 @@ import { BarChart } from 'react-native-charts-wrapper';
 import EntryDBHandler from '../../../databasehandler/entryhandler';
 import { Graph } from '../../../styles/colors';
 import { global } from '../../../styles/global';
-import { getMonthName } from '../../../utils/converters';
 
 export default class TypeDifference extends Component{
     constructor(props)
@@ -15,6 +14,7 @@ export default class TypeDifference extends Component{
 
         this.state = {
           months: ["01","02","03","04","05","06","07","08","09","10","11","12"],
+          monthNames: ['January','February','March','April','May','June','July','August','September','October','November','December'],
           incomeData: [],
           expenseData: []
         }
@@ -53,9 +53,9 @@ export default class TypeDifference extends Component{
             style={{flex: 1}}
             xAxis={{
               drawAxisLines: false,
-              drawGridLines: false,
+              drawGridLines: true,
               position: "BOTTOM",
-              valueFormatter: this.state.months,
+              valueFormatter: this.state.monthNames,
               granularityEnabled: true,
               granularity: 1,
               axisMaximum: 12,
