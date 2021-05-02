@@ -50,6 +50,7 @@ export default class CategoryHorizontalBar extends Component{
             label: 'Bar dataSet',
             config: {
               color: processColor(Graph.random()),
+              valueTextSize: 10
 
             }
         })
