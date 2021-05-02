@@ -4,6 +4,7 @@ import {ButtonColors} from '../../styles/colors';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 import {Icon} from 'react-native-elements';
 import {dimensions} from '../../utils/constants';
+import { ToastAndroid } from 'react-native';
 
 export default class Entry extends Component {
   constructor(props) {
@@ -32,6 +33,7 @@ export default class Entry extends Component {
           this.entryHandler.deleteEntry(entry).then((result) => {
             if (result.success) {
               this.props.refresh();
+              ToastAndroid.show("Entry Deleted",ToastAndroid.SHORT)
             }
           });
         },
@@ -80,7 +82,8 @@ export default class Entry extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 4,
+    padding: 4,
+    marginVertical: 5
   },
   entryContainer: {
     flex: 1,

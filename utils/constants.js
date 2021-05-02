@@ -46,11 +46,11 @@ export const dimensions = {
     footerText: 18,
   },
   entry: {
-    titleText: 18,
+    titleText: 20,
     amountText: 18,
     categoryText: 16,
     desText: 16,
-    controlButtonSize: 25,
+    controlButtonSize: 20,
     controlButtonMargin: 4,
   },
   categoryFilter: {

@@ -93,11 +93,11 @@ export default class Year extends Component {
 
     if (change) {
       this.setState({
-        selectedCats: prevProps.categories,
+        selectedCats: getSelectedCategories(prevProps.categories),
         amount: 0,
       });
 
-      this.getYearData(this.props.searchText, prevProps.categories);
+      this.getYearData(this.props.searchText, getSelectedCategories(prevProps.categories));
     }
   }
   render() {

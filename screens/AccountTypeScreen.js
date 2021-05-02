@@ -99,9 +99,9 @@ export default class AccountType extends Component {
       });
       console.log('Refresh');
 
-      this.setState({
-        edit: false
-      })
+      // this.setState({
+      //   edit: false
+      // })
     }
   };
 
@@ -118,10 +118,10 @@ export default class AccountType extends Component {
     this.setState({
       searchText: text,
       total: 0,
-      edit: true
     });
 
     this.getYears(text);
+    console.log(`Searching: ${text}`)
   };
   render() {
     return (
@@ -130,7 +130,7 @@ export default class AccountType extends Component {
 
         <SearchBar
           containerStyle={styles.searchBarContainer}
-          placeholder="Type Here..."
+          placeholder="Search Here..."
           inputContainerStyle={styles.searchBarInputContainer}
           onChangeText={this.handleSearch}
           value={this.state.searchText}
@@ -213,8 +213,8 @@ const styles = StyleSheet.create({
   footer: {
     width: '100%',
     textAlign: 'center',
-    backgroundColor: TextBackground.footerTotal,
-    color: 'white',
+    // backgroundColor: TextBackground.footerTotal,
+    color: 'steelblue',
     fontSize: dimensions.accountType.footerText,
     fontWeight: 'bold',
   },
