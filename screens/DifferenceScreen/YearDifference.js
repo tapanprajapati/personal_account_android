@@ -50,6 +50,16 @@ export default class YearDifference extends Component {
     this.props.addToExpense(amount);
   };
 
+  componentDidUpdate(prevProps,prevState){
+    if(prevProps.edit)
+    {
+      this.setState({
+        income: 0,
+        expense: 0
+      })
+      this.getMonths()
+    }
+  }
   render() {
     const difference = (this.state.income - this.state.expense).toFixed(2);
 
@@ -77,6 +87,7 @@ export default class YearDifference extends Component {
               <MonthDifference
                 month={item}
                 year={this.props.year}
+                edit={this.props.edit}
                 addToIncome={this.addToIncome}
                 addToExpense={this.addToExpense}
               />

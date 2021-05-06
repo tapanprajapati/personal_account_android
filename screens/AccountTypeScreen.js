@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { RefreshControl } from 'react-native';
 import {FlatList, Modal, StyleSheet, Text, View} from 'react-native';
 import {Icon, SearchBar} from 'react-native-elements';
 import CategoryDBHandler from '../databasehandler/categoryhandler';
@@ -19,7 +20,8 @@ export default class AccountType extends Component {
       categories: [],
       total: 0,
       searchText: '',
-      edit: false
+      edit: false,
+      refresh: false
     };
     this.entryHandler = new EntryDBHandler();
     this.categoryHandler = new CategoryDBHandler();
@@ -29,12 +31,17 @@ export default class AccountType extends Component {
     const categoryString = getSelectedCategories(this.state.categories).join(
       ',',
     );
+
+    this.setState({
+      edit: false,
+      total: 0
+    });
     this.entryHandler
       .getSearchYears(searchText, categoryString)
       .then((years) => {
         this.setState({
           years: years,
-          edit: false
+          refresh: false
         });
       });
   };
@@ -94,35 +101,32 @@ export default class AccountType extends Component {
     if(this.state.edit)
     {
       this.getYears(this.state.searchText);
-      this.setState({
-        total: 0,
-      });
+      
       console.log('Refresh');
-
-      // this.setState({
-      //   edit: false
-      // })
     }
   };
 
   saveCategories = (categories) => {
     this.setState({
       categories: categories,
-      total: 0,
       edit: true
     });
-    this.getYears();
+    this.getYears(this.state.searchText);
   };
 
   handleSearch = (text) => {
     this.setState({
       searchText: text,
-      total: 0,
     });
 
     this.getYears(text);
     console.log(`Searching: ${text}`)
   };
+
+  refresh = () => {
+    this.setState({edit: true,refresh: true})
+    this.getYears(this.state.searchText)
+  }
   render() {
     return (
       <View style={global.container}>
@@ -148,28 +152,33 @@ export default class AccountType extends Component {
           }}
         />
         </View>
-        <FlatList
-          extraData={this.state.categories}
-          style={[global.list, styles.yearListContainer]}
-          data={this.state.years}
-          keyExtractor={(item) => {
-            return item;
-          }}
-          renderItem={({item}) => {
-            return (
-              <Year
-                type={this.props.route.params.type}
-                key={item}
-                year={item}
-                edit={this.state.edit}
-                categories={(this.state.categories)}
-                navigation={this.props.navigation}
-                passTotal={this.addToTotal}
-                searchText={this.state.searchText}
-              />
-            );
-          }}
-        />
+        <RefreshControl
+          refreshing={this.state.refresh}
+          onRefresh={()=>{setTimeout(this.refresh,100)}}
+        >
+          <FlatList
+            extraData={this.state.categories}
+            style={[global.list, styles.yearListContainer]}
+            data={this.state.years}
+            keyExtractor={(item) => {
+              return item;
+            }}
+            renderItem={({item}) => {
+              return (
+                <Year
+                  type={this.props.route.params.type}
+                  key={item}
+                  year={item}
+                  edit={this.state.edit}
+                  categories={(this.state.categories)}
+                  navigation={this.props.navigation}
+                  passTotal={this.addToTotal}
+                  searchText={this.state.searchText}
+                />
+              );
+            }}
+          />
+        </RefreshControl>
         <Text style={styles.footer}>
           Total: $ {this.state.total.toFixed(2)}
         </Text>
@@ -213,6 +222,8 @@ const styles = StyleSheet.create({
   footer: {
     width: '100%',
     textAlign: 'center',
+    position: 'absolute',
+    bottom: 3,
     // backgroundColor: TextBackground.footerTotal,
     color: 'steelblue',
     fontSize: dimensions.accountType.footerText,

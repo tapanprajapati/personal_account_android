@@ -42,6 +42,17 @@ export default class MonthDifference extends Component {
     this.getTotals();
   }
 
+  componentDidUpdate(prevProps,prevState){
+    if(prevProps.edit)
+    {
+      this.setState({
+        income: 0,
+        expense: 0
+      })
+      this.getTotals()
+    }
+  }
+
   render() {
     const difference = (this.state.income - this.state.expense).toFixed(2);
 
