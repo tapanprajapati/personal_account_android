@@ -32,11 +32,11 @@ const ListColors = {
     background: '#F44336',
     footer: '#758698',
   },
-  dateList:{
+  dateList: {
     title: '#fff',
     background: '#F44336',
     footer: '#758698',
-  }
+  },
 };
 
 const TextBackground = {
@@ -51,9 +51,16 @@ const TextBackground = {
 const Graph = {
   income: '#00C63C',
   expense: '#F44336',
-  random: () =>{
-      return ("#" + ((1<<24)*Math.random() | 0).toString(16))
-  }
-}
+  random: () => {
+    return '#' + (((1 << 24) * Math.random()) | 0).toString(16);
+  },
+};
 
-export {HeaderColors, TextColors, ButtonColors, ListColors, TextBackground, Graph};
+export {
+  HeaderColors,
+  TextColors,
+  ButtonColors,
+  ListColors,
+  TextBackground,
+  Graph,
+};

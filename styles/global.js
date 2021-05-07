@@ -14,23 +14,23 @@ const global = StyleSheet.create({
   list: {
     marginHorizontal: 5,
   },
-  shadow:{
+  shadow: {
     borderWidth: 1,
     borderColor: '#ddd',
     borderBottomWidth: 0,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.8,
     shadowRadius: 5,
     elevation: 1,
   },
 
-  graphTitle:{
+  graphTitle: {
     color: '#396884',
     fontSize: 18,
     margin: 3,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 });
 
 export {global};

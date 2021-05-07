@@ -4,7 +4,7 @@ import {FlatList} from 'react-native';
 import {View} from 'react-native';
 import {StyleSheet} from 'react-native';
 import EntryDBHandler from '../databasehandler/entryhandler';
-import { global } from '../styles/global';
+import {global} from '../styles/global';
 import {TextColors} from './../styles/colors';
 
 export default class RecentEntries extends Component {
@@ -34,7 +34,7 @@ export default class RecentEntries extends Component {
       color = TextColors.expense;
     }
     return (
-      <View style={[styles.entryContainer,global.shadow]}>
+      <View style={[styles.entryContainer, global.shadow]}>
         <View style={styles.slash1}></View>
         <View style={styles.slash2}></View>
         <View style={styles.slash3}></View>
@@ -72,49 +72,49 @@ export default class RecentEntries extends Component {
 
 const styles = StyleSheet.create({
   main: {},
-  entryContainer:{
+  entryContainer: {
     padding: 10,
     margin: 5,
     // borderWidth: 1,
     // borderColor: 'black',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
-  slash1:{
+  slash1: {
     position: 'absolute',
     height: 20,
     width: 100,
     top: -8,
     start: -5,
     backgroundColor: 'steelblue',
-    transform:[{rotate: '-12deg'}]
+    transform: [{rotate: '-12deg'}],
   },
-  slash2:{
+  slash2: {
     position: 'absolute',
     height: 20,
     width: 100,
     top: 10,
     start: -48,
     backgroundColor: 'steelblue',
-    transform:[{rotate: '102deg'}]
+    transform: [{rotate: '102deg'}],
   },
-  
-  slash3:{
+
+  slash3: {
     position: 'absolute',
     height: 20,
     width: 100,
     bottom: 10,
     end: -48,
     backgroundColor: 'steelblue',
-    transform:[{rotate: '102deg'}]
+    transform: [{rotate: '102deg'}],
   },
-  slash4:{
+  slash4: {
     position: 'absolute',
     height: 20,
     width: 100,
     bottom: -10,
     end: -5,
     backgroundColor: 'steelblue',
-    transform:[{rotate: '-12deg'}]
+    transform: [{rotate: '-12deg'}],
   },
   entry: {
     flexDirection: 'row',

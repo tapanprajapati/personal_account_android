@@ -4,7 +4,7 @@ import {ListColors} from '../../styles/colors';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 import Entry from './Entry';
 import {dimensions} from '../../utils/constants';
-import { global } from '../../styles/global';
+import {global} from '../../styles/global';
 
 export default class Date extends Component {
   constructor(props) {
@@ -69,9 +69,7 @@ export default class Date extends Component {
     let change = false;
     if (prevProps.searchText != this.props.searchText) {
       change = true;
-    }
-    else if(prevProps.edit)
-    {
+    } else if (prevProps.edit) {
       change = true;
     }
 
@@ -81,13 +79,13 @@ export default class Date extends Component {
   }
   render() {
     return (
-      <View style={[styles.container,global.shadow]}>
+      <View style={[styles.container, global.shadow]}>
         <View style={styles.titleContainer}>
-        <Text style={styles.title}>{this.props.date}</Text>
-        <View style={styles.titleMaterialBack}></View>
+          <Text style={styles.title}>{this.props.date}</Text>
+          <View style={styles.titleMaterialBack}></View>
         </View>
         <View style={styles.titleShadowContainer}>
-        <View style={styles.titleMaterialBackShadow}></View>
+          <View style={styles.titleMaterialBackShadow}></View>
         </View>
         <Text style={styles.footer}>$ {this.state.amount.toFixed(2)}</Text>
         <FlatList
@@ -100,7 +98,7 @@ export default class Date extends Component {
                 navigation={this.props.navigation}
                 entry={item}
                 markDateEdit={this.markEdit}
-                refresh = {this.getEntries}
+                refresh={this.getEntries}
               />
             );
           }}
@@ -116,16 +114,16 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     marginBottom: 10,
     shadowColor: 'grey',
-    marginHorizontal: 10
+    marginHorizontal: 10,
   },
   title: {
     fontWeight: 'bold',
-    marginHorizontal:10,
+    marginHorizontal: 10,
     color: ListColors.yearList.title,
     fontSize: dimensions.year.titleText,
-    flex: 1
+    flex: 1,
   },
-  titleContainer:{
+  titleContainer: {
     position: 'absolute',
     zIndex: 2,
     width: '104%',
@@ -133,9 +131,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     start: -10,
     top: 7,
-
   },
-  titleShadowContainer:{
+  titleShadowContainer: {
     position: 'absolute',
     zIndex: 1,
     overflow: 'hidden',
@@ -144,9 +141,8 @@ const styles = StyleSheet.create({
     height: 35,
     start: 0,
     top: 11,
-
   },
-  titleMaterialBack:{
+  titleMaterialBack: {
     position: 'absolute',
     start: -40,
     top: -20,
@@ -155,9 +151,9 @@ const styles = StyleSheet.create({
     height: 100,
     width: 100,
     overflow: 'hidden',
-    transform:[{rotate:'-30deg'}]
+    transform: [{rotate: '-30deg'}],
   },
-  titleMaterialBackShadow:{
+  titleMaterialBackShadow: {
     position: 'absolute',
     start: -42,
     top: -20,
@@ -167,7 +163,7 @@ const styles = StyleSheet.create({
     height: 100,
     width: 100,
     overflow: 'hidden',
-    transform:[{rotate:'-30deg'}]
+    transform: [{rotate: '-30deg'}],
   },
   footer: {
     textAlign: 'right',
@@ -176,7 +172,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     color: ListColors.yearList.footer,
     fontSize: dimensions.year.footerText,
-    flex: 1
+    flex: 1,
   },
   listOfEntries: {
     marginHorizontal: 10,

@@ -42,14 +42,13 @@ export default class MonthDifference extends Component {
     this.getTotals();
   }
 
-  componentDidUpdate(prevProps,prevState){
-    if(prevProps.edit)
-    {
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.edit) {
       this.setState({
         income: 0,
-        expense: 0
-      })
-      this.getTotals()
+        expense: 0,
+      });
+      this.getTotals();
     }
   }
 

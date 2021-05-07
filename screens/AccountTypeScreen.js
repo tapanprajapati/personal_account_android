@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { RefreshControl } from 'react-native';
+import {RefreshControl} from 'react-native';
 import {FlatList, Modal, StyleSheet, Text, View} from 'react-native';
 import {Icon, SearchBar} from 'react-native-elements';
 import CategoryDBHandler from '../databasehandler/categoryhandler';
@@ -21,7 +21,7 @@ export default class AccountType extends Component {
       total: 0,
       searchText: '',
       edit: false,
-      refresh: false
+      refresh: false,
     };
     this.entryHandler = new EntryDBHandler();
     this.categoryHandler = new CategoryDBHandler();
@@ -34,14 +34,14 @@ export default class AccountType extends Component {
 
     this.setState({
       edit: false,
-      total: 0
+      total: 0,
     });
     this.entryHandler
       .getSearchYears(searchText, categoryString)
       .then((years) => {
         this.setState({
           years: years,
-          refresh: false
+          refresh: false,
         });
       });
   };
@@ -98,10 +98,9 @@ export default class AccountType extends Component {
   }
 
   handleStateChange = () => {
-    if(this.state.edit)
-    {
+    if (this.state.edit) {
       this.getYears(this.state.searchText);
-      
+
       console.log('Refresh');
     }
   };
@@ -109,7 +108,7 @@ export default class AccountType extends Component {
   saveCategories = (categories) => {
     this.setState({
       categories: categories,
-      edit: true
+      edit: true,
     });
     this.getYears(this.state.searchText);
   };
@@ -120,42 +119,42 @@ export default class AccountType extends Component {
     });
 
     this.getYears(text);
-    console.log(`Searching: ${text}`)
+    console.log(`Searching: ${text}`);
   };
 
   refresh = () => {
-    this.setState({edit: true,refresh: true})
-    this.getYears(this.state.searchText)
-  }
+    this.setState({edit: true, refresh: true});
+    this.getYears(this.state.searchText);
+  };
   render() {
     return (
       <View style={global.container}>
         <View>
-
-        <SearchBar
-          containerStyle={styles.searchBarContainer}
-          placeholder="Search Here..."
-          inputContainerStyle={styles.searchBarInputContainer}
-          onChangeText={this.handleSearch}
-          value={this.state.searchText}
-          onClear={() => this.handleSearch('')}
-        />
-        <Icon
-          containerStyle={{position: 'absolute',end: 0,margin: 0,top: -2}}
-          name="filter-outline"
-          type="ionicon"
-          raised
-          color="steelblue"
-          // reverse
-          onPress={() => {
-            this.setState({showCategoryModal: true});
-          }}
-        />
+          <SearchBar
+            containerStyle={styles.searchBarContainer}
+            placeholder="Search Here..."
+            inputContainerStyle={styles.searchBarInputContainer}
+            onChangeText={this.handleSearch}
+            value={this.state.searchText}
+            onClear={() => this.handleSearch('')}
+          />
+          <Icon
+            containerStyle={{position: 'absolute', end: 0, margin: 0, top: -2}}
+            name="filter-outline"
+            type="ionicon"
+            raised
+            color="steelblue"
+            // reverse
+            onPress={() => {
+              this.setState({showCategoryModal: true});
+            }}
+          />
         </View>
         <RefreshControl
           refreshing={this.state.refresh}
-          onRefresh={()=>{setTimeout(this.refresh,100)}}
-        >
+          onRefresh={() => {
+            setTimeout(this.refresh, 100);
+          }}>
           <FlatList
             extraData={this.state.categories}
             style={[global.list, styles.yearListContainer]}
@@ -170,7 +169,7 @@ export default class AccountType extends Component {
                   key={item}
                   year={item}
                   edit={this.state.edit}
-                  categories={(this.state.categories)}
+                  categories={this.state.categories}
                   navigation={this.props.navigation}
                   passTotal={this.addToTotal}
                   searchText={this.state.searchText}
@@ -189,17 +188,15 @@ export default class AccountType extends Component {
             name="add"
             type="material"
             reverse
-            onPress={() =>{
-
+            onPress={() => {
               this.props.navigation.navigate('AddEntry', {
                 type: this.props.route.params.type,
-              })
+              });
 
               this.setState({
-                edit:true
-              })
-            }
-            }
+                edit: true,
+              });
+            }}
           />
         </View>
         <Modal
@@ -234,7 +231,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 0,
     padding: 0,
     borderBottomWidth: 0,
-    marginEnd: 60
+    marginEnd: 60,
   },
   searchBarInputContainer: {
     backgroundColor: 'white',

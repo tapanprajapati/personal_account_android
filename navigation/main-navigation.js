@@ -106,7 +106,7 @@ export default function HomeNavigation() {
         <Stack.Screen
           name="MonthsGraphs"
           component={MonthsGraphScreen}
-         options={({route}) => ({
+          options={({route}) => ({
             title: `Graphs: ${route.params.year}`,
 
             headerTitleContainerStyle: {
@@ -114,7 +114,6 @@ export default function HomeNavigation() {
             },
           })}
         />
-
       </Stack.Navigator>
     </NavigationContainer>
   );

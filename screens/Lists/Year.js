@@ -4,8 +4,8 @@ import {ListColors} from '../../styles/colors';
 import {getMonthName, getSelectedCategories} from '../../utils/converters';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 import {dimensions} from '../../utils/constants';
-import { global } from '../../styles/global';
-import { Animated } from 'react-native';
+import {global} from '../../styles/global';
+import {Animated} from 'react-native';
 
 export default class Year extends Component {
   constructor(props) {
@@ -53,18 +53,19 @@ export default class Year extends Component {
     //   toValue: 0,
     //   duration: 1000
     // }).start(()=>{})
-      
-      Animated.parallel([
-        Animated.timing(this.state.tagPosX,{
-          toValue: 0,
-          useNativeDriver: true,
-          duration: 1000
-        }),Animated.timing(this.state.posY,{
-          toValue: 0,
-          useNativeDriver: true,
-          duration: 1000
-        })
-      ]).start()
+
+    Animated.parallel([
+      Animated.timing(this.state.tagPosX, {
+        toValue: 0,
+        useNativeDriver: true,
+        duration: 1000,
+      }),
+      Animated.timing(this.state.posY, {
+        toValue: 0,
+        useNativeDriver: true,
+        duration: 1000,
+      }),
+    ]).start();
     // this.getYearData(this.props.searchText, this.props.categories);
     // })
   }
@@ -83,11 +84,9 @@ export default class Year extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     let change = false;
-    if(prevProps.edit)
-    {
-      change = true
-    }
-    else if (prevProps.searchText != this.props.searchText) {
+    if (prevProps.edit) {
+      change = true;
+    } else if (prevProps.searchText != this.props.searchText) {
       change = true;
     }
 
@@ -97,25 +96,38 @@ export default class Year extends Component {
         amount: 0,
       });
 
-      this.getYearData(this.props.searchText, getSelectedCategories(prevProps.categories));
+      this.getYearData(
+        this.props.searchText,
+        getSelectedCategories(prevProps.categories),
+      );
     }
   }
   render() {
-
     return (
-      <Animated.View style={[styles.container,global.shadow,{transform:[{translateY: this.state.posY}]}]}>
-        <Animated.View style={[styles.titleContainer,{
-      transform:[
-      {translateX: this.state.tagPosX},
-    ]}]}>
-        <Text style={styles.title}>{this.props.year}</Text>
-        <View style={styles.titleMaterialBack}></View>
+      <Animated.View
+        style={[
+          styles.container,
+          global.shadow,
+          {transform: [{translateY: this.state.posY}]},
+        ]}>
+        <Animated.View
+          style={[
+            styles.titleContainer,
+            {
+              transform: [{translateX: this.state.tagPosX}],
+            },
+          ]}>
+          <Text style={styles.title}>{this.props.year}</Text>
+          <View style={styles.titleMaterialBack}></View>
         </Animated.View>
-        <Animated.View style={[styles.titleShadowContainer,{
-      transform:[
-      {translateX: this.state.tagPosX},
-    ]}]}>
-        <View style={styles.titleMaterialBackShadow}></View>
+        <Animated.View
+          style={[
+            styles.titleShadowContainer,
+            {
+              transform: [{translateX: this.state.tagPosX}],
+            },
+          ]}>
+          <View style={styles.titleMaterialBackShadow}></View>
         </Animated.View>
         <Text style={styles.footer}>$ {this.state.amount.toFixed(2)}</Text>
         <FlatList
@@ -177,16 +189,17 @@ class Month extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     let change = false;
-    if(prevProps.edit)
-    {
-      change = true
-    }
-    else if (prevProps.searchText != this.props.searchText) {
+    if (prevProps.edit) {
+      change = true;
+    } else if (prevProps.searchText != this.props.searchText) {
       change = true;
     }
 
     if (change) {
-      this.getMonthTotal(this.props.searchText, getSelectedCategories(prevProps.categories));
+      this.getMonthTotal(
+        this.props.searchText,
+        getSelectedCategories(prevProps.categories),
+      );
       this.setState({
         selectedCats: getSelectedCategories(prevProps.categories),
       });
@@ -219,16 +232,16 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     marginBottom: 10,
     shadowColor: 'grey',
-    marginHorizontal: 10
+    marginHorizontal: 10,
   },
   title: {
     fontWeight: 'bold',
-    marginHorizontal:10,
+    marginHorizontal: 10,
     color: ListColors.yearList.title,
     fontSize: dimensions.year.titleText,
-    flex: 1
+    flex: 1,
   },
-  titleContainer:{
+  titleContainer: {
     position: 'absolute',
     zIndex: 2,
     // borderWidth: 1,
@@ -239,9 +252,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     start: -10,
     top: 7,
-
   },
-  titleShadowContainer:{
+  titleShadowContainer: {
     position: 'absolute',
     zIndex: 1,
     overflow: 'hidden',
@@ -250,9 +262,8 @@ const styles = StyleSheet.create({
     height: 35,
     start: 0,
     top: 11,
-
   },
-  titleMaterialBack:{
+  titleMaterialBack: {
     position: 'absolute',
     start: -15,
     top: -20,
@@ -261,9 +272,9 @@ const styles = StyleSheet.create({
     height: 100,
     width: 100,
     overflow: 'hidden',
-    transform:[{rotate:'-30deg'}]
+    transform: [{rotate: '-30deg'}],
   },
-  titleMaterialBackShadow:{
+  titleMaterialBackShadow: {
     position: 'absolute',
     start: -16,
     top: -20,
@@ -273,7 +284,7 @@ const styles = StyleSheet.create({
     height: 100,
     width: 100,
     overflow: 'hidden',
-    transform:[{rotate:'-30deg'}]
+    transform: [{rotate: '-30deg'}],
   },
   footer: {
     textAlign: 'right',
@@ -282,12 +293,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     color: ListColors.yearList.footer,
     fontSize: dimensions.year.footerText,
-    flex: 1
+    flex: 1,
   },
   listOfMonths: {
     paddingHorizontal: 5,
     paddingVertical: 2,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
 
   monthContainer: {
@@ -301,7 +312,7 @@ const styles = StyleSheet.create({
     fontSize: dimensions.month.titleText,
     fontWeight: 'bold',
     flex: 2,
-    color: '#396884'
+    color: '#396884',
   },
   amountText: {
     flex: 1,

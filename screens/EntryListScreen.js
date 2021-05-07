@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import { Modal } from 'react-native';
+import {Modal} from 'react-native';
 import {StyleSheet} from 'react-native';
 import {FlatList, View} from 'react-native';
 import {Icon, SearchBar} from 'react-native-elements';
 import EntryDBHandler from '../databasehandler/entryhandler';
 import {global} from '../styles/global';
-import { getSelectedCategories } from '../utils/converters';
+import {getSelectedCategories} from '../utils/converters';
 import CategoryFilterModal from './CategoryFilterModal';
 import Date from './Lists/Date';
 
@@ -16,27 +16,24 @@ export default class EntryList extends Component {
     this.state = {
       dates: [],
       searchText: '',
-      selectedCategories: getSelectedCategories(this.props.route.params.categories),
+      selectedCategories: getSelectedCategories(
+        this.props.route.params.categories,
+      ),
       showCategoryModal: false,
-      edit: false
+      edit: false,
     };
   }
 
-  getDates = (searchText = '',categories = '') => {
-    console.log(categories)
-    if(categories=='')
-      categories = this.state.selectedCategories
+  getDates = (searchText = '', categories = '') => {
+    console.log(categories);
+    if (categories == '') categories = this.state.selectedCategories;
     let date = `${this.props.route.params.month}/${this.props.route.params.year}`;
     this.entryHandler
-      .getSearchDatesFromMonthAndYear(
-        searchText,
-        date,
-        categories
-      )
+      .getSearchDatesFromMonthAndYear(searchText, date, categories)
       .then((dates) => {
         this.setState({
           dates: dates,
-          edit: false
+          edit: false,
         });
       });
   };
@@ -61,19 +58,19 @@ export default class EntryList extends Component {
   handleSearch = (text) => {
     this.setState({
       searchText: text,
-      edit: true
+      edit: true,
     });
 
     this.getDates(text);
   };
 
   saveCategories = (categories) => {
-    const cats = getSelectedCategories(categories)
+    const cats = getSelectedCategories(categories);
     this.setState({
       selectedCategories: cats,
-      edit: true
+      edit: true,
     });
-    this.getDates(this.state.searchText,cats);
+    this.getDates(this.state.searchText, cats);
   };
 
   render() {
@@ -105,17 +102,17 @@ export default class EntryList extends Component {
             );
           }}></FlatList>
 
-          <Modal
-            transparent={true}
-            visible={this.state.showCategoryModal}
-            onRequestClose={() => this.setState({showCategoryModal: false})}
-            style={styles.categoryModal}>
-            <CategoryFilterModal
-              categories={this.props.route.params.categories}
-              saveChanges={this.saveCategories}
-              close={() => this.setState({showCategoryModal: false})}
-            />
-          </Modal>
+        <Modal
+          transparent={true}
+          visible={this.state.showCategoryModal}
+          onRequestClose={() => this.setState({showCategoryModal: false})}
+          style={styles.categoryModal}>
+          <CategoryFilterModal
+            categories={this.props.route.params.categories}
+            saveChanges={this.saveCategories}
+            close={() => this.setState({showCategoryModal: false})}
+          />
+        </Modal>
       </View>
     );
   }

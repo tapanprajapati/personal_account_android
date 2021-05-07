@@ -50,14 +50,13 @@ export default class YearDifference extends Component {
     this.props.addToExpense(amount);
   };
 
-  componentDidUpdate(prevProps,prevState){
-    if(prevProps.edit)
-    {
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.edit) {
       this.setState({
         income: 0,
-        expense: 0
-      })
-      this.getMonths()
+        expense: 0,
+      });
+      this.getMonths();
     }
   }
   render() {

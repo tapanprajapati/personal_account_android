@@ -4,7 +4,7 @@ import {ButtonColors} from '../../styles/colors';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 import {Icon} from 'react-native-elements';
 import {dimensions} from '../../utils/constants';
-import { ToastAndroid } from 'react-native';
+import {ToastAndroid} from 'react-native';
 
 export default class Entry extends Component {
   constructor(props) {
@@ -33,7 +33,7 @@ export default class Entry extends Component {
           this.entryHandler.deleteEntry(entry).then((result) => {
             if (result.success) {
               this.props.refresh();
-              ToastAndroid.show("Entry Deleted",ToastAndroid.SHORT)
+              ToastAndroid.show('Entry Deleted', ToastAndroid.SHORT);
             }
           });
         },
@@ -72,9 +72,10 @@ export default class Entry extends Component {
           <Text style={styles.entryText}>{this.props.entry.title}</Text>
           <Text style={styles.amountText}> $ {this.props.entry.amount}</Text>
         </View>
-        {(this.props.entry.description != '' && this.props.entry.description != null) && (
-          <Text style={styles.descText}>{this.props.entry.description}</Text>
-        )}
+        {this.props.entry.description != '' &&
+          this.props.entry.description != null && (
+            <Text style={styles.descText}>{this.props.entry.description}</Text>
+          )}
       </View>
     );
   }
@@ -83,7 +84,7 @@ export default class Entry extends Component {
 const styles = StyleSheet.create({
   container: {
     padding: 4,
-    marginVertical: 5
+    marginVertical: 5,
   },
   entryContainer: {
     flex: 1,

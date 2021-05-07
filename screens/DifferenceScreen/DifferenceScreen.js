@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Text} from 'react-native';
 import {FlatList} from 'react-native';
 import {StyleSheet} from 'react-native';
-import { RefreshControl } from 'react-native';
+import {RefreshControl} from 'react-native';
 import {View} from 'react-native';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 import {TextBackground} from '../../styles/colors';
@@ -19,7 +19,7 @@ export default class Difference extends Component {
       income: 0,
       expense: 0,
       edit: false,
-      refresh: false
+      refresh: false,
     };
   }
 
@@ -42,7 +42,7 @@ export default class Difference extends Component {
       console.log(years);
       this.setState({
         years: years,
-        refresh: false
+        refresh: false,
       });
     });
   };
@@ -56,15 +56,15 @@ export default class Difference extends Component {
       edit: true,
       income: 0,
       expense: 0,
-      refresh: true
-    })
+      refresh: true,
+    });
 
-    this.getYears()
+    this.getYears();
 
     this.setState({
-      edit: false
-    })
-  }
+      edit: false,
+    });
+  };
 
   render() {
     const difference = (this.state.income - this.state.expense).toFixed(2);
@@ -78,10 +78,7 @@ export default class Difference extends Component {
         <View style={styles.yearsContainer}>
           <RefreshControl
             refreshing={this.state.refresh}
-            onRefresh={()=>setTimeout(this.refresh,100)}
-
-          >
-
+            onRefresh={() => setTimeout(this.refresh, 100)}>
             <FlatList
               data={this.state.years}
               keyExtractor={(item) => item}
