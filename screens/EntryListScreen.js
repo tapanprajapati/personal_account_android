@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Text} from 'react-native';
 import {Modal} from 'react-native';
 import {StyleSheet} from 'react-native';
 import {FlatList, View} from 'react-native';
@@ -21,12 +22,14 @@ export default class EntryList extends Component {
       ),
       showCategoryModal: false,
       edit: false,
+      total: 0,
     };
   }
 
   getDates = (searchText = this.state.searchText, categories = '') => {
     console.log(categories);
     if (categories == '') categories = this.state.selectedCategories;
+
     let date = `${this.props.route.params.month}/${this.props.route.params.year}`;
     this.entryHandler
       .getSearchDatesFromMonthAndYear(searchText, date, categories)
@@ -35,6 +38,12 @@ export default class EntryList extends Component {
           dates: dates,
           edit: false,
         });
+      });
+
+    this.entryHandler
+      .getSearchMonthTotal(searchText, date, categories)
+      .then((total) => {
+        this.setState({total: total});
       });
   };
 
@@ -89,7 +98,7 @@ export default class EntryList extends Component {
           onSubmitEditing={this.handleSearch}
         />
         <FlatList
-          style={global.list}
+          style={[global.list, styles.dateList]}
           data={this.state.dates}
           keyExtractor={(item) => item}
           renderItem={({item}) => {
@@ -105,6 +114,9 @@ export default class EntryList extends Component {
               />
             );
           }}></FlatList>
+        <Text style={global.footer}>
+          Total: $ {this.state.total.toFixed(2)}
+        </Text>
 
         <Modal
           transparent={true}
@@ -123,6 +135,9 @@ export default class EntryList extends Component {
 }
 
 const styles = StyleSheet.create({
+  dateList: {
+    marginBottom: 20,
+  },
   searchBarContainer: {
     backgroundColor: 'white',
     borderTopWidth: 0,

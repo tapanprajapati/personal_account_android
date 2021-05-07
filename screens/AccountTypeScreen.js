@@ -157,13 +157,13 @@ export default class AccountType extends Component {
           />
         </View>
         <RefreshControl
+          style={[global.list, styles.yearListContainer]}
           refreshing={this.state.refresh}
           onRefresh={() => {
             setTimeout(this.refresh, 100);
           }}>
           <FlatList
-            extraData={this.state.categories}
-            style={[global.list, styles.yearListContainer]}
+            // style={[global.list]}
             data={this.state.years}
             keyExtractor={(item) => {
               return item;
@@ -184,7 +184,7 @@ export default class AccountType extends Component {
             }}
           />
         </RefreshControl>
-        <Text style={styles.footer}>
+        <Text style={global.footer}>
           Total: $ {this.state.total.toFixed(2)}
         </Text>
         <View style={global.floatingButton}>
@@ -222,16 +222,6 @@ export default class AccountType extends Component {
 }
 
 const styles = StyleSheet.create({
-  footer: {
-    width: '100%',
-    textAlign: 'center',
-    position: 'absolute',
-    bottom: 3,
-    // backgroundColor: TextBackground.footerTotal,
-    color: 'steelblue',
-    fontSize: dimensions.accountType.footerText,
-    fontWeight: 'bold',
-  },
   searchBarContainer: {
     backgroundColor: 'white',
     borderTopWidth: 0,
@@ -247,6 +237,6 @@ const styles = StyleSheet.create({
     borderRadius: 55,
   },
   yearListContainer: {
-    marginBottom: 8,
+    marginBottom: 80,
   },
 });

@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {dimensions} from '../utils/constants';
 
 const global = StyleSheet.create({
   container: {
@@ -13,6 +14,16 @@ const global = StyleSheet.create({
   },
   list: {
     marginHorizontal: 5,
+  },
+  footer: {
+    width: '100%',
+    textAlign: 'center',
+    position: 'absolute',
+    bottom: 3,
+    // backgroundColor: TextBackground.footerTotal,
+    color: 'steelblue',
+    fontSize: dimensions.accountType.footerText,
+    fontWeight: 'bold',
   },
   shadow: {
     borderWidth: 1,
