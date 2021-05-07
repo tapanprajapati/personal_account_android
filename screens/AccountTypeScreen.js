@@ -27,7 +27,7 @@ export default class AccountType extends Component {
     this.categoryHandler = new CategoryDBHandler();
   }
 
-  getYears = (searchText = '') => {
+  getYears = (searchText = this.state.searchText) => {
     const categoryString = getSelectedCategories(this.state.categories).join(
       ',',
     );
@@ -110,16 +110,19 @@ export default class AccountType extends Component {
       categories: categories,
       edit: true,
     });
-    this.getYears(this.state.searchText);
+
+    setTimeout(this.getYears, 10);
   };
 
-  handleSearch = (text) => {
+  handleSearch = () => {
     this.setState({
-      searchText: text,
+      // searchText: text,
+      edit: true,
     });
 
-    this.getYears(text);
-    console.log(`Searching: ${text}`);
+    setTimeout(this.getYears, 10);
+    console.log(`Searching: ${this.state.searchText}`);
+    // console.log(text);
   };
 
   refresh = () => {
@@ -134,9 +137,12 @@ export default class AccountType extends Component {
             containerStyle={styles.searchBarContainer}
             placeholder="Search Here..."
             inputContainerStyle={styles.searchBarInputContainer}
-            onChangeText={this.handleSearch}
+            onChangeText={(text) => {
+              this.setState({searchText: text});
+            }}
             value={this.state.searchText}
-            onClear={() => this.handleSearch('')}
+            onClear={this.handleSearch}
+            onSubmitEditing={this.handleSearch}
           />
           <Icon
             containerStyle={{position: 'absolute', end: 0, margin: 0, top: -2}}

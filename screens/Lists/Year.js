@@ -86,9 +86,10 @@ export default class Year extends Component {
     let change = false;
     if (prevProps.edit) {
       change = true;
-    } else if (prevProps.searchText != this.props.searchText) {
-      change = true;
     }
+    // else if (prevProps.searchText != this.props.searchText) {
+    //   change = true;
+    // }
 
     if (change) {
       this.setState({
@@ -191,9 +192,10 @@ class Month extends Component {
     let change = false;
     if (prevProps.edit) {
       change = true;
-    } else if (prevProps.searchText != this.props.searchText) {
-      change = true;
     }
+    // else if (prevProps.searchText != this.props.searchText) {
+    //   change = true;
+    // }
 
     if (change) {
       this.getMonthTotal(

@@ -67,9 +67,10 @@ export default class Date extends Component {
   }
   componentDidUpdate(prevProps, prevState) {
     let change = false;
-    if (prevProps.searchText != this.props.searchText) {
-      change = true;
-    } else if (prevProps.edit) {
+    // if (prevProps.searchText != this.props.searchText) {
+    //   change = true;
+    // } else
+    if (prevProps.edit) {
       change = true;
     }
 

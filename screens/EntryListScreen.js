@@ -24,7 +24,7 @@ export default class EntryList extends Component {
     };
   }
 
-  getDates = (searchText = '', categories = '') => {
+  getDates = (searchText = this.state.searchText, categories = '') => {
     console.log(categories);
     if (categories == '') categories = this.state.selectedCategories;
     let date = `${this.props.route.params.month}/${this.props.route.params.year}`;
@@ -55,13 +55,14 @@ export default class EntryList extends Component {
     this.getDates();
   }
 
-  handleSearch = (text) => {
+  handleSearch = () => {
     this.setState({
-      searchText: text,
+      // searchText: text,
       edit: true,
     });
 
-    this.getDates(text);
+    setTimeout(this.getDates, 50);
+    // this.getDates();
   };
 
   saveCategories = (categories) => {
@@ -80,9 +81,12 @@ export default class EntryList extends Component {
           containerStyle={styles.searchBarContainer}
           placeholder="Type Here..."
           inputContainerStyle={styles.searchBarInputContainer}
-          onChangeText={this.handleSearch}
+          onChangeText={(text) => {
+            this.setState({searchText: text});
+          }}
           value={this.state.searchText}
-          onClear={() => this.handleSearch('')}
+          onClear={this.handleSearch}
+          onSubmitEditing={this.handleSearch}
         />
         <FlatList
           style={global.list}
