@@ -48,22 +48,22 @@ export default class Date extends Component {
   };
 
   componentDidMount() {
-    this.getEntries('');
-    this.unsubscribe = this.props.navigation.addListener('focus', () => {
-      if (this.state.edit) {
-        this.setState({
-          edit: false,
-          amount: 0,
-        });
-        this.getEntries();
-        console.log(
-          `Edit ${this.props.date}/${this.props.month}/${this.props.year}`,
-        );
-      }
-    });
+    this.getEntries(this.props.searchText);
+    // this.unsubscribe = this.props.navigation.addListener('focus', () => {
+    //   if (this.state.edit) {
+    //     this.setState({
+    //       edit: false,
+    //       amount: 0,
+    //     });
+    //     this.getEntries();
+    //     console.log(
+    //       `Edit ${this.props.date}/${this.props.month}/${this.props.year}`,
+    //     );
+    //   }
+    // });
   }
   componentWillUnmount() {
-    this.unsubscribe();
+    // this.unsubscribe();
   }
   componentDidUpdate(prevProps, prevState) {
     let change = false;

@@ -16,7 +16,7 @@ export default class EntryList extends Component {
     this.entryHandler = new EntryDBHandler();
     this.state = {
       dates: [],
-      searchText: '',
+      searchText: this.props.route.params.searchText,
       selectedCategories: getSelectedCategories(
         this.props.route.params.categories,
       ),
@@ -26,9 +26,10 @@ export default class EntryList extends Component {
     };
   }
 
-  getDates = (searchText = this.state.searchText, categories = '') => {
+  getDates = (searchText = '', categories = '') => {
     console.log(categories);
     if (categories == '') categories = this.state.selectedCategories;
+    if (searchText == '') searchText = this.state.searchText;
 
     let date = `${this.props.route.params.month}/${this.props.route.params.year}`;
     this.entryHandler
@@ -61,6 +62,8 @@ export default class EntryList extends Component {
         />
       ),
     });
+
+    // setTimeout(this.getDates, 50);
     this.getDates();
   }
 

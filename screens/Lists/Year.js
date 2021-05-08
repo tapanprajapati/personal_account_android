@@ -214,6 +214,7 @@ class Month extends Component {
       year: this.props.year,
       month: this.props.month,
       categories: this.props.categories,
+      searchText: this.props.searchText,
     });
   };
 

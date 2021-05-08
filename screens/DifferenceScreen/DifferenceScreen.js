@@ -4,9 +4,12 @@ import {FlatList} from 'react-native';
 import {StyleSheet} from 'react-native';
 import {RefreshControl} from 'react-native';
 import {View} from 'react-native';
+import {Tooltip} from 'react-native-elements';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 import {TextBackground} from '../../styles/colors';
+import {global} from '../../styles/global';
 import {dimensions} from '../../utils/constants';
+import {formatLargeNumber} from '../../utils/converters';
 import YearDifference from './YearDifference';
 
 export default class Difference extends Component {
@@ -93,15 +96,15 @@ export default class Difference extends Component {
               }}></FlatList>
           </RefreshControl>
         </View>
-        <View style={styles.total}>
+        <View style={[styles.total, global.shadow]}>
           <Text style={styles.totalTitle}>Total</Text>
           <Text style={styles.totalIncome}>
-            $ {this.state.income.toFixed(2)}
+            $ {formatLargeNumber(this.state.income)}
           </Text>
           <Text style={styles.totalExpense}>
-            $ {this.state.expense.toFixed(2)}
+            $ {formatLargeNumber(this.state.expense)}
           </Text>
-          <Text style={[styles.totalDifference, {backgroundColor: diffColor}]}>
+          <Text style={[styles.totalDifference, {color: diffColor}]}>
             $ {difference}
           </Text>
         </View>
@@ -116,42 +119,46 @@ const styles = StyleSheet.create({
   },
   yearsContainer: {
     margin: 5,
+    marginBottom: 10,
   },
   total: {
     position: 'absolute',
     bottom: 0,
     flexDirection: 'row',
-    margin: 5,
+    marginVertical: 8,
+    marginHorizontal: 8,
+    backgroundColor: 'white',
+    padding: 5,
   },
   totalTitle: {
     flex: 1,
     fontWeight: 'bold',
-    color: 'white',
-    textAlignVertical: 'center',
+    // color: 'white',
+    // textAlignVertical: 'center',
     fontSize: dimensions.difference.default,
-    backgroundColor: TextBackground.differenceTotal,
+    // backgroundColor: TextBackground.differenceTotal,
   },
   totalIncome: {
     flex: 1,
     // fontWeight: 'bold',
-    color: 'white',
-    textAlignVertical: 'center',
+    // color: 'white',
+    // textAlignVertical: 'center',
     fontSize: dimensions.difference.default,
-    backgroundColor: TextBackground.differenceTotal,
+    // backgroundColor: TextBackground.differenceTotal,
   },
   totalExpense: {
     flex: 1,
     // fontWeight: 'bold',
-    textAlignVertical: 'center',
-    color: 'white',
+    // textAlignVertical: 'center',
+    // color: 'white',
     fontSize: dimensions.difference.default,
-    backgroundColor: TextBackground.differenceTotal,
+    // backgroundColor: TextBackground.differenceTotal,
   },
   totalDifference: {
     flex: 1,
     // fontWeight: 'bold',
     textAlignVertical: 'center',
-    color: 'white',
+    // color: 'white',
     fontSize: dimensions.difference.default,
   },
 });

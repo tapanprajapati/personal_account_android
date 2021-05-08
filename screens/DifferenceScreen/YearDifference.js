@@ -6,6 +6,7 @@ import EntryDBHandler from '../../databasehandler/entryhandler';
 import {TextBackground} from '../../styles/colors';
 import {dimensions} from '../../utils/constants';
 import MonthDifference from './MonthDifference';
+import {global} from '../../styles/global';
 
 export default class YearDifference extends Component {
   constructor(props) {
@@ -67,11 +68,11 @@ export default class YearDifference extends Component {
       diffColor = TextBackground.savingRed;
     }
     return (
-      <View style={styles.main}>
+      <View style={[styles.main, global.shadow]}>
         <View>
           <Text style={styles.title}>{this.props.year}</Text>
         </View>
-        <View style={styles.titleContainer}>
+        <View style={styles.headerRowContainer}>
           <Text style={styles.titleMonth}>Month</Text>
           <Text style={styles.titleIncome}>Income</Text>
           <Text style={styles.titleExpense}>Expense</Text>
@@ -100,7 +101,7 @@ export default class YearDifference extends Component {
           <Text style={styles.totalExpense}>
             $ {this.state.expense.toFixed(2)}
           </Text>
-          <Text style={[styles.totalSaving, {backgroundColor: diffColor}]}>
+          <Text style={[styles.totalSaving, {color: diffColor}]}>
             $ {difference}
           </Text>
         </View>
@@ -111,90 +112,99 @@ export default class YearDifference extends Component {
 
 const styles = StyleSheet.create({
   main: {
-    margin: 2,
+    paddingVertical: 5,
+    margin: 4,
     elevation: 10,
+    backgroundColor: 'white',
   },
   monthListContainer: {
-    marginHorizontal: 3,
+    marginHorizontal: 8,
+    paddingBottom: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: '#bbb',
   },
   title: {
     fontSize: dimensions.difference.yearTitle,
     fontWeight: 'bold',
-    backgroundColor: TextBackground.yearTitle,
-    color: 'white',
+    // backgroundColor: TextBackground.yearTitle,
+    color: 'steelblue',
     textAlign: 'center',
   },
-  titleContainer: {
+  headerRowContainer: {
     flexDirection: 'row',
-    margin: 2,
+    marginHorizontal: 8,
+    paddingBottom: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: '#bbb',
   },
   totalContainer: {
     flexDirection: 'row',
     margin: 2,
+    marginHorizontal: 8,
   },
   titleMonth: {
     flex: 1,
-    textAlign: 'center',
+    // textAlign: 'center',
     fontSize: dimensions.difference.default,
     fontWeight: 'bold',
-    color: 'white',
-    backgroundColor: TextBackground.yearTableTitle,
+    color: 'steelblue',
+    // backgroundColor: TextBackground.yearTableTitle,
   },
   titleIncome: {
     flex: 1,
-    textAlign: 'center',
+    // textAlign: 'center',
     fontWeight: 'bold',
-    color: 'white',
+    color: 'steelblue',
     fontSize: dimensions.difference.default,
     textAlignVertical: 'center',
-    backgroundColor: TextBackground.yearTableTitle,
+    // backgroundColor: TextBackground.yearTableTitle,
   },
   titleExpense: {
     flex: 1,
-    textAlign: 'center',
+    // textAlign: 'center',
     fontWeight: 'bold',
     textAlignVertical: 'center',
     fontSize: dimensions.difference.default,
-    color: 'white',
-    backgroundColor: TextBackground.yearTableTitle,
+    color: 'steelblue',
+    // backgroundColor: TextBackground.yearTableTitle,
   },
   titleSaving: {
     flex: 1,
-    textAlign: 'center',
+    // textAlign: 'center',
     fontWeight: 'bold',
     textAlignVertical: 'center',
     fontSize: dimensions.difference.default,
-    color: 'white',
-    backgroundColor: TextBackground.yearTableTitle,
+    color: 'steelblue',
+    // backgroundColor: TextBackground.yearTableTitle,
   },
   totalTitle: {
     flex: 1,
     fontSize: dimensions.difference.default,
     fontWeight: 'bold',
-    backgroundColor: TextBackground.differenceTotal,
-    color: 'white',
+    // backgroundColor: TextBackground.differenceTotal,
+    // color: 'white',
   },
   totalIncome: {
     flex: 1,
     // fontWeight: 'bold',
-    color: 'white',
+    // color: 'white',
     fontSize: dimensions.difference.default,
-    textAlignVertical: 'center',
-    backgroundColor: TextBackground.differenceTotal,
+    // textAlignVertical: 'center',
+    // backgroundColor: TextBackground.differenceTotal,
   },
   totalExpense: {
     flex: 1,
     // fontWeight: 'bold',
-    textAlignVertical: 'center',
+    // textAlignVertical: 'center',
     fontSize: dimensions.difference.default,
-    color: 'white',
-    backgroundColor: TextBackground.differenceTotal,
+    // color: 'white',
+    // backgroundColor: TextBackground.differenceTotal,
   },
   totalSaving: {
     flex: 1,
     // fontWeight: 'bold',
-    textAlignVertical: 'center',
+    // textAlignVertical: 'center',
     fontSize: dimensions.difference.default,
-    color: 'white',
+    // color: 'white',
   },
 });

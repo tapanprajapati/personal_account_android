@@ -64,9 +64,7 @@ export default class MonthDifference extends Component {
         <Text style={styles.month}>{getMonthName(this.props.month)}</Text>
         <Text style={styles.income}>$ {this.state.income}</Text>
         <Text style={styles.expense}>$ {this.state.expense}</Text>
-        <Text style={[styles.saving, {backgroundColor: diffColor}]}>
-          $ {difference}
-        </Text>
+        <Text style={[styles.saving, {color: diffColor}]}>$ {difference}</Text>
       </View>
     );
   }

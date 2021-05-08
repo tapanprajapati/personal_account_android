@@ -60,7 +60,7 @@ export const dimensions = {
     buttonText: 16,
   },
   difference: {
-    default: 16,
+    default: 17,
     yearTitle: 22,
     monthTitle: 18,
   },
