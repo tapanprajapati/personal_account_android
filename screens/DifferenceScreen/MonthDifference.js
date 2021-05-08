@@ -4,7 +4,7 @@ import {View} from 'react-native';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 import {TextBackground} from '../../styles/colors';
 import {dimensions} from '../../utils/constants';
-import {getMonthName} from '../../utils/converters';
+import {getMonthName, getSelectedCategories} from '../../utils/converters';
 
 export default class MonthDifference extends Component {
   constructor(props) {
@@ -19,23 +19,35 @@ export default class MonthDifference extends Component {
 
   getTotals = () => {
     const date = `${this.props.month}/${this.props.year}`;
-    this.entryHandler.getMonthTotal(date, 'income').then((amount) => {
-      console.log(`Income: ${date}-> ${amount}`);
-      this.setState({
-        income: amount,
+    this.entryHandler
+      .getSearchMonthTotal(
+        '',
+        date,
+        getSelectedCategories(this.props.incomeCategories),
+      )
+      .then((amount) => {
+        console.log(`Income: ${date}-> ${amount}`);
+        this.setState({
+          income: amount,
+        });
+
+        this.props.addToIncome(amount);
       });
 
-      this.props.addToIncome(amount);
-    });
+    this.entryHandler
+      .getSearchMonthTotal(
+        '',
+        date,
+        getSelectedCategories(this.props.expenseCategories),
+      )
+      .then((amount) => {
+        console.log(`Expense: ${date}-> ${amount}`);
+        this.setState({
+          expense: amount,
+        });
 
-    this.entryHandler.getMonthTotal(date, 'expense').then((amount) => {
-      console.log(`Expense: ${date}-> ${amount}`);
-      this.setState({
-        expense: amount,
+        this.props.addToExpense(amount);
       });
-
-      this.props.addToExpense(amount);
-    });
   };
 
   componentDidMount() {
@@ -62,8 +74,8 @@ export default class MonthDifference extends Component {
     return (
       <View style={styles.main}>
         <Text style={styles.month}>{getMonthName(this.props.month)}</Text>
-        <Text style={styles.income}>$ {this.state.income}</Text>
-        <Text style={styles.expense}>$ {this.state.expense}</Text>
+        <Text style={styles.income}>$ {this.state.income.toFixed(2)}</Text>
+        <Text style={styles.expense}>$ {this.state.expense.toFixed(2)}</Text>
         <Text style={[styles.saving, {color: diffColor}]}>$ {difference}</Text>
       </View>
     );

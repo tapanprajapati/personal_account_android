@@ -6,7 +6,7 @@ export default class CategoryDBHandler {
     this.db = openDatabase({name: DB.dbname});
     this.table = DB.tables.categories.name;
     this.columns = DB.tables.categories.columns;
-    this.entryTable = DB.tables.entries
+    this.entryTable = DB.tables.entries;
   }
 
   addCategory(category) {
@@ -57,6 +57,7 @@ export default class CategoryDBHandler {
   }
 
   getCategories(type) {
+    console.log(`Getting categories for ${type}`);
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
         const getSQL = `SELECT * FROM ${this.table} WHERE ${this.columns.type.title} = ?`;
@@ -101,10 +102,9 @@ export default class CategoryDBHandler {
     });
   }
 
-  getCategoryTotalByYear(year,type){
+  getCategoryTotalByYear(year, type) {
     return new Promise((resolve, reject) => {
-
-      console.log(`${type} categories total of ${year}`)
+      console.log(`${type} categories total of ${year}`);
 
       this.db.transaction((tx) => {
         const getSQL = `SELECT 
@@ -121,31 +121,28 @@ export default class CategoryDBHandler {
           getSQL,
           [type, year],
           (tnx, result) => {
+            let listCategories = [];
+            for (let i = 0; i < result.rows.length; i++) {
+              let total = result.rows.item(i).total;
+              if (total == null) total = 0;
 
-          let listCategories = []
-          for (let i = 0; i < result.rows.length; i++) {
-          
-            let total = result.rows.item(i).total
-            if (total == null) total = 0;
+              total = parseInt(total);
 
-            total = parseInt(total)
+              let title = result.rows.item(i).title;
+              let id = result.rows.item(i).id;
 
-            let title = result.rows.item(i).title
-            let id = result.rows.item(i).id
-
-            listCategories.push({
-              id: id,
-              title: title,
-              total: total
-            })
-
-          }
+              listCategories.push({
+                id: id,
+                title: title,
+                total: total,
+              });
+            }
 
             resolve(listCategories);
           },
           (tnx, error) => {
             console.error('Error');
-            console.error(error)
+            console.error(error);
             resolve(0);
           },
         );
@@ -153,10 +150,9 @@ export default class CategoryDBHandler {
     });
   }
 
-  getCategoryTotalByMonthYear(monthYear,type){
+  getCategoryTotalByMonthYear(monthYear, type) {
     return new Promise((resolve, reject) => {
-
-      console.log(`${type} categories total of ${monthYear}`)
+      console.log(`${type} categories total of ${monthYear}`);
 
       this.db.transaction((tx) => {
         const getSQL = `SELECT 
@@ -173,42 +169,38 @@ export default class CategoryDBHandler {
           getSQL,
           [type, monthYear],
           (tnx, result) => {
+            let listCategories = [];
+            for (let i = 0; i < result.rows.length; i++) {
+              let total = result.rows.item(i).total;
+              if (total == null) total = 0;
 
-          let listCategories = []
-          for (let i = 0; i < result.rows.length; i++) {
-          
-            let total = result.rows.item(i).total
-            if (total == null) total = 0;
+              total = parseInt(total);
 
-            total = parseInt(total)
+              let title = result.rows.item(i).title;
+              let id = result.rows.item(i).id;
 
-            let title = result.rows.item(i).title
-            let id = result.rows.item(i).id
-
-            listCategories.push({
-              id: id,
-              title: title,
-              total: total
-            })
-
-          }
+              listCategories.push({
+                id: id,
+                title: title,
+                total: total,
+              });
+            }
 
             resolve(listCategories);
           },
           (tnx, error) => {
             console.error('Error');
-            console.error(error)
+            console.error(error);
             resolve(0);
           },
         );
       });
     });
   }
-  
-  getCategoryTotal(type){
-    return new Promise((resolve, reject) => {
 
-      console.log(`${type} categories total`)
+  getCategoryTotal(type) {
+    return new Promise((resolve, reject) => {
+      console.log(`${type} categories total`);
 
       this.db.transaction((tx) => {
         const getSQL = `SELECT 
@@ -224,31 +216,28 @@ export default class CategoryDBHandler {
           getSQL,
           [type],
           (tnx, result) => {
+            let listCategories = [];
+            for (let i = 0; i < result.rows.length; i++) {
+              let total = result.rows.item(i).total;
+              if (total == null) total = 0;
 
-          let listCategories = []
-          for (let i = 0; i < result.rows.length; i++) {
-          
-            let total = result.rows.item(i).total
-            if (total == null) total = 0;
+              total = parseInt(total);
 
-            total = parseInt(total)
+              let title = result.rows.item(i).title;
+              let id = result.rows.item(i).id;
 
-            let title = result.rows.item(i).title
-            let id = result.rows.item(i).id
-
-            listCategories.push({
-              id: id,
-              title: title,
-              total: total
-            })
-
-          }
+              listCategories.push({
+                id: id,
+                title: title,
+                total: total,
+              });
+            }
 
             resolve(listCategories);
           },
           (tnx, error) => {
             console.error('Error');
-            console.error(error)
+            console.error(error);
             resolve(0);
           },
         );
