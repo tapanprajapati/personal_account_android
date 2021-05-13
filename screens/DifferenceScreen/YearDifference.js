@@ -7,6 +7,7 @@ import {TextBackground} from '../../styles/colors';
 import {dimensions} from '../../utils/constants';
 import MonthDifference from './MonthDifference';
 import {global} from '../../styles/global';
+import {formatLargeNumber} from '../../utils/converters';
 
 export default class YearDifference extends Component {
   constructor(props) {
@@ -61,7 +62,7 @@ export default class YearDifference extends Component {
     }
   }
   render() {
-    const difference = (this.state.income - this.state.expense).toFixed(2);
+    const difference = this.state.income - this.state.expense;
 
     let diffColor = TextBackground.savingGreen;
     if (difference < 0) {
@@ -98,13 +99,13 @@ export default class YearDifference extends Component {
         <View style={styles.totalContainer}>
           <Text style={styles.totalTitle}>Total</Text>
           <Text style={styles.totalIncome}>
-            $ {this.state.income.toFixed(2)}
+            $ {formatLargeNumber(this.state.income)}
           </Text>
           <Text style={styles.totalExpense}>
-            $ {this.state.expense.toFixed(2)}
+            $ {formatLargeNumber(this.state.expense)}
           </Text>
           <Text style={[styles.totalSaving, {color: diffColor}]}>
-            $ {difference}
+            $ {formatLargeNumber(difference)}
           </Text>
         </View>
       </View>

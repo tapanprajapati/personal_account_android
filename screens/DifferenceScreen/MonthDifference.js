@@ -4,7 +4,11 @@ import {View} from 'react-native';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 import {TextBackground} from '../../styles/colors';
 import {dimensions} from '../../utils/constants';
-import {getMonthName, getSelectedCategories} from '../../utils/converters';
+import {
+  formatLargeNumber,
+  getMonthName,
+  getSelectedCategories,
+} from '../../utils/converters';
 
 export default class MonthDifference extends Component {
   constructor(props) {
@@ -65,7 +69,7 @@ export default class MonthDifference extends Component {
   }
 
   render() {
-    const difference = (this.state.income - this.state.expense).toFixed(2);
+    const difference = this.state.income - this.state.expense;
 
     let diffColor = TextBackground.savingGreen;
     if (difference < 0) {
@@ -74,9 +78,15 @@ export default class MonthDifference extends Component {
     return (
       <View style={styles.main}>
         <Text style={styles.month}>{getMonthName(this.props.month)}</Text>
-        <Text style={styles.income}>$ {this.state.income.toFixed(2)}</Text>
-        <Text style={styles.expense}>$ {this.state.expense.toFixed(2)}</Text>
-        <Text style={[styles.saving, {color: diffColor}]}>$ {difference}</Text>
+        <Text style={styles.income}>
+          $ {formatLargeNumber(this.state.income)}
+        </Text>
+        <Text style={styles.expense}>
+          $ {formatLargeNumber(this.state.expense)}
+        </Text>
+        <Text style={[styles.saving, {color: diffColor}]}>
+          $ {formatLargeNumber(difference)}
+        </Text>
       </View>
     );
   }
@@ -102,7 +112,6 @@ const styles = StyleSheet.create({
   },
   saving: {
     flex: 1,
-    color: 'white',
     fontSize: dimensions.difference.default,
   },
 });

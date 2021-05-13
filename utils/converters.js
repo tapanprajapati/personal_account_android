@@ -38,14 +38,14 @@ export function getSelectedCategories(categories) {
 
 export function formatLargeNumber(num) {
   numStr = parseInt(num).toString();
-  const len = numStr.length;
+  let len = numStr.length;
 
   if (len >= 8) {
-    return `${numStr.substr(0, 2)}.${numStr.substr(2, 2)} M`;
+    return `${numStr.substr(0, len - 6)}.${numStr.substr(len - 6, 2)} M`;
   }
 
   if (len >= 5) {
-    return `${numStr.substr(0, 2)}.${numStr.substr(2, 2)} K`;
+    return `${numStr.substr(0, len - 3)}.${numStr.substr(len - 3, 2)} K`;
   }
 
   return num.toFixed(2);

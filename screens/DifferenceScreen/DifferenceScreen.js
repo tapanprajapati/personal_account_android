@@ -129,7 +129,7 @@ export default class Difference extends Component {
   };
 
   render() {
-    const difference = (this.state.income - this.state.expense).toFixed(2);
+    const difference = this.state.income - this.state.expense;
 
     let diffColor = TextBackground.savingGreen;
     if (difference < 0) {
@@ -192,7 +192,7 @@ export default class Difference extends Component {
             $ {formatLargeNumber(this.state.expense)}
           </Text>
           <Text style={[styles.totalDifference, {color: diffColor}]}>
-            $ {difference}
+            $ {formatLargeNumber(difference)}
           </Text>
         </View>
         <Modal
