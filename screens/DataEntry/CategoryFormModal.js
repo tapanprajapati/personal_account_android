@@ -30,7 +30,7 @@ export default class CategoryForm extends Component {
             },
           ]);
         } else {
-          this.props.addCategory(input);
+          this.props.submitData(input);
           this.props.closeModal();
         }
       });
@@ -41,7 +41,7 @@ export default class CategoryForm extends Component {
     return (
       <View style={styles.modalContainer}>
         <View style={styles.inputHolder}>
-          <Text style={styles.inputText}>Title</Text>
+          <Text style={styles.inputText}>{this.props.title}</Text>
           <TextInput
             onChangeText={(text) => this.setState({categoryTitle: text})}
             style={[styles.inputElement, styles.textInput]}></TextInput>
@@ -49,7 +49,7 @@ export default class CategoryForm extends Component {
         <View style={styles.inputHolder}>
           <Button
             buttonStyle={styles.button}
-            title="ADD"
+            title={this.props.buttonTitle}
             color={ButtonColors.entryAdd}
             titleStyle={{fontSize: dimensions.categoryModal.buttonFont}}
             onPress={this.addCategory}
@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
   inputText: {
     marginBottom: dimensions.categoryModal.textMargin,
     fontSize: dimensions.categoryModal.titleText,
+    alignSelf: 'center',
   },
   inputElement: {},
   inputHolder: {

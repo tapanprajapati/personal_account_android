@@ -34,6 +34,22 @@ export default class CategoryDBHandler {
     });
   }
 
+  updateCategory(newTitle, id) {
+    return new Promise((resolve, reject) => {
+      this.db.transaction((tx) => {
+        const updateSQL = `UPDATE ${this.table} SET ${this.columns.title.title}=? WHERE ${this.columns.id.title}=?`;
+
+        tx.executeSql(updateSQL, [newTitle, id], (tnx, result) => {
+          if (result.rowsAffected == 1) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        });
+      });
+    });
+  }
+
   categoryExists(categoryTitle, type) {
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {

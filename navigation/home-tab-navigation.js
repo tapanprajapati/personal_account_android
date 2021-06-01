@@ -66,6 +66,13 @@ export default function HomeTabNavigation(props) {
             }>
             <MenuItem onPress={exportData}>Backup</MenuItem>
             <MenuItem onPress={openPicker}>Restore</MenuItem>
+            <MenuItem
+              onPress={() => {
+                props.navigation.navigate('ManageCategories');
+                hide();
+              }}>
+              Manage Categories
+            </MenuItem>
           </Menu>
           {/* <Icon
                   containerStyle={{marginRight: 10}}

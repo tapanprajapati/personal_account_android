@@ -12,6 +12,7 @@ import {dimensions} from '../utils/constants';
 import {getSelectedCategories} from '../utils/converters';
 import CategoryFilterModal from './CategoryFilterModal';
 import Year from './Lists/Year';
+import LoadingSpinner from './LoadingSpinner';
 
 export default class AccountType extends Component {
   constructor(props) {
@@ -39,6 +40,8 @@ export default class AccountType extends Component {
     this.setState({
       edit: false,
       total: 0,
+      isLoading: true,
+      countDoneLoading: 0,
     });
     this.entryHandler
       .getSearchYears(searchText, categoryString)
@@ -123,6 +126,8 @@ export default class AccountType extends Component {
     this.setState({
       categories: categories,
       edit: true,
+      isLoading: true,
+      countDoneLoading: 0,
     });
 
     setTimeout(this.getYears, 10);
@@ -132,6 +137,8 @@ export default class AccountType extends Component {
     this.setState({
       // searchText: text,
       edit: true,
+      isLoading: true,
+      countDoneLoading: 0,
     });
 
     setTimeout(this.getYears, 10);
@@ -140,7 +147,12 @@ export default class AccountType extends Component {
   };
 
   refresh = () => {
-    this.setState({edit: true, refresh: true});
+    this.setState({
+      edit: true,
+      refresh: true,
+      isLoading: true,
+      countDoneLoading: 0,
+    });
     this.getYears(this.state.searchText);
   };
   render() {
@@ -231,19 +243,7 @@ export default class AccountType extends Component {
             close={() => this.setState({showCategoryModal: false})}
           />
         </Modal>
-        <Modal
-          transparent={true}
-          visible={this.state.isLoading}
-          onRequestClose={BackHandler.exitApp}>
-          <View style={{height: '100%', width: '100%'}}>
-            <ActivityIndicator
-              color="#01A4EF"
-              animating={this.state.isLoading}
-              size={50}
-              style={{position: 'absolute', top: '50%', alignSelf: 'center'}}
-            />
-          </View>
-        </Modal>
+        <LoadingSpinner isLoading={this.state.isLoading} />
       </View>
     );
   }

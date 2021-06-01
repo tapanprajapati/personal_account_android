@@ -17,6 +17,7 @@ import CategoryForm from './CategoryFormModal';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 import CategoryDBHandler from '../../databasehandler/categoryhandler';
 import {dimensions} from '../../utils/constants';
+import {ToastAndroid} from 'react-native';
 
 export default class EntryForm extends Component {
   constructor(props) {
@@ -110,9 +111,11 @@ export default class EntryForm extends Component {
       .addCategory({title: category, type: this.state.selectedType})
       .then((result) => {
         if (result.success) {
-          console.log('Category Added');
+          this.getCategories(this.state.selectedType);
+          ToastAndroid.show('Category Added Successfully', ToastAndroid.SHORT);
+        } else {
+          ToastAndroid.show('Error Adding Category', ToastAndroid.SHORT);
         }
-        this.getCategories(this.state.selectedType);
       });
   };
 
@@ -293,9 +296,11 @@ export default class EntryForm extends Component {
             onRequestClose={this.closeCategoryModal}>
             <View style={styles.categoryModal}>
               <CategoryForm
+                title="Add New Category"
                 checkCategory={this.checkCategory}
-                addCategory={this.addCategory}
+                submitData={this.addCategory}
                 closeModal={this.closeCategoryModal}
+                buttonTitle="Add"
               />
             </View>
           </Modal>

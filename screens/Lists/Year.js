@@ -101,6 +101,7 @@ export default class Year extends Component {
       this.setState({
         selectedCats: getSelectedCategories(prevProps.categories),
         amount: 0,
+        callToTotal: 0,
       });
 
       this.getYearData(

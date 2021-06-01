@@ -12,6 +12,7 @@ import Difference from '../screens/DifferenceScreen/DifferenceScreen';
 import HomeTabNavigation from './home-tab-navigation';
 import YearsGraphScreen from '../screens/Graphs/YearsGraphScreen';
 import MonthsGraphScreen from '../screens/Graphs/MonthsGraphScreen';
+import ManageCategoriesScreen from '../screens/CategoryFunctions/ManageCategoriesScreen';
 
 export default function HomeNavigation() {
   const Stack = createStackNavigator();
@@ -98,9 +99,25 @@ export default function HomeNavigation() {
         />
 
         <Stack.Screen
+          name="ManageCategories"
+          component={ManageCategoriesScreen}
+          options={{
+            title: 'Manage Categories',
+            headerTitleContainerStyle: {
+              left: 45,
+            },
+          }}
+        />
+
+        <Stack.Screen
           name="Graphs"
           component={YearsGraphScreen}
-          options={{title: 'Graphs'}}
+          options={{
+            title: 'Graphs',
+            headerTitleContainerStyle: {
+              left: 45,
+            },
+          }}
         />
 
         <Stack.Screen
