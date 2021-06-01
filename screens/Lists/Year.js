@@ -13,6 +13,7 @@ export default class Year extends Component {
     this.state = {
       months: [],
       amount: 0,
+      callToTotal: 0,
       selectedCats: getSelectedCategories(this.props.categories),
       posY: new Animated.Value(-50),
       tagPosX: new Animated.Value(-100),
@@ -37,7 +38,12 @@ export default class Year extends Component {
     total += amount;
     this.setState({
       amount: total,
+      callToTotal: this.state.callToTotal + 1,
     });
+
+    if (this.state.callToTotal + 1 == this.state.months.length) {
+      this.props.doneLoading();
+    }
 
     this.props.passTotal(amount);
   };

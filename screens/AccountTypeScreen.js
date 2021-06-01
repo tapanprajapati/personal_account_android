@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {RefreshControl} from 'react-native';
+import {BackHandler} from 'react-native';
+import {ActivityIndicator} from 'react-native';
 import {FlatList, Modal, StyleSheet, Text, View} from 'react-native';
 import {Icon, SearchBar} from 'react-native-elements';
 import CategoryDBHandler from '../databasehandler/categoryhandler';
@@ -20,8 +22,10 @@ export default class AccountType extends Component {
       categories: [],
       total: 0,
       searchText: '',
+      countDoneLoading: 0,
       edit: false,
       refresh: false,
+      isLoading: true,
     };
     this.entryHandler = new EntryDBHandler();
     this.categoryHandler = new CategoryDBHandler();
@@ -51,6 +55,16 @@ export default class AccountType extends Component {
     this.setState({
       total: this.state.total + amount,
     });
+  };
+
+  doneLoading = () => {
+    this.setState({
+      countDoneLoading: this.state.countDoneLoading + 1,
+    });
+
+    if (this.state.countDoneLoading + 1 == this.state.years.length) {
+      this.setState({isLoading: false});
+    }
   };
 
   componentDidMount() {
@@ -179,6 +193,7 @@ export default class AccountType extends Component {
                   navigation={this.props.navigation}
                   passTotal={this.addToTotal}
                   searchText={this.state.searchText}
+                  doneLoading={this.doneLoading}
                 />
               );
             }}
@@ -215,6 +230,19 @@ export default class AccountType extends Component {
             saveChanges={this.saveCategories}
             close={() => this.setState({showCategoryModal: false})}
           />
+        </Modal>
+        <Modal
+          transparent={true}
+          visible={this.state.isLoading}
+          onRequestClose={BackHandler.exitApp}>
+          <View style={{height: '100%', width: '100%'}}>
+            <ActivityIndicator
+              color="#01A4EF"
+              animating={this.state.isLoading}
+              size={50}
+              style={{position: 'absolute', top: '50%', alignSelf: 'center'}}
+            />
+          </View>
         </Modal>
       </View>
     );
