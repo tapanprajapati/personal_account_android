@@ -62,7 +62,7 @@ export default class AccountType extends Component {
       countDoneLoading: this.state.countDoneLoading + 1,
     });
 
-    if (this.state.countDoneLoading + 1 == this.state.years.length) {
+    if (this.state.countDoneLoading == this.state.years.length) {
       this.setState({isLoading: false});
     }
   };
@@ -123,8 +123,6 @@ export default class AccountType extends Component {
     this.setState({
       categories: categories,
       edit: true,
-      isLoading: true,
-      countDoneLoading: 0,
     });
 
     setTimeout(this.getYears, 10);
@@ -134,8 +132,6 @@ export default class AccountType extends Component {
     this.setState({
       // searchText: text,
       edit: true,
-      isLoading: true,
-      countDoneLoading: 0,
     });
 
     setTimeout(this.getYears, 10);
@@ -147,8 +143,6 @@ export default class AccountType extends Component {
     this.setState({
       edit: true,
       refresh: true,
-      isLoading: true,
-      countDoneLoading: 0,
     });
     this.getYears(this.state.searchText);
   };

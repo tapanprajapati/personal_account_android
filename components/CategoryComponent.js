@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Text} from 'react-native';
 import {StyleSheet} from 'react-native';
+import {Alert} from 'react-native';
 import {View} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {ButtonColors} from '../styles/colors';
@@ -11,6 +12,22 @@ export default class Category extends Component {
     super(props);
     this.controlButtonSize = 20;
   }
+
+  confirmAndDelete = () => {
+    let message = `Do you want to delete category: ${this.props.data.title} ?\n\nNOTE: All the entries of this category will be deleted. Please transfer entries to another category before deleting.`;
+    Alert.alert('WARNING', message, [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Delete',
+        onPress: () => {
+          this.props.handleDelete(this.props.data);
+        },
+      },
+    ]);
+  };
 
   render() {
     return (
@@ -27,6 +44,7 @@ export default class Category extends Component {
           <Icon
             name="delete"
             type="material"
+            onPress={this.confirmAndDelete}
             size={this.controlButtonSize}
             containerStyle={styles.controlButton}
             color={ButtonColors.entryControl.delete}></Icon>
@@ -46,8 +64,10 @@ export default class Category extends Component {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    padding: 4,
+    padding: 8,
     margin: 4,
+    borderRadius: 15,
+    backgroundColor: 'white',
   },
   controlList: {
     flex: 2.5,

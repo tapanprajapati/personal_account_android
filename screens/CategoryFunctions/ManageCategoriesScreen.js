@@ -66,13 +66,27 @@ export default class ManageCategoriesScreen extends Component {
         if (result == true) {
           ToastAndroid.show(
             `${this.state.selectedCategory.title} updated successfully`,
-            ToastAndroid.SHORT,
+            ToastAndroid.LONG,
           );
           this.getCategories();
         } else {
-          ToastAndroid.show('Error Updating Category', ToastAndroid.SHORT);
+          ToastAndroid.show('Error Updating Category', ToastAndroid.LONG);
         }
       });
+  };
+
+  deleteCategory = (category) => {
+    this.categoryHandler.deleteCategory(category.id).then((result) => {
+      if (result == true) {
+        ToastAndroid.show(
+          `${category.title} deleted successfully`,
+          ToastAndroid.LONG,
+        );
+        this.getCategories();
+      } else {
+        ToastAndroid.show('Error Deleting Category', ToastAndroid.LONG);
+      }
+    });
   };
 
   componentDidMount() {
@@ -112,9 +126,15 @@ export default class ManageCategoriesScreen extends Component {
         <FlatList
           style={styles.categoryList}
           data={this.state.categories}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => `${item.id}`}
           renderItem={({item}) => {
-            return <Category handleEdit={this.handleEdit} data={item} />;
+            return (
+              <Category
+                handleDelete={this.deleteCategory}
+                handleEdit={this.handleEdit}
+                data={item}
+              />
+            );
           }}
         />
 

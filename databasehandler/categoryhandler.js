@@ -50,6 +50,26 @@ export default class CategoryDBHandler {
     });
   }
 
+  deleteCategory(id) {
+    return new Promise((resolve, reject) => {
+      this.db.transaction((tx) => {
+        const deleteFromEntriesSQL = `DELETE FROM ${this.entryTable.name} WHERE ${this.entryTable.columns.categoryId.title}=?`;
+
+        tx.executeSql(deleteFromEntriesSQL, [id], (tnx, result) => {
+          const deleteSQL = `DELETE FROM ${this.table} WHERE ${this.columns.id.title}=?`;
+
+          tnx.executeSql(deleteSQL, [id], (tnxx, result) => {
+            if (result.rowsAffected == 1) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          });
+        });
+      });
+    });
+  }
+
   categoryExists(categoryTitle, type) {
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
