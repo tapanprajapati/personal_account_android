@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
-import {ListColors} from '../../styles/colors';
-import EntryDBHandler from '../../databasehandler/entryhandler';
+import {ListColors} from '../styles/colors';
+import EntryDBHandler from '../databasehandler/entryhandler';
 import Entry from './Entry';
-import {dimensions} from '../../utils/constants';
-import {global} from '../../styles/global';
+import {dimensions} from '../utils/constants';
+import {global} from '../styles/global';
 
 export default class Date extends Component {
   constructor(props) {

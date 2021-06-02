@@ -1,18 +1,15 @@
 import React, {Component} from 'react';
 import {RefreshControl} from 'react-native';
-import {BackHandler} from 'react-native';
-import {ActivityIndicator} from 'react-native';
 import {FlatList, Modal, StyleSheet, Text, View} from 'react-native';
 import {Icon, SearchBar} from 'react-native-elements';
+import Year from '../components/Year';
 import CategoryDBHandler from '../databasehandler/categoryhandler';
 import EntryDBHandler from '../databasehandler/entryhandler';
-import {ButtonColors, TextBackground} from '../styles/colors';
+import CategoryFilterModal from '../modals/CategoryFilterModal';
+import LoadingSpinner from '../modals/LoadingSpinner';
+import {ButtonColors} from '../styles/colors';
 import {global} from '../styles/global';
-import {dimensions} from '../utils/constants';
 import {getSelectedCategories} from '../utils/converters';
-import CategoryFilterModal from './CategoryFilterModal';
-import Year from './Lists/Year';
-import LoadingSpinner from './LoadingSpinner';
 
 export default class AccountType extends Component {
   constructor(props) {

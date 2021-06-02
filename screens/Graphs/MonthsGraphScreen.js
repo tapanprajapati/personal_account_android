@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {ScrollView} from 'react-native';
 import {StyleSheet} from 'react-native';
-import CategoryLine from './MonthlyComponents/CategoryLine';
-import TypeDifference from './MonthlyComponents/TypeDifference';
+import CategoryLine from '../../components/graph/MonthlyComponents/CategoryLine';
+import TypeDifference from '../../components/graph/MonthlyComponents/TypeDifference';
 
 export default class MonthsGraphScreen extends Component {
   constructor(props) {

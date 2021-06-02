@@ -8,11 +8,11 @@ import {View} from 'react-native';
 import {Icon, Tooltip} from 'react-native-elements';
 import CategoryDBHandler from '../../databasehandler/categoryhandler';
 import EntryDBHandler from '../../databasehandler/entryhandler';
+import CategoryFilterModal from '../../modals/CategoryFilterModal';
 import {TextBackground} from '../../styles/colors';
 import {global} from '../../styles/global';
 import {dimensions} from '../../utils/constants';
 import {formatLargeNumber} from '../../utils/converters';
-import CategoryFilterModal from '../CategoryFilterModal';
 import YearDifference from './YearDifference';
 
 export default class Difference extends Component {

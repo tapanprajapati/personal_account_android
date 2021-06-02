@@ -3,8 +3,8 @@ import {Text} from 'react-native';
 import {StyleSheet} from 'react-native';
 import {View} from 'react-native';
 import {Icon} from 'react-native-elements';
-import {ButtonColors} from '../../styles/colors';
-import {global} from '../../styles/global';
+import {ButtonColors} from '../styles/colors';
+import {global} from '../styles/global';
 
 export default class Category extends Component {
   constructor(props) {

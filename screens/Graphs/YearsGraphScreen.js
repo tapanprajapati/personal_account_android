@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import {ScrollView} from 'react-native';
 import {StyleSheet} from 'react-native';
-import CategoryHorizontalBar from './YearlyComponents/CategoryHorizontalBar';
-import CategoryLine from './YearlyComponents/CategoryLine';
-import TypeDifference from './YearlyComponents/TypeDifference';
+import CategoryLine from '../../components/graph/YearlyComponents/CategoryLine';
+import TypeDifference from '../../components/graph/YearlyComponents/TypeDifference';
 
 export default class YearsGraphScreen extends Component {
   constructor(props) {

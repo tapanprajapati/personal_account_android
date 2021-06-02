@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {Alert, StyleSheet, Text, View} from 'react-native';
-import {ButtonColors} from '../../styles/colors';
-import EntryDBHandler from '../../databasehandler/entryhandler';
 import {Icon} from 'react-native-elements';
-import {dimensions} from '../../utils/constants';
 import {ToastAndroid} from 'react-native';
+import EntryDBHandler from '../databasehandler/entryhandler';
+import {dimensions} from '../utils/constants';
+import {ButtonColors} from '../styles/colors';
 
 export default class Entry extends Component {
   constructor(props) {

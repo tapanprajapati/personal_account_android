@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Alert, StyleSheet, Text, TextInput, View} from 'react-native';
 import {Button} from 'react-native-elements';
-import {ButtonColors} from '../../styles/colors';
-import {dimensions} from '../../utils/constants';
+import {ButtonColors} from '../styles/colors';
+import {dimensions} from '../utils/constants';
 
 export default class CategoryForm extends Component {
   constructor(props) {

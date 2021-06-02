@@ -13,11 +13,11 @@ import {Picker} from '@react-native-picker/picker';
 import {Button, Icon} from 'react-native-elements';
 import {ButtonColors} from '../../styles/colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import CategoryForm from './CategoryFormModal';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 import CategoryDBHandler from '../../databasehandler/categoryhandler';
 import {dimensions} from '../../utils/constants';
 import {ToastAndroid} from 'react-native';
+import CategoryForm from '../../modals/CategoryFormModal';
 
 export default class EntryForm extends Component {
   constructor(props) {

@@ -7,9 +7,9 @@ import {LineChart} from 'react-native-charts-wrapper';
 import {Icon} from 'react-native-elements';
 import CategoryDBHandler from '../../../databasehandler/categoryhandler';
 import EntryDBHandler from '../../../databasehandler/entryhandler';
+import CategoryFilterModal from '../../../modals/CategoryFilterModal';
 import {Graph} from '../../../styles/colors';
 import {global} from '../../../styles/global';
-import CategoryFilterModal from '../../CategoryFilterModal';
 import CategoryHorizontalBar from '../YearlyComponents/CategoryHorizontalBar';
 
 export default class CategoryLine extends Component {

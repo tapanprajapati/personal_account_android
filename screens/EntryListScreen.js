@@ -4,11 +4,11 @@ import {Modal} from 'react-native';
 import {StyleSheet} from 'react-native';
 import {FlatList, View} from 'react-native';
 import {Icon, SearchBar} from 'react-native-elements';
+import Date from '../components/Date';
 import EntryDBHandler from '../databasehandler/entryhandler';
+import CategoryFilterModal from '../modals/CategoryFilterModal';
 import {global} from '../styles/global';
 import {getSelectedCategories} from '../utils/converters';
-import CategoryFilterModal from './CategoryFilterModal';
-import Date from './Lists/Date';
 
 export default class EntryList extends Component {
   constructor(props) {

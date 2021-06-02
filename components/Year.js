@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {ListColors} from '../../styles/colors';
-import {getMonthName, getSelectedCategories} from '../../utils/converters';
-import EntryDBHandler from '../../databasehandler/entryhandler';
-import {dimensions} from '../../utils/constants';
-import {global} from '../../styles/global';
 import {Animated} from 'react-native';
+import EntryDBHandler from '../databasehandler/entryhandler';
+import {ListColors} from '../styles/colors';
+import {global} from '../styles/global';
+import {dimensions} from '../utils/constants';
+import {getMonthName, getSelectedCategories} from '../utils/converters';
 
 export default class Year extends Component {
   constructor(props) {

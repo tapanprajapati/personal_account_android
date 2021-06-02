@@ -7,12 +7,12 @@ import {ToastAndroid} from 'react-native';
 import {Text} from 'react-native';
 import {View} from 'react-native';
 import {Icon} from 'react-native-elements';
+import Category from '../../components/CategoryComponent';
 import CategoryDBHandler from '../../databasehandler/categoryhandler';
+import CategoryForm from '../../modals/CategoryFormModal';
 import {ButtonColors} from '../../styles/colors';
 import {global} from '../../styles/global';
 import {dimensions} from '../../utils/constants';
-import CategoryForm from '../DataEntry/CategoryFormModal';
-import Category from './CategoryComponent';
 
 export default class ManageCategoriesScreen extends Component {
   constructor(props) {
