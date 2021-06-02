@@ -10,6 +10,7 @@ import {Icon} from 'react-native-elements';
 import Category from '../../components/CategoryComponent';
 import CategoryDBHandler from '../../databasehandler/categoryhandler';
 import CategoryForm from '../../modals/CategoryFormModal';
+import CategoryTransfer from '../../modals/CategoryTransferModal';
 import {ButtonColors} from '../../styles/colors';
 import {global} from '../../styles/global';
 import {dimensions} from '../../utils/constants';
@@ -23,6 +24,7 @@ export default class ManageCategoriesScreen extends Component {
       categories: [],
       showUpdateModal: false,
       showAddModal: false,
+      showTransferModal: false,
       selectedCategory: '',
     };
   }
@@ -39,6 +41,13 @@ export default class ManageCategoriesScreen extends Component {
     this.setState({
       selectedCategory: category,
       showUpdateModal: true,
+    });
+  };
+
+  handleTransfer = (category) => {
+    this.setState({
+      selectedCategory: category,
+      showTransferModal: true,
     });
   };
 
@@ -89,6 +98,22 @@ export default class ManageCategoriesScreen extends Component {
     });
   };
 
+  transferCategory = (id) => {
+    this.categoryHandler
+      .transferCategory(this.state.selectedCategory.id, id)
+      .then((result) => {
+        if (result == true) {
+          ToastAndroid.show(
+            `${this.state.selectedCategory.title} Transferred successfully`,
+            ToastAndroid.LONG,
+          );
+          this.getCategories();
+        } else {
+          ToastAndroid.show('Error Transferring Category', ToastAndroid.LONG);
+        }
+      });
+  };
+
   componentDidMount() {
     this.getCategories();
   }
@@ -132,6 +157,7 @@ export default class ManageCategoriesScreen extends Component {
               <Category
                 handleDelete={this.deleteCategory}
                 handleEdit={this.handleEdit}
+                handleTransfer={this.handleTransfer}
                 data={item}
               />
             );
@@ -163,6 +189,9 @@ export default class ManageCategoriesScreen extends Component {
             />
           </View>
         </Modal>
+
+        {/* ADD NEW CATEGORY */}
+
         <Modal
           visible={this.state.showAddModal}
           transparent={true}
@@ -183,6 +212,31 @@ export default class ManageCategoriesScreen extends Component {
                 });
               }}
               buttonTitle="Add"
+            />
+          </View>
+        </Modal>
+
+        {/* TRANSFER CATEGORY DATA */}
+
+        <Modal
+          visible={this.state.showTransferModal}
+          transparent={true}
+          animationType="slide"
+          onRequestClose={() => {
+            this.setState({
+              showTransferModal: false,
+            });
+          }}>
+          <View style={styles.categoryModal}>
+            <CategoryTransfer
+              submitData={this.transferCategory}
+              sourceCategory={this.state.selectedCategory}
+              categories={this.state.categories}
+              closeModal={() => {
+                this.setState({
+                  showTransferModal: false,
+                });
+              }}
             />
           </View>
         </Modal>

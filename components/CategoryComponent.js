@@ -54,6 +54,7 @@ export default class Category extends Component {
             type="material"
             size={this.controlButtonSize}
             containerStyle={styles.controlButton}
+            onPress={() => this.props.handleTransfer(this.props.data)}
             color={ButtonColors.entryControl.delete}></Icon>
         </View>
       </View>

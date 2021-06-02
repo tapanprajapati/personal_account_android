@@ -239,10 +239,11 @@ class Month extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 2,
+    borderRadius: 5,
     marginBottom: 10,
     shadowColor: 'grey',
     marginHorizontal: 10,
+    backgroundColor: 'white',
   },
   title: {
     fontWeight: 'bold',
@@ -299,6 +300,7 @@ const styles = StyleSheet.create({
   footer: {
     textAlign: 'right',
     marginTop: 10,
+    fontWeight: 'bold',
     marginBottom: 5,
     marginHorizontal: 5,
     color: ListColors.yearList.footer,

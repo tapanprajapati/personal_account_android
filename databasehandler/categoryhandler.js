@@ -70,6 +70,21 @@ export default class CategoryDBHandler {
     });
   }
 
+  transferCategory(sourceID, targetID) {
+    return new Promise((resolve, reject) => {
+      this.db.transaction((tx) => {
+        const transferSQL = `UPDATE ${this.entryTable.name} SET ${this.entryTable.columns.categoryId.title}=? WHERE ${this.entryTable.columns.categoryId.title}=?`;
+        tx.executeSql(transferSQL, [targetID, sourceID], (tnx, result) => {
+          if (result) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        });
+      });
+    });
+  }
+
   categoryExists(categoryTitle, type) {
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
