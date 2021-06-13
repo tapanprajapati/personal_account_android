@@ -47,6 +47,12 @@ export default class AccountType extends Component {
           years: years,
           refresh: false,
         });
+
+        setTimeout(() => {
+          this.setState({
+            isLoading: false,
+          });
+        }, 1500);
       });
   };
 

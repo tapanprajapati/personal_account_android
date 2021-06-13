@@ -17,7 +17,7 @@ ImportHandler.prototype.saveData = function (file) {
 
 ImportHandler.prototype.saveCategories = function (categories) {
   categories.forEach((category) => {
-    this.categoryHandler.addCategory(category).then((result) => {
+    this.categoryHandler.importCategory(category).then((result) => {
       console.log(result.success);
     });
   });

@@ -34,6 +34,31 @@ export default class CategoryDBHandler {
     });
   }
 
+  importCategory(category) {
+    return new Promise((resolve, reject) => {
+      this.db.transaction((tx) => {
+        const addSQL = `INSERT INTO ${this.table} (${this.columns.id.title},${this.columns.title.title},${this.columns.type.title}) VALUES(?,?,?)`;
+
+        tx.executeSql(
+          addSQL,
+          [category.id, category.title, category.type.toLowerCase()],
+          (tnx, result) => {
+            resolve({
+              success: true,
+              result: result,
+            });
+          },
+          (tnx, error) => {
+            resolve({
+              success: true,
+              result: error,
+            });
+          },
+        );
+      });
+    });
+  }
+
   updateCategory(newTitle, id) {
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
