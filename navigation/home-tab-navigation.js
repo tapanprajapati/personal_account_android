@@ -3,19 +3,23 @@ import AccountType from '../screens/AccountTypeScreen';
 import React from 'react';
 import Difference from '../screens/DifferenceScreen/DifferenceScreen';
 import {useEffect} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 import checkAndCreateDatabase from '../databasehandler/dbinit';
 import {Icon} from 'react-native-elements';
 import Menu, {MenuItem} from 'react-native-material-menu';
 import DocumentPicker from 'react-native-document-picker';
 import BackupHandler from '../backupmanager/BackupHandler';
 import {ToastAndroid} from 'react-native';
+import {useState} from 'react';
+import LoadingSpinner from '../modals/LoadingSpinner';
+import {Alert} from 'react-native';
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function HomeTabNavigation(props) {
   backupHandler = new BackupHandler();
 
+  let [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     _menu = null;
 
@@ -83,11 +87,12 @@ export default function HomeTabNavigation(props) {
                     props.navigation.navigate('RecentEntries');
                   }}
                 /> */}
+          <LoadingSpinner isLoading={isLoading} />
         </View>
       ),
     });
     checkAndCreateDatabase();
-  }, []);
+  }, [isLoading]);
 
   openPicker = () => {
     DocumentPicker.pick().then((res) => {
@@ -96,14 +101,27 @@ export default function HomeTabNavigation(props) {
   };
 
   exportData = () => {
+    setIsLoading(true);
     backupHandler.exportData().then(
       (success) => {
         ToastAndroid.show(
           "Exported to: 'Downloads/personalaccountsbackup.json'",
           ToastAndroid.LONG,
         );
+
+        Alert.alert(
+          'Backup Successful',
+          "Exported to: 'Downloads/personalaccountsbackup.json'",
+          [{text: 'OK', style: 'cancel'}],
+        );
+        // setTimeout(() => {
+        //   // setIsLoading(false);
+        // }, 1000);
+        setIsLoading(false);
       },
       (error) => {
+        console.log(error);
+        setIsLoading(false);
         ToastAndroid.show('Error Exporting Data', ToastAndroid.LONG);
       },
     );
