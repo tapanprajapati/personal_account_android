@@ -13,7 +13,22 @@ const months = [
   'December',
 ];
 
-export function getMonthName(num) {
+const monthsShort = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'June',
+  'July',
+  'Aug',
+  'Sept',
+  'Oct',
+  'Nov',
+  'Dec',
+];
+
+export function getMonthName(num, type = 'long') {
   num = parseInt(num);
   if (!num) {
     return;
@@ -22,7 +37,8 @@ export function getMonthName(num) {
     console.log(`Invalid month number: ${num}`);
     return;
   }
-  return months[num - 1];
+
+  return type == 'long' ? months[num - 1] : monthsShort[num - 1];
 }
 
 export function getSelectedCategories(categories) {
@@ -37,6 +53,9 @@ export function getSelectedCategories(categories) {
 }
 
 export function formatLargeNumber(num) {
+  if (Math.abs(num) < 1000) {
+    return num.toFixed(2);
+  }
   numStr = parseInt(num).toString();
   let len = numStr.length;
 

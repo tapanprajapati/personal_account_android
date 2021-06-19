@@ -10,6 +10,7 @@ import Menu, {MenuItem} from 'react-native-material-menu';
 import DocumentPicker from 'react-native-document-picker';
 import BackupHandler from '../backupmanager/BackupHandler';
 import {ToastAndroid} from 'react-native';
+import DashboardScreen from '../screens/DashboardScreen';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -111,7 +112,16 @@ export default function HomeTabNavigation(props) {
   };
 
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      tabBarOptions={{
+        labelStyle: {
+          textTransform: 'capitalize',
+          // fontSize: 10,
+          fontWeight: 'bold',
+          margin: 0,
+        },
+      }}>
+      <Tab.Screen name="Dashboard" component={DashboardScreen}></Tab.Screen>
       <Tab.Screen
         name="Expense"
         component={AccountType}

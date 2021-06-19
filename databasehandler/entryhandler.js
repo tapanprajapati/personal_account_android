@@ -259,7 +259,7 @@ export default class EntryDBHandler {
   //   console.log('Fetching Entries');
   //   return new Promise((resolve, reject) => {
   //     this.db.transaction((tx) => {
-  //       const getSQL = `SELECT 
+  //       const getSQL = `SELECT
   //         e.${this.columns.id.title} as id,
   //         e.${this.columns.categoryId.title} as categoryid,
   //         e.${this.columns.title.title} as title,
@@ -405,8 +405,8 @@ export default class EntryDBHandler {
         const getSQL = `SELECT
         sum(e.${this.columns.amount.title}) as total
         FROM ${this.table} as e, ${this.catTable.name} as c
-        where e.${this.columns.categoryId.title}=c.${this.catTable.columns.id.title} 
-        and c.${this.catTable.columns.type.title} = ? 
+        where e.${this.columns.categoryId.title}=c.${this.catTable.columns.id.title}
+        and c.${this.catTable.columns.type.title} = ?
         and strftime('%m/%Y',e.${this.columns.date.title})=?`;
 
         tx.executeSql(
@@ -429,8 +429,7 @@ export default class EntryDBHandler {
 
   getYearsTotal(year, type) {
     return new Promise((resolve, reject) => {
-
-      console.log(`${type} total of ${year}`)
+      console.log(`${type} total of ${year}`);
 
       this.db.transaction((tx) => {
         const getSQL = `SELECT 
@@ -444,15 +443,14 @@ export default class EntryDBHandler {
           getSQL,
           [type, year],
           (tnx, result) => {
-            let total = result.rows.item(0).total
+            let total = result.rows.item(0).total;
             if (total == null) total = 0;
 
-
-            resolve((total.toFixed(2)));
+            resolve(total.toFixed(2));
           },
           (tnx, error) => {
             console.error('Error');
-            console.error(error)
+            console.error(error);
             resolve(0);
           },
         );
