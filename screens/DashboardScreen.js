@@ -1,24 +1,38 @@
 import React, {Component} from 'react';
 import {StyleSheet} from 'react-native';
-import {Text, View} from 'react-native';
+import {Text, View, TouchableOpacity} from 'react-native';
 import CategoryHorizontalBar from '../components/graph/DashboardComponents/CategoryHorizontalBar';
 import TypePieChart from '../components/graph/DashboardComponents/TypePieChart';
 import {global} from '../styles/global';
 import {getMonthName} from '../utils/converters';
+import {Picker} from '@react-native-picker/picker';
+import MonthYearPicker from '../modals/MonthYearPicker';
 
 export default class DashboardScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       date: new Date(),
+      isDatePickerVisible: false,
     };
   }
+
+  saveDate = (date) => {
+    this.setState({
+      date: date,
+    });
+  };
 
   render() {
     return (
       <View style={global.container}>
         <View style={styles.first}>
-          <View style={styles.dateContainer}>
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => {
+              this.setState({isDatePickerVisible: true});
+            }}
+            style={styles.dateContainer}>
             <View style={[styles.monthContainer, global.shadow]}>
               <Text style={styles.month}>
                 {getMonthName(
@@ -30,7 +44,7 @@ export default class DashboardScreen extends Component {
             <View style={styles.yearContainer}>
               <Text style={styles.year}>{this.state.date.getFullYear()}</Text>
             </View>
-          </View>
+          </TouchableOpacity>
 
           <View style={styles.pieChart}>
             <TypePieChart date={this.state.date} />
@@ -59,6 +73,12 @@ export default class DashboardScreen extends Component {
             />
           </View>
         </View>
+        <MonthYearPicker
+          isVisible={this.state.isDatePickerVisible}
+          close={() => this.setState({isDatePickerVisible: false})}
+          saveDate={this.saveDate}
+          date={this.state.date}
+        />
       </View>
     );
   }

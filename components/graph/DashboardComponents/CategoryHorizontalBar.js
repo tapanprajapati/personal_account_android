@@ -15,7 +15,7 @@ export default class CategoryHorizontalBar extends Component {
     this.categoryHanlder = new CategoryDBHandler();
   }
 
-  componentDidMount() {
+  fetchFromDatabase = () => {
     const date = this.props.date;
     const monthYear =
       (date.getMonth() + 1 < 10
@@ -30,14 +30,27 @@ export default class CategoryHorizontalBar extends Component {
           categories: categories,
         });
       });
+  };
+
+  componentDidMount() {
+    this.fetchFromDatabase();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.date != prevProps.date) {
+      this.fetchFromDatabase();
+    }
   }
 
   getData = () => {
     let dataSets = [];
     let values = [];
-    this.state.categories.forEach((category) => {
-      values.push({y: category.total});
-    });
+
+    if (this.state.categories.length != 0) {
+      this.state.categories.forEach((category) => {
+        values.push({y: category.total});
+      });
+    }
 
     dataSets.push({
       values: values,
@@ -139,5 +152,6 @@ const styles = StyleSheet.create({
     //   padding: 4,
     //   backgroundColor: 'white',
     //   borderRadius: 15
+    paddingBottom: 5,
   },
 });

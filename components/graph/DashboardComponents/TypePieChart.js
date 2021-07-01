@@ -16,7 +16,7 @@ export default class TypePieChart extends Component {
     };
   }
 
-  componentDidMount() {
+  getData = () => {
     const date = this.props.date;
     const monthYear =
       (date.getMonth() + 1 < 10
@@ -33,6 +33,16 @@ export default class TypePieChart extends Component {
         income: parseFloat(result[1]),
       });
     });
+  };
+
+  componentDidMount() {
+    this.getData();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.date != prevProps.date) {
+      this.getData();
+    }
   }
 
   render() {
