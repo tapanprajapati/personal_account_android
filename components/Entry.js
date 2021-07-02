@@ -5,23 +5,30 @@ import {ToastAndroid} from 'react-native';
 import EntryDBHandler from '../databasehandler/entryhandler';
 import {dimensions} from '../utils/constants';
 import {ButtonColors} from '../styles/colors';
+import RNFS from 'react-native-fs';
 
 export default class Entry extends Component {
   constructor(props) {
     super(props);
     this.controlButtonSize = dimensions.entry.controlButtonSize;
     this.entryHandler = new EntryDBHandler();
+
+    this.state = {
+      imageExists: false,
+    };
+
+    this.imageExists();
   }
 
   confirmAndDelete = () => {
     let entry = this.props.entry;
     let message = `Do you want to delete this entry ?\n
-    Title: ${entry.title}
-    Description: ${entry.description}
-    Amount: ${entry.amount}
-    Date: ${entry.date}
-    Category: ${entry.category.title}
-    Type: ${entry.category.type.toUpperCase()}`;
+Title: ${entry.title}
+Description: ${entry.description}
+Amount: ${entry.amount}
+Date: ${entry.date}
+Category: ${entry.category.title}
+Type: ${entry.category.type.toUpperCase()}`;
     Alert.alert('Entry Will Be Delete', message, [
       {
         text: 'Cancel',
@@ -41,10 +48,34 @@ export default class Entry extends Component {
     ]);
   };
 
+  imageExists = () => {
+    RNFS.exists(
+      RNFS.ExternalStorageDirectoryPath +
+        '/PersonalAccount/Images/' +
+        this.props.entry.id +
+        '.jpg',
+    ).then((result) => {
+      if (result) {
+        this.setState({imageExists: true});
+      }
+    });
+  };
+
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.controlButtonsContainer}>
+          {this.state.imageExists && (
+            <Icon
+              name="photo-camera"
+              type="material"
+              size={this.controlButtonSize}
+              containerStyle={styles.controlButton}
+              onPress={() => {
+                this.props.openImage(this.props.entry.id);
+              }}
+              color={ButtonColors.entryControl.edit}></Icon>
+          )}
           <Icon
             name="create"
             type="material"

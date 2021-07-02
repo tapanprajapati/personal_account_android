@@ -8,6 +8,7 @@ export default function BackupHandler() {
 }
 
 BackupHandler.prototype.importData = function (file) {
+  console.log(file);
   this.importHandler.saveData(file);
 };
 
