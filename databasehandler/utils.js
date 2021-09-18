@@ -6,7 +6,7 @@ const DB = {
       columns: {
         id: {
           title: 'id',
-          type: 'integer',
+          type: 'text',
         },
         title: {
           title: 'title',
@@ -35,7 +35,7 @@ const DB = {
       columns: {
         id: {
           title: 'id',
-          type: 'integer',
+          type: 'text',
         },
         title: {
           title: 'title',

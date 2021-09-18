@@ -49,8 +49,9 @@ export default class EntryDBHandler {
     return new Promise((resolve, reject) => {
       console.log('Starting transaction');
       this.db.transaction((tx) => {
-        const addSQL = `INSERT INTO ${this.table} (${this.columns.title.title},${this.columns.description.title},${this.columns.amount.title},${this.columns.date.title},${this.columns.categoryId.title}) VALUES (?,?,?,?,?)`;
+        const addSQL = `INSERT INTO ${this.table} (${this.columns.id.title},${this.columns.title.title},${this.columns.description.title},${this.columns.amount.title},${this.columns.date.title},${this.columns.categoryId.title}) VALUES (?,?,?,?,?,?)`;
         let data = [
+          Date.now(),
           entry.title,
           entry.description,
           entry.amount,

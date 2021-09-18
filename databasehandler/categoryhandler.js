@@ -12,11 +12,11 @@ export default class CategoryDBHandler {
   addCategory(category) {
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
-        const addSQL = `INSERT INTO ${this.table} (${this.columns.title.title},${this.columns.type.title}) VALUES(?,?)`;
+        const addSQL = `INSERT INTO ${this.table} (${this.columns.id.title},${this.columns.title.title},${this.columns.type.title}) VALUES(?,?,?)`;
 
         tx.executeSql(
           addSQL,
-          [category.title, category.type.toLowerCase()],
+          [Date.now(), category.title, category.type.toLowerCase()],
           (tnx, result) => {
             resolve({
               success: true,
