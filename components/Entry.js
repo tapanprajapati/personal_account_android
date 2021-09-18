@@ -23,6 +23,7 @@ export default class Entry extends Component {
   confirmAndDelete = () => {
     let entry = this.props.entry;
     let message = `Do you want to delete this entry ?\n
+ID: ${entry.id}
 Title: ${entry.title}
 Description: ${entry.description}
 Amount: ${entry.amount}

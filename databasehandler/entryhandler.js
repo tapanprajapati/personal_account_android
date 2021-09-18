@@ -9,6 +9,41 @@ export default class EntryDBHandler {
     this.catTable = DB.tables.categories;
   }
 
+  importEntry(entry) {
+    console.log('In handler');
+    return new Promise((resolve, reject) => {
+      console.log('Starting transaction');
+      this.db.transaction((tx) => {
+        const addSQL = `INSERT INTO ${this.table} (${this.columns.id.title},${this.columns.title.title},${this.columns.description.title},${this.columns.amount.title},${this.columns.date.title},${this.columns.categoryId.title}) VALUES (?,?,?,?,?)`;
+        let data = [
+          entry.id,
+          entry.title,
+          entry.description,
+          entry.amount,
+          entry.date,
+          entry.category.id,
+        ];
+
+        tx.executeSql(
+          addSQL,
+          data,
+          (tnx, result) => {
+            resolve({
+              success: true,
+              result: result,
+            });
+          },
+          (tnx, error) => {
+            resolve({
+              success: false,
+              result: error,
+            });
+          },
+        );
+      });
+    });
+  }
+
   addEntry(entry) {
     console.log('In handler');
     return new Promise((resolve, reject) => {
@@ -388,7 +423,9 @@ export default class EntryDBHandler {
           (tnx, result) => {
             let total = result.rows.item(0).total;
 
-            if (total == null) total = 0;
+            if (total == null) {
+              total = 0;
+            }
             resolve(total);
           },
           (tnx, error) => {
@@ -415,7 +452,9 @@ export default class EntryDBHandler {
           (tnx, result) => {
             let total = result.rows.item(0).total;
 
-            if (total == null) total = 0;
+            if (total == null) {
+              total = 0;
+            }
             resolve(total.toFixed(2));
           },
           (tnx, error) => {
@@ -444,7 +483,9 @@ export default class EntryDBHandler {
           [type, year],
           (tnx, result) => {
             let total = result.rows.item(0).total;
-            if (total == null) total = 0;
+            if (total == null) {
+              total = 0;
+            }
 
             resolve(total.toFixed(2));
           },
@@ -492,7 +533,9 @@ export default class EntryDBHandler {
           (tnx, result) => {
             let total = result.rows.item(0).total;
 
-            if (total == null) total = 0;
+            if (total == null) {
+              total = 0;
+            }
             resolve(total.toFixed(2));
           },
           (tnx, error) => {
