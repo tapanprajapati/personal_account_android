@@ -97,11 +97,13 @@ export default class EntryForm extends Component {
         categories: result,
       });
 
-      if (result.length > 0 && this.state.selectedCategoryId == 0) {
+      if (this.state.selectedType!=type) {
         this.setState({
           selectedCategoryId: result[0].id,
         });
       }
+
+      this.setState({selectedType: type})
     });
   };
 
@@ -263,7 +265,6 @@ export default class EntryForm extends Component {
               mode="dropdown"
               itemStyle={{fontSize: dimensions.entryForm.input.text}}
               onValueChange={(value, index) => {
-                this.setState({selectedType: value});
                 this.getCategories(value);
               }}
               selectedValue={this.state.selectedType}>

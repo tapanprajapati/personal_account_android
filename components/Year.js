@@ -137,7 +137,7 @@ export default class Year extends Component {
           ]}>
           <View style={styles.titleMaterialBackShadow}></View>
         </Animated.View>
-        <Text style={styles.footer}>$ {this.state.amount.toFixed(2)}</Text>
+        <Text style={styles.footer}>$ {formatLargeNumber(this.state.amount)}</Text>
         <FlatList
           style={styles.listOfMonths}
           keyExtractor={(item) => item}
