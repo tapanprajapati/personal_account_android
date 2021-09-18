@@ -22,7 +22,7 @@ export default class MonthYearPicker extends Component {
     };
 
     this._monthListRef = null;
-    this.yearListRef = null;
+    this._yearListRef = null;
   }
 
   scrollMonthHandler = (e) => {
@@ -80,7 +80,8 @@ export default class MonthYearPicker extends Component {
   };
 
   reset = () => {
-    const month = new Date().getMonth();
+    const d = new Date();
+    const month = d.getMonth();
     const year = 20;
     this.setState({
       selectedMonth: month,
@@ -110,7 +111,14 @@ export default class MonthYearPicker extends Component {
               <Text style={styles.title}>Select Month and Date</Text>
               <View style={styles.dateHolder}>
                 <View style={styles.listHolder}>
-                  <Icon name="arrow-drop-up" type="material" />
+                  <Icon name="arrow-drop-up" type="material" onPress={()=>{
+                    if(this.state.selectedMonth>0)
+                    {
+                      let m = this.state.selectedMonth-1;
+                      this.setState({selectedMonth: m})
+                      this._monthListRef.scrollToIndex({index: m, animated: true});
+                    }
+                  }}/>
                   <FlatList
                     ref={(ref) => {
                       this._monthListRef = ref;
@@ -129,15 +137,29 @@ export default class MonthYearPicker extends Component {
                     renderItem={({item}) => {
                       return (
                         <Text style={styles.list}>
-                          {getMonthName(item + 1)}
+                          {getMonthName(item + 1, 'short')}
                         </Text>
                       );
                     }}></FlatList>
 
-                  <Icon name="arrow-drop-down" type="material" />
+                  <Icon name="arrow-drop-down" type="material" onPress={()=>{
+                    if(this.state.selectedMonth<11)
+                    {
+                      let m = this.state.selectedMonth+1;
+                      this.setState({selectedMonth: m})
+                      this._monthListRef.scrollToIndex({index: m, animated: true});
+                    }
+                  }}/>
                 </View>
                 <View style={styles.listHolder}>
-                  <Icon name="arrow-drop-up" type="material" />
+                  <Icon name="arrow-drop-up" type="material" onPress={()=>{
+                    if(this.state.selectedYear>0)
+                    {
+                      let y = this.state.selectedYear-1;
+                      this.setState({selectedYear: y})
+                      this._yearListRef.scrollToIndex({index: y, animated: true});
+                    }
+                  }}/>
                   <FlatList
                     ref={(ref) => {
                       this._yearListRef = ref;
@@ -157,7 +179,14 @@ export default class MonthYearPicker extends Component {
                       return <Text style={styles.list}>{item}</Text>;
                     }}></FlatList>
 
-                  <Icon name="arrow-drop-down" type="material" />
+                  <Icon name="arrow-drop-down" type="material" onPress={()=>{
+                    if(this.state.selectedYear<40)
+                    {
+                      let y = this.state.selectedYear+1;
+                      this.setState({selectedYear: y})
+                      this._yearListRef.scrollToIndex({index: y, animated: true});
+                    }
+                  }}/>
                 </View>
               </View>
               <View style={styles.actionButtonsContainer}>
