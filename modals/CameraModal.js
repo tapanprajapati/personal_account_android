@@ -3,6 +3,7 @@ import {Dimensions} from 'react-native';
 import {StyleSheet} from 'react-native';
 import {Modal, View, Text} from 'react-native';
 import {RNCamera} from 'react-native-camera';
+import { Icon } from 'react-native-elements';
 export default class CameraModal extends Component {
   constructor(props) {
     super(props);
@@ -39,9 +40,7 @@ export default class CameraModal extends Component {
               buttonPositive: 'Ok',
               buttonNegative: 'Cancel',
             }}>
-            <Text style={styles.capture} onPress={this.takePicture.bind(this)}>
-              [CAPTURE]
-            </Text>
+            <Icon name="photo-camera" raised color="black" type="material" onPress={this.takePicture.bind(this)}/>
           </RNCamera>
         </View>
       </Modal>

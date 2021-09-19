@@ -26,7 +26,7 @@ const DB = {
         },
         categoryId: {
           title: 'categoryid',
-          type: 'integer',
+          type: 'text',
         },
       },
     },
