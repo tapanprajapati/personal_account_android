@@ -13,6 +13,7 @@ import {ToastAndroid} from 'react-native';
 import {useState} from 'react';
 import LoadingSpinner from '../modals/LoadingSpinner';
 import {Alert} from 'react-native';
+import DashboardScreen from '../screens/DashboardScreen';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -129,7 +130,16 @@ export default function HomeTabNavigation(props) {
   };
 
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      tabBarOptions={{
+        labelStyle: {
+          textTransform: 'capitalize',
+          // fontSize: 10,
+          fontWeight: 'bold',
+          margin: 0,
+        },
+      }}>
+      <Tab.Screen name="Dashboard" component={DashboardScreen}></Tab.Screen>
       <Tab.Screen
         name="Expense"
         component={AccountType}

@@ -78,7 +78,7 @@ export default function HomeNavigation() {
           name="EntryList"
           component={EntryList}
           options={({route}) => ({
-            title: `${route.params.type}: ${
+            title: `${route.params.type.toUpperCase()}: ${
               route.params.year
             } -> ${getMonthName(route.params.month)}`,
 

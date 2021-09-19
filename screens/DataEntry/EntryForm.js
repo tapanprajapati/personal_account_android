@@ -10,22 +10,30 @@ import {
   Alert,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
-import {Button, Icon} from 'react-native-elements';
-import {ButtonColors} from '../../styles/colors';
+import {Button, Icon, Image} from 'react-native-elements';
+import {ButtonColors, TextColors} from '../../styles/colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import EntryDBHandler from '../../databasehandler/entryhandler';
 import CategoryDBHandler from '../../databasehandler/categoryhandler';
 import {dimensions} from '../../utils/constants';
 import {ToastAndroid} from 'react-native';
 import CategoryForm from '../../modals/CategoryFormModal';
+import CameraModal from '../../modals/CameraModal';
+import CameraImagePreviewModal from '../../modals/CameraImagePreviewModal';
+import CameraImageHandler from '../../databasehandler/cameraImageHandler';
 
 export default class EntryForm extends Component {
   constructor(props) {
     super(props);
+
+    this.cameraImageHandler = new CameraImageHandler();
+
     if (!props.entry) {
       // console.log('In');
       this.state = {
         showDatePicker: false,
+        showCameraModal: false,
+        showPreview: false,
         date: new Date(),
         showCategoryModal: false,
         selectedType: this.props.type.toLowerCase(),
@@ -34,11 +42,14 @@ export default class EntryForm extends Component {
         amount: '',
         description: '',
         categories: [],
+        imagePath: '',
       };
     } else {
       this.state = {
         showDatePicker: false,
         date: new Date(props.entry.date),
+        showCameraModal: false,
+        showPreview: false,
         showCategoryModal: false,
         selectedType: props.entry.category.type,
         selectedCategoryId: props.entry.category.id,
@@ -46,7 +57,16 @@ export default class EntryForm extends Component {
         amount: props.entry.amount.toString(),
         description: props.entry.description,
         categories: [],
+        imagePath: '',
       };
+
+      this.cameraImageHandler.imageExists(props.entry.id).then((result) => {
+        if (result) {
+          this.setState({
+            imagePath: this.cameraImageHandler.getImagePath(props.entry.id),
+          });
+        }
+      });
     }
 
     this.buttonText = 'ADD';
@@ -77,11 +97,13 @@ export default class EntryForm extends Component {
         categories: result,
       });
 
-      if (result.length > 0 && this.state.selectedCategoryId == 0) {
+      if (this.state.selectedType!=type) {
         this.setState({
           selectedCategoryId: result[0].id,
         });
       }
+
+      this.setState({selectedType: type})
     });
   };
 
@@ -117,6 +139,12 @@ export default class EntryForm extends Component {
           ToastAndroid.show('Error Adding Category', ToastAndroid.SHORT);
         }
       });
+  };
+
+  getImagePath = (path) => {
+    this.setState({
+      imagePath: path,
+    });
   };
 
   submitForm = () => {
@@ -165,7 +193,7 @@ export default class EntryForm extends Component {
 
       console.log(entry);
 
-      this.props.handleFormData(entry);
+      this.props.handleFormData(entry, this.state.imagePath);
       this.resetInputs();
     }
   };
@@ -175,6 +203,7 @@ export default class EntryForm extends Component {
       title: '',
       amount: '',
       description: '',
+      imagePath: '',
     });
   }
 
@@ -236,7 +265,6 @@ export default class EntryForm extends Component {
               mode="dropdown"
               itemStyle={{fontSize: dimensions.entryForm.input.text}}
               onValueChange={(value, index) => {
-                this.setState({selectedType: value});
                 this.getCategories(value);
               }}
               selectedValue={this.state.selectedType}>
@@ -277,6 +305,48 @@ export default class EntryForm extends Component {
           </View>
 
           <View style={styles.inputHolder}>
+            <Text style={styles.inputText}>Add Image</Text>
+            <View style={styles.horizontalInputContainer}>
+              <Icon
+                name="add-a-photo"
+                type="material"
+                reverse
+                containerStyle={{flex: 1}}
+                color={ButtonColors.homeButton.floating}
+                size={15}
+                onPress={() => this.setState({showCameraModal: true})}
+              />
+              {this.state.imagePath != '' && (
+                <Icon
+                  name="check"
+                  type="material"
+                  reverse
+                  containerStyle={{flex: 1}}
+                  color={TextColors.income}
+                  size={15}
+                  onPress={() => {
+                    console.log('Showing Preview');
+                    this.setState({showPreview: true});
+                  }}
+                />
+              )}
+              {this.state.imagePath != '' && (
+                <Icon
+                  name="clear"
+                  type="material"
+                  reverse
+                  containerStyle={{flex: 1}}
+                  color={TextColors.expense}
+                  size={15}
+                  onPress={() => {
+                    this.setState({imagePath: ''});
+                  }}
+                />
+              )}
+            </View>
+          </View>
+
+          <View style={styles.inputHolder}>
             <Button
               containerStyle={{
                 marginTop: 10,
@@ -304,6 +374,22 @@ export default class EntryForm extends Component {
               />
             </View>
           </Modal>
+          <CameraModal
+            captureImage={this.getImagePath}
+            visible={this.state.showCameraModal}
+            close={() => {
+              this.setState({showCameraModal: false});
+            }}
+          />
+
+          <CameraImagePreviewModal
+            visible={this.state.showPreview}
+            close={() => {
+              this.setState({showPreview: false});
+            }}
+            uri={this.state.imagePath}
+          />
+
           {this.state.showDatePicker && (
             <DateTimePicker
               mode="date"

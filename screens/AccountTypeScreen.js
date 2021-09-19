@@ -168,7 +168,7 @@ export default class AccountType extends Component {
             onSubmitEditing={this.handleSearch}
           />
           <Icon
-            containerStyle={{position: 'absolute', end: 0, margin: 0, top: -2}}
+            containerStyle={{position: 'absolute', end: 60, margin: 0, top: -2}}
             name="filter-outline"
             type="ionicon"
             raised
@@ -176,6 +176,22 @@ export default class AccountType extends Component {
             // reverse
             onPress={() => {
               this.setState({showCategoryModal: true});
+            }}
+          />
+          <Icon
+            containerStyle={{position: 'absolute', end: 0, margin: 0, top: -2}}
+            raised
+            color={ButtonColors.floatingAdd}
+            name="add"
+            type="material"
+            onPress={() => {
+              this.props.navigation.navigate('AddEntry', {
+                type: this.props.route.params.type,
+              });
+
+              this.setState({
+                edit: true,
+              });
             }}
           />
         </View>
@@ -211,24 +227,9 @@ export default class AccountType extends Component {
         <Text style={global.footer}>
           Total: $ {this.state.total.toFixed(2)}
         </Text>
-        <View style={global.floatingButton}>
-          <Icon
-            raised
-            color={ButtonColors.floatingAdd}
-            name="add"
-            type="material"
-            reverse
-            onPress={() => {
-              this.props.navigation.navigate('AddEntry', {
-                type: this.props.route.params.type,
-              });
-
-              this.setState({
-                edit: true,
-              });
-            }}
-          />
-        </View>
+        {/* <View style={global.floatingButton}>
+          
+        </View> */}
         <Modal
           transparent={true}
           visible={this.state.showCategoryModal}
@@ -252,7 +253,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 0,
     padding: 0,
     borderBottomWidth: 0,
-    marginEnd: 60,
+    marginEnd: 120,
   },
   searchBarInputContainer: {
     backgroundColor: 'white',

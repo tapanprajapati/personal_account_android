@@ -5,6 +5,7 @@ import EntryDBHandler from '../databasehandler/entryhandler';
 import Entry from './Entry';
 import {dimensions} from '../utils/constants';
 import {global} from '../styles/global';
+import {ThemeConsumer} from 'react-native-elements';
 
 export default class Date extends Component {
   constructor(props) {
@@ -100,6 +101,7 @@ export default class Date extends Component {
                 entry={item}
                 markDateEdit={this.markEdit}
                 refresh={this.getEntries}
+                openImage={this.props.openImage}
               />
             );
           }}

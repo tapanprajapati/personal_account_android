@@ -9,11 +9,14 @@ import EntryDBHandler from '../databasehandler/entryhandler';
 import CategoryFilterModal from '../modals/CategoryFilterModal';
 import {global} from '../styles/global';
 import {getSelectedCategories} from '../utils/converters';
+import CameraImagePreviewModal from '../modals/CameraImagePreviewModal';
+import CameraImageHandler from '../databasehandler/cameraImageHandler';
 
 export default class EntryList extends Component {
   constructor(props) {
     super(props);
     this.entryHandler = new EntryDBHandler();
+    this.cameraImageHandler = new CameraImageHandler();
     this.state = {
       dates: [],
       searchText: this.props.route.params.searchText,
@@ -23,6 +26,8 @@ export default class EntryList extends Component {
       showCategoryModal: false,
       edit: false,
       total: 0,
+      imagePath: '',
+      showImage: false,
     };
   }
 
@@ -46,6 +51,15 @@ export default class EntryList extends Component {
       .then((total) => {
         this.setState({total: total});
       });
+  };
+
+  openImage = (id) => {
+    const path = this.cameraImageHandler.getImagePath(id);
+    this.setState({
+      showImage: true,
+      imagePath: path,
+    });
+    console.log(path);
   };
 
   componentDidMount() {
@@ -114,6 +128,7 @@ export default class EntryList extends Component {
                 year={this.props.route.params.year}
                 categories={this.state.selectedCategories}
                 edit={this.state.edit}
+                openImage={this.openImage}
               />
             );
           }}></FlatList>
@@ -132,6 +147,13 @@ export default class EntryList extends Component {
             close={() => this.setState({showCategoryModal: false})}
           />
         </Modal>
+        <CameraImagePreviewModal
+          visible={this.state.showImage}
+          uri={this.state.imagePath}
+          close={() => {
+            this.setState({showImage: false});
+          }}
+        />
       </View>
     );
   }

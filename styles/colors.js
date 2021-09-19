@@ -49,8 +49,8 @@ const TextBackground = {
 };
 
 const Graph = {
-  income: '#00C63C',
-  expense: '#F44336',
+  income: '#00E676',
+  expense: '#FF5252',
   random: () => {
     return '#' + (((1 << 24) * Math.random()) | 0).toString(16);
   },

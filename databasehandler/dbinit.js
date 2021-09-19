@@ -17,7 +17,7 @@ export default function checkAndCreateDatabase() {
         const tableE = DB.tables.entries;
         const tableC = DB.tables.categories;
         const createEntries = `CREATE TABLE ${tableE.name} (
-        ${tableE.columns.id.title} ${tableE.columns.id.type} PRIMARY KEY AUTOINCREMENT,
+        ${tableE.columns.id.title} ${tableE.columns.id.type} PRIMARY KEY,
         ${tableE.columns.title.title} ${tableE.columns.title.type},
         ${tableE.columns.description.title} ${tableE.columns.description.type},
         ${tableE.columns.amount.title} ${tableE.columns.amount.type},
@@ -26,7 +26,7 @@ export default function checkAndCreateDatabase() {
       );`;
 
         const createCats = `CREATE TABLE ${tableC.name} (
-        ${tableC.columns.id.title} ${tableC.columns.id.type} PRIMARY KEY AUTOINCREMENT,
+        ${tableC.columns.id.title} ${tableC.columns.id.type} PRIMARY KEY,
         ${tableC.columns.title.title} ${tableC.columns.title.type},
         ${tableC.columns.type.title} ${tableC.columns.type.type}
       );`;

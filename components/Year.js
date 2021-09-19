@@ -5,7 +5,7 @@ import EntryDBHandler from '../databasehandler/entryhandler';
 import {ListColors} from '../styles/colors';
 import {global} from '../styles/global';
 import {dimensions} from '../utils/constants';
-import {getMonthName, getSelectedCategories} from '../utils/converters';
+import {getMonthName, getSelectedCategories, formatLargeNumber} from '../utils/converters';
 
 export default class Year extends Component {
   constructor(props) {
@@ -137,7 +137,7 @@ export default class Year extends Component {
           ]}>
           <View style={styles.titleMaterialBackShadow}></View>
         </Animated.View>
-        <Text style={styles.footer}>$ {this.state.amount.toFixed(2)}</Text>
+        <Text style={styles.footer}>$ {formatLargeNumber(this.state.amount)}</Text>
         <FlatList
           style={styles.listOfMonths}
           keyExtractor={(item) => item}
@@ -231,7 +231,7 @@ class Month extends Component {
         style={styles.monthContainer}
         onPress={this.goToEntryListScreen}>
         <Text style={styles.monthText}>{getMonthName(this.props.month)}</Text>
-        <Text style={styles.amountText}> $ {this.state.amount.toFixed(2)}</Text>
+        <Text style={styles.amountText}> $ {formatLargeNumber(this.state.amount)}</Text>
       </TouchableOpacity>
     );
   }

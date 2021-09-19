@@ -25,8 +25,10 @@ ImportHandler.prototype.saveCategories = function (categories) {
 
 ImportHandler.prototype.saveEntries = function (entries) {
   entries.forEach((entry) => {
-    this.entryHandler.addEntry(entry).then((result) => {
+    this.entryHandler.importEntry(entry).then((result) => {
+      console.log(entry);
       console.log(result.success);
+      console.log(result.result);
     });
   });
 };
