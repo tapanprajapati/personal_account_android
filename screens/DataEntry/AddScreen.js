@@ -16,7 +16,7 @@ export default class AddEntry extends Component {
   addEntry = (entry, imagePath) => {
     console.log('Adding data');
     this.entryHandler.addEntry(entry).then((result) => {
-      console.log(result);
+      console.log(JSON.stringify(result));
       if (result.success) {
         console.log('Entry Added');
         // this.props.navigation.goBack();
@@ -27,7 +27,7 @@ export default class AddEntry extends Component {
         }
         ToastAndroid.show('Entry Added Successfully', ToastAndroid.SHORT);
       } else {
-        console.log(result.result);
+        ToastAndroid.show('Error creating entry', ToastAndroid.SHORT);
       }
     });
   };

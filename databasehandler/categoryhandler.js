@@ -1,5 +1,7 @@
 import {openDatabase} from 'react-native-sqlite-storage';
 import {DB} from './utils';
+import './../utils/api/endpoints'
+import endpoints from './../utils/api/endpoints';
 
 export default class CategoryDBHandler {
   constructor() {
@@ -134,25 +136,19 @@ export default class CategoryDBHandler {
 
   getCategories(type) {
     console.log(`Getting categories for ${type}`);
-    return new Promise((resolve, reject) => {
-      this.db.transaction((tx) => {
-        const getSQL = `SELECT * FROM ${this.table} WHERE ${this.columns.type.title} = ?`;
+    console.log(`${endpoints.category.getCategories}1640932481964`)
 
-        tx.executeSql(getSQL, [type.toLowerCase()], (tnx, result) => {
-          let temp = [];
-
-          for (let i = 0; i < result.rows.length; i++) {
-            temp.push({
-              id: result.rows.item(i).id,
-              title: result.rows.item(i).title,
-              type: type,
-            });
-          }
-
-          resolve(temp);
-        });
-      });
-    });
+    return new Promise((resolve, reject)=>{
+      fetch(`${endpoints.category.getCategories}1640932481964`)
+      .then((response)=>response.json())
+      .then(json=>{
+        const message = json.message;
+        console.log(message)
+        resolve(message.filter(item=>item.type===type))
+      }).catch(error=>{
+        console.log(error)
+      })
+    })
   }
 
   getAllCategories() {

@@ -30,22 +30,14 @@ export default class Year extends Component {
           months: result,
         });
       });
-  };
-
-  addToTotal = (amount) => {
-    amount = parseFloat(amount);
-    let total = this.state.amount;
-    total += amount;
-    this.setState({
-      amount: total,
-      callToTotal: this.state.callToTotal + 1,
-    });
-
-    if (this.state.callToTotal + 1 == this.state.months.length) {
-      this.props.doneLoading();
-    }
-
-    this.props.passTotal(amount);
+    
+    this.entryHandler
+    .getSearchYearTotal(searchText, this.props.year, categories)
+    .then((result)=>{
+      this.setState({
+        amount: result
+      })
+    })
   };
 
   componentDidMount() {
@@ -145,7 +137,6 @@ export default class Year extends Component {
           renderItem={({item}) => {
             return (
               <Month
-                passTotal={this.addToTotal}
                 month={item}
                 searchText={this.props.searchText}
                 year={this.props.year}
@@ -180,7 +171,6 @@ class Month extends Component {
         this.setState({
           amount: total,
         });
-        this.props.passTotal(total);
       });
   };
   componentDidMount() {

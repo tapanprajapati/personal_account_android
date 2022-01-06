@@ -98,7 +98,8 @@ Type: ${entry.category.type.toUpperCase()}`;
             onPress={this.confirmAndDelete}></Icon>
         </View>
         <Text style={styles.categoryText}>
-          {this.props.entry.category.title}
+          {/* {this.props.entry.category.title} */}
+          Hello
         </Text>
         <View style={styles.entryContainer}>
           <Text style={styles.entryText}>{this.props.entry.title}</Text>

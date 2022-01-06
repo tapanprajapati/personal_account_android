@@ -1,5 +1,7 @@
 import {openDatabase} from 'react-native-sqlite-storage';
 import {DB} from './utils';
+import './../utils/api/endpoints'
+import endpoints from './../utils/api/endpoints';
 
 export default class EntryDBHandler {
   constructor() {
@@ -48,34 +50,27 @@ export default class EntryDBHandler {
     console.log('In handler');
     return new Promise((resolve, reject) => {
       console.log('Starting transaction');
-      this.db.transaction((tx) => {
-        const addSQL = `INSERT INTO ${this.table} (${this.columns.id.title},${this.columns.title.title},${this.columns.description.title},${this.columns.amount.title},${this.columns.date.title},${this.columns.categoryId.title}) VALUES (?,?,?,?,?,?)`;
-        let data = [
-          Date.now(),
-          entry.title,
-          entry.description,
-          entry.amount,
-          entry.date,
-          entry.category.id,
-        ];
-
-        tx.executeSql(
-          addSQL,
-          data,
-          (tnx, result) => {
-            resolve({
-              success: true,
-              result: result,
-            });
-          },
-          (tnx, error) => {
-            resolve({
-              success: false,
-              result: error,
-            });
-          },
-        );
-      });
+      fetch(endpoints.entry.createEntry,{
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({
+          title: entry.title,
+          description: entry.description,
+          amount: parseFloat(entry.amount),
+          date: entry.date,
+          categoryid: entry.category.id,
+          username: "tapan"
+        })
+      })
+      .then((response)=>response.json())
+      .then(json=>{
+        resolve(json)
+      })
+      .catch(error=>
+        reject(error))
     });
   }
 
@@ -186,157 +181,46 @@ export default class EntryDBHandler {
   getSearchYears(searchString, categories) {
     console.log('Fetching Years from Database');
     return new Promise((resolve, reject) => {
-      this.db.transaction((tx) => {
-        let getSQL = `SELECT distinct(strftime('%Y',${this.columns.date.title})) as date from ${this.table}  WHERE ${this.columns.categoryId.title} IN (${categories})
-         and ${this.columns.title.title} like '%${searchString}%' order by date`;
-
-        tx.executeSql(getSQL, [], (tnx, result) => {
-          let temp = [];
-
-          for (let i = 0; i < result.rows.length; i++) {
-            temp.push(result.rows.item(i).date);
-          }
-          resolve(temp);
-        });
-      });
+      fetch(`${endpoints.entry.getYears}?search=${searchString}&categories=${categories}`)
+      .then((response)=>response.json())
+      .then(json=>{
+        resolve(json.message)
+      })
+      .catch(error=>{
+        reject(error)
+      })
     });
   }
-
-  // getMonthsOfYear(year, categories) {
-  //   return new Promise((resolve, reject) => {
-  //     this.db.transaction((tx) => {
-  //       let getSQL = `SELECT distinct(strftime('%m',${this.columns.date.title})) as date FROM ${this.table}
-  //            where strftime('%Y',${this.columns.date.title})=? AND ${this.columns.categoryId.title} IN (${categories})
-  //            order by date`;
-
-  //       tx.executeSql(getSQL, [year], (tnx, result) => {
-  //         let temp = [];
-
-  //         for (let i = 0; i < result.rows.length; i++) {
-  //           temp.push(result.rows.item(i).date);
-  //         }
-
-  //         resolve(temp);
-  //       });
-  //     });
-  //   });
-  // }
 
   getSearchMonthsOfYear(searchString, year, categories) {
+    console.log('Fetching months from Database');
+    console.log(`${endpoints.entry.getMonths}?search=${searchString}&categories=${categories}&date=${year}`)
     return new Promise((resolve, reject) => {
-      this.db.transaction((tx) => {
-        console.log(`Fetching Months for ${year}`);
-
-        let getSQL = `SELECT distinct(strftime('%m',${this.columns.date.title})) as date FROM ${this.table}
-             where strftime('%Y',${this.columns.date.title})=? AND ${this.columns.categoryId.title} IN (${categories}) and 
-             ${this.columns.title.title} like '%${searchString}%'
-             order by date`;
-
-        tx.executeSql(getSQL, [year], (tnx, result) => {
-          let temp = [];
-
-          for (let i = 0; i < result.rows.length; i++) {
-            temp.push(result.rows.item(i).date);
-          }
-          console.log(temp);
-
-          resolve(temp);
-        });
-      });
+      fetch(`${endpoints.entry.getMonths}?search=${searchString}&categories=${categories}&date=${year}`)
+      .then((response)=>response.json())
+      .then(json=>{
+        console.log(json.message)
+        resolve(json.message)
+      })
+      .catch(error=>{
+        reject(error)
+      })
     });
   }
-
-  // getDatesFromMonthAndYear(monthYear, categories) {
-  //   console.log(`Fetching Dates for ${monthYear}`);
-
-  //   return new Promise((resolve, reject) => {
-  //     this.db.transaction((tx) => {
-  //       const getSQL = `SELECT distinct(strftime('%d',${this.columns.date.title})) as date FROM ${this.table}
-  //       where strftime('%m/%Y',${this.columns.date.title})=? and ${this.columns.categoryId.title} IN (${categories})
-  //       order by date`;
-
-  //       tx.executeSql(getSQL, [monthYear], (tnx, result) => {
-  //         let temp = [];
-
-  //         for (let i = 0; i < result.rows.length; i++) {
-  //           temp.push(result.rows.item(i).date);
-  //         }
-
-  //         resolve(temp);
-  //       });
-  //     });
-  //   });
-  // }
 
   getSearchDatesFromMonthAndYear(searchString, monthYear, categories) {
-    console.log(`Fetching Dates for ${monthYear}`);
-
+    console.log('Fetching dates from Database');
+    console.log(`${endpoints.entry.getDates}?search=${searchString}&categories=${categories}&date=${monthYear}`);
     return new Promise((resolve, reject) => {
-      this.db.transaction((tx) => {
-        const getSQL = `SELECT distinct(strftime('%d',${this.columns.date.title})) as date FROM ${this.table}
-        where strftime('%m/%Y',${this.columns.date.title})=? and ${this.columns.categoryId.title} IN (${categories}) and 
-        ${this.columns.title.title} like '%${searchString}%' 
-        order by date`;
-
-        tx.executeSql(getSQL, [monthYear], (tnx, result) => {
-          let temp = [];
-
-          for (let i = 0; i < result.rows.length; i++) {
-            temp.push(result.rows.item(i).date);
-          }
-
-          resolve(temp);
-        });
-      });
-    });
-  }
-
-  // getEntries(date, categories) {
-  //   console.log('Fetching Entries');
-  //   return new Promise((resolve, reject) => {
-  //     this.db.transaction((tx) => {
-  //       const getSQL = `SELECT
-  //         e.${this.columns.id.title} as id,
-  //         e.${this.columns.categoryId.title} as categoryid,
-  //         e.${this.columns.title.title} as title,
-  //         e.${this.columns.description.title} as description,
-  //         e.${this.columns.amount.title} as amount,
-  //         e.${this.columns.date.title} as date,
-  //         c.${this.catTable.columns.title.title} as cTitle,
-  //         c.${this.catTable.columns.id.title} as cId,
-  //         c.${this.catTable.columns.type.title} as cType
-  //       FROM ${this.table} as e, ${this.catTable.name} as c
-  //       where strftime('%d/%m/%Y',${this.columns.date.title})=?
-  //       and categoryid=cId and categoryid IN (${categories}) order by id`;
-
-  //       tx.executeSql(getSQL, [date], (tnx, result) => {
-  //         resolve(this.fromEntries(result));
-  //       });
-  //     });
-  //   });
-  // }
-
-  getAllEntries() {
-    console.log('Fetching Entries');
-    return new Promise((resolve, reject) => {
-      this.db.transaction((tx) => {
-        const getSQL = `SELECT 
-          e.${this.columns.id.title} as id,
-          e.${this.columns.categoryId.title} as categoryid,
-          e.${this.columns.title.title} as title,
-          e.${this.columns.description.title} as description,
-          e.${this.columns.amount.title} as amount,
-          e.${this.columns.date.title} as date,
-          c.${this.catTable.columns.title.title} as cTitle,
-          c.${this.catTable.columns.id.title} as cId,
-          c.${this.catTable.columns.type.title} as cType
-        FROM ${this.table} as e, ${this.catTable.name} as c
-        where categoryid=cId order by id`;
-
-        tx.executeSql(getSQL, [], (tnx, result) => {
-          resolve(this.fromEntries(result));
-        });
-      });
+      fetch(`${endpoints.entry.getDates}?search=${searchString}&categories=${categories}&date=${monthYear}`)
+      .then((response)=>response.json())
+      .then(json=>{
+        console.log(json.message)
+        resolve(json.message)
+      })
+      .catch(error=>{
+        reject(error)
+      })
     });
   }
 
@@ -385,57 +269,71 @@ export default class EntryDBHandler {
     return temp;
   }
 
+  
   getSearchEntriesByDate(searchString, date, categories) {
-    console.log(`Fetching Entries from string: ${searchString}`);
+    console.log('Fetching entries from Database');
+    console.log(`${endpoints.entry.getEntries}?search=${searchString}&categories=${categories}&date=${date}`)
     return new Promise((resolve, reject) => {
-      this.db.transaction((tx) => {
-        const getSQL = `SELECT 
-          e.${this.columns.id.title} as id,
-          e.${this.columns.categoryId.title} as categoryid,
-          e.${this.columns.title.title} as title,
-          e.${this.columns.description.title} as description,
-          e.${this.columns.amount.title} as amount,
-          e.${this.columns.date.title} as date,
-          c.${this.catTable.columns.title.title} as cTitle,
-          c.${this.catTable.columns.id.title} as cId,
-          c.${this.catTable.columns.type.title} as cType
-        FROM ${this.table} as e, ${this.catTable.name} as c
-        where strftime('%d/%m/%Y',${this.columns.date.title})=? 
-        and e.title like '%${searchString}%'
-        and categoryid=cId and categoryid IN (${categories}) order by id`;
-
-        tx.executeSql(getSQL, [date], (tnx, result) => {
-          resolve(this.fromEntries(result));
-        });
-      });
+      fetch(`${endpoints.entry.getEntries}?search=${searchString}&categories=${categories}&date=${date}`)
+      .then((response)=>response.json())
+      .then(json=>{
+        console.log(json.message)
+        resolve(json.message)
+      })
+      .catch(error=>{
+        reject(error)
+      })
+    });
+  }
+  
+  getSearchYearTotal(searchString, year, categories) {
+    console.log('Fetching year total from Database');
+    console.log(`${endpoints.entry.getYearTotal}?search=${searchString}&categories=${categories}&date=${year}`)
+    return new Promise((resolve, reject) => {
+      fetch(`${endpoints.entry.getYearTotal}?search=${searchString}&categories=${categories}&date=${year}`)
+      .then((response)=>response.json())
+      .then(json=>{
+        console.log(json.message)
+        resolve(json.message)
+      })
+      .catch(error=>{
+        reject(error)
+      })
     });
   }
 
   getSearchMonthTotal(searchString, monthAndYear, categories) {
+    console.log('Fetching month total from Database');
+    console.log(`${endpoints.entry.getMonthTotal}?search=${searchString}&categories=${categories}&date=${monthAndYear}`)
     return new Promise((resolve, reject) => {
-      this.db.transaction((tx) => {
-        const getSQL = `SELECT sum(${this.columns.amount.title}) as total FROM ${this.table}
-        where strftime('%m/%Y',${this.columns.date.title})=? AND ${this.columns.categoryId.title} IN (${categories}) 
-        AND ${this.columns.title.title} like '%${searchString}%'`;
-
-        tx.executeSql(
-          getSQL,
-          [monthAndYear],
-          (tnx, result) => {
-            let total = result.rows.item(0).total;
-
-            if (total == null) {
-              total = 0;
-            }
-            resolve(total);
-          },
-          (tnx, error) => {
-            resolve(0);
-          },
-        );
-      });
+      fetch(`${endpoints.entry.getMonthTotal}?search=${searchString}&categories=${categories}&date=${monthAndYear}`)
+      .then((response)=>response.json())
+      .then(json=>{
+        console.log(json.message)
+        resolve(json.message)
+      })
+      .catch(error=>{
+        reject(error)
+      })
     });
   }
+
+  getSearchDateTotal(searchString, date, categories) {
+    console.log('Fetching date total from Database');
+    console.log(`${endpoints.entry.getDateTotal}?search=${searchString}&categories=${categories}&date=${date}`)
+    return new Promise((resolve, reject) => {
+      fetch(`${endpoints.entry.getDateTotal}?search=${searchString}&categories=${categories}&date=${date}`)
+      .then((response)=>response.json())
+      .then(json=>{
+        console.log(json.message)
+        resolve(json.message)
+      })
+      .catch(error=>{
+        reject(error)
+      })
+    });
+  }
+
 
   getMonthTotal(month, type) {
     return new Promise((resolve, reject) => {
@@ -499,26 +397,6 @@ export default class EntryDBHandler {
       });
     });
   }
-
-  // async getYearTotal(){
-  //   let ret = {
-  //     years: [],
-  //     incomeData: [],
-  //     expenseData: []
-  //   }
-
-  //   ret.years = await this.getYears()
-
-  //   ret.years.forEach(year=>{
-  //     let i = await this.getYearsTotal(year,'income')
-  //     ret.incomeData.push(i)
-
-  //     let e = await this.getYearsTotal(year,'expense')
-  //     ret.expenseData.push(e)
-  //   })
-
-  //   return ret
-  // }
   getCategoryTotal(category) {
     return new Promise((resolve, reject) => {
       this.db.transaction((tx) => {
