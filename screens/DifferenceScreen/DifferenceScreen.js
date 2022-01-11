@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
   },
   yearsContainer: {
     marginHorizontal: 5,
-    marginBottom: 10,
+    marginBottom: 90,
   },
   total: {
     position: 'absolute',

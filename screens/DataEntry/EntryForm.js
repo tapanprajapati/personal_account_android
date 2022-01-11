@@ -207,6 +207,15 @@ export default class EntryForm extends Component {
     });
   }
 
+  validateAmount = (amount) => {
+    if(!isNaN(amount))
+    {
+      this.setState({
+        amount: amount
+      })
+    }
+  }
+
   componentDidMount() {
     this.getCategories(this.state.selectedType);
   }
@@ -240,8 +249,8 @@ export default class EntryForm extends Component {
               value={this.state.amount}
               style={[styles.inputElement, styles.textInput]}
               keyboardType="numeric"
-              onChangeText={(text) =>
-                this.setState({amount: text})
+              onChangeText={
+                this.validateAmount
               }></TextInput>
           </View>
           <View style={styles.inputHolder}>

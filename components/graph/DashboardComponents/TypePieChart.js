@@ -40,7 +40,7 @@ export default class TypePieChart extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.date != prevProps.date) {
+    if (this.props.date != prevProps.date || prevProps.edit) {
       this.getData();
     }
   }

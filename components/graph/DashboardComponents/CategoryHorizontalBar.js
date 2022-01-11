@@ -37,7 +37,7 @@ export default class CategoryHorizontalBar extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.date != prevProps.date) {
+    if (this.props.date != prevProps.date || prevProps.edit) {
       this.fetchFromDatabase();
     }
   }

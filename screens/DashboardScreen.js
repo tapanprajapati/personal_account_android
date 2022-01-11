@@ -5,8 +5,9 @@ import CategoryHorizontalBar from '../components/graph/DashboardComponents/Categ
 import TypePieChart from '../components/graph/DashboardComponents/TypePieChart';
 import {global} from '../styles/global';
 import {getMonthName} from '../utils/converters';
-import {Picker} from '@react-native-picker/picker';
 import MonthYearPicker from '../modals/MonthYearPicker';
+import { Icon } from 'react-native-elements';
+import { HeaderColors } from '../styles/colors';
 
 export default class DashboardScreen extends Component {
   constructor(props) {
@@ -14,6 +15,8 @@ export default class DashboardScreen extends Component {
     this.state = {
       date: new Date(),
       isDatePickerVisible: false,
+      refreshTrigger: new Date(),
+      edit: false
     };
   }
 
@@ -23,9 +26,30 @@ export default class DashboardScreen extends Component {
     });
   };
 
+  refresh = () => {
+    this.setState({
+      edit: true
+    })
+
+    setTimeout(()=>{
+      this.setState({
+        edit: false
+      })
+    },10)
+  }
+
   render() {
     return (
       <View style={global.container}>
+        <View style={[styles.refreshContainer, global.shadow]}>
+        <Icon
+          containerStyle={styles.refreshIcon}
+          name="refresh"
+          type="material"
+          color= {HeaderColors.background}
+          onPress={this.refresh}
+        />
+        </View>
         <View style={styles.first}>
           <TouchableOpacity
             activeOpacity={1}
@@ -47,7 +71,7 @@ export default class DashboardScreen extends Component {
           </TouchableOpacity>
 
           <View style={styles.pieChart}>
-            <TypePieChart date={this.state.date} />
+            <TypePieChart date={this.state.date} edit={this.state.edit}/>
           </View>
         </View>
         <View style={styles.categoryChartsContainer}>
@@ -59,6 +83,7 @@ export default class DashboardScreen extends Component {
               navigation={this.props.navigation}
               date={this.state.date}
               type="income"
+              edit={this.state.edit}
             />
           </View>
 
@@ -70,6 +95,7 @@ export default class DashboardScreen extends Component {
               navigation={this.props.navigation}
               date={this.state.date}
               type="expense"
+              edit={this.state.edit}
             />
           </View>
         </View>
@@ -120,6 +146,7 @@ const styles = StyleSheet.create({
   },
   pieChart: {
     flex: 1,
+    zIndex: -1
   },
 
   categoryChartsContainer: {
@@ -139,4 +166,13 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 15,
   },
+  refreshContainer: {
+    position: 'absolute',
+    height: 30,
+    width: 30,
+    top: 10,
+    right: 10,
+    borderRadius: 5,
+    backgroundColor: 'white'
+  }
 });
