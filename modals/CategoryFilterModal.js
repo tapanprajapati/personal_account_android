@@ -9,7 +9,7 @@ export default class CategoryFilterModal extends Component {
     super(props);
     this.state = {
       categories: this.props.categories,
-      checkAll: false,
+      checkAll: true,
     };
     this.entryHandler = new EntryDBHandler();
   }

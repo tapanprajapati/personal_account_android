@@ -7,6 +7,8 @@ import {getMonthName} from '../utils/converters';
 import MonthYearPicker from '../modals/MonthYearPicker';
 import DashboardCategoryTotal from '../components/DashboardCategoryTotal';
 import CategoryDBHandler from '../databasehandler/categoryhandler';
+import { Icon } from 'react-native-elements';
+import { HeaderColors } from '../styles/colors';
 
 export default class DashboardScreen extends Component {
   constructor(props) {
@@ -84,6 +86,15 @@ export default class DashboardScreen extends Component {
   render() {
     return (
       <View style={global.container}>
+        <View style={[styles.refreshContainer, global.shadow]}>
+        <Icon
+          containerStyle={styles.refreshIcon}
+          name="refresh"
+          type="material"
+          color= {HeaderColors.background}
+          onPress={this.refresh}
+        />
+        </View>
         <View style={styles.first}>
           <TouchableOpacity
             activeOpacity={1}
@@ -170,6 +181,7 @@ const styles = StyleSheet.create({
   },
   pieChart: {
     flex: 1,
+    zIndex: -1
   },
 
   categoryContainer: {
@@ -189,4 +201,13 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 15,
   },
+  refreshContainer: {
+    position: 'absolute',
+    height: 30,
+    width: 30,
+    top: 10,
+    right: 10,
+    borderRadius: 5,
+    backgroundColor: 'white'
+  }
 });
