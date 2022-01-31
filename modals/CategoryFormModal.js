@@ -22,18 +22,18 @@ export default class CategoryForm extends Component {
         },
       ]);
     } else {
-      this.props.checkCategory(input).then((result) => {
-        if (result) {
-          Alert.alert('ERROR', 'Category Exists', [
-            {
-              text: 'Close',
-            },
-          ]);
-        } else {
+      // this.props.checkCategory(input).then((result) => {
+        // if (result) {
+        //   Alert.alert('ERROR', 'Category Exists', [
+        //     {
+        //       text: 'Close',
+        //     },
+        //   ]);
+        // } else {
           this.props.submitData(input);
           this.props.closeModal();
-        }
-      });
+        // }
+      // });
     }
   };
 

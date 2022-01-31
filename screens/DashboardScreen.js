@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import {StyleSheet} from 'react-native';
 import {Text, View, TouchableOpacity} from 'react-native';
-import CategoryHorizontalBar from '../components/graph/DashboardComponents/CategoryHorizontalBar';
 import TypePieChart from '../components/graph/DashboardComponents/TypePieChart';
 import {global} from '../styles/global';
 import {getMonthName} from '../utils/converters';
-import {Picker} from '@react-native-picker/picker';
 import MonthYearPicker from '../modals/MonthYearPicker';
+import DashboardCategoryTotal from '../components/DashboardCategoryTotal';
+import CategoryDBHandler from '../databasehandler/categoryhandler';
 
 export default class DashboardScreen extends Component {
   constructor(props) {
@@ -14,14 +14,72 @@ export default class DashboardScreen extends Component {
     this.state = {
       date: new Date(),
       isDatePickerVisible: false,
+      incomeData: [],
+      expenseData: [],
+      incomeTotal: 0,
+      expenseTotal: 0
     };
+
+    this.categoryHandler = new CategoryDBHandler();
   }
 
   saveDate = (date) => {
     this.setState({
       date: date,
     });
+    setTimeout(()=>{
+
+    this.getCategoryData("income")
+    this.getCategoryData("expense")
+
+    // this.getTypeTotal("income")
+    // this.getTypeTotal("expense")
+    },100)
   };
+
+  getCategoryData = (type) => {
+    const monthYear =
+      (this.state.date.getMonth() + 1 < 10
+        ? '0' + (this.state.date.getMonth() + 1)
+        : this.state.date.getMonth() + 1) +
+      '/' +
+      this.state.date.getFullYear();
+    this.categoryHandler.getAllCategoriesTotal(type,monthYear).then(data=>{
+
+      const t = this.getTypeTotal(data)
+      if(type==="income")
+      {
+        this.setState({
+          incomeData: data,
+          incomeTotal: t
+        })
+      }
+      else{
+        {
+          this.setState({
+            expenseData: data,
+            expenseTotal: t
+          })
+        }
+      }
+    })
+  }
+
+  getTypeTotal = (data) => {
+    let total = 0;
+    data.forEach((item)=>{
+        total+=item.total;
+    })
+
+    return total;
+  }
+
+  componentDidMount() {
+    this.getCategoryData("income")
+    this.getCategoryData("expense")
+    // this.getTypeTotal("income")
+    // this.getTypeTotal("expense")
+  }
 
   render() {
     return (
@@ -47,29 +105,21 @@ export default class DashboardScreen extends Component {
           </TouchableOpacity>
 
           <View style={styles.pieChart}>
-            <TypePieChart date={this.state.date} />
+            <TypePieChart income={this.state.incomeTotal} expense={this.state.expenseTotal} />
           </View>
         </View>
-        <View style={styles.categoryChartsContainer}>
-          <View style={[styles.categoryChart, global.shadow]}>
-            <Text style={styles.categoryChartTitle}>
-              Income Category Summary
-            </Text>
-            <CategoryHorizontalBar
-              navigation={this.props.navigation}
-              date={this.state.date}
-              type="income"
+        <View style={styles.categoryContainer}>
+          <View style={[styles.categoryTotal, global.shadow]}>
+            <DashboardCategoryTotal
+              type={"Income"}
+              data={this.state.incomeData}
             />
           </View>
 
-          <View style={[styles.categoryChart, global.shadow]}>
-            <Text style={styles.categoryChartTitle}>
-              Expense Category Summary
-            </Text>
-            <CategoryHorizontalBar
-              navigation={this.props.navigation}
-              date={this.state.date}
-              type="expense"
+          <View style={[styles.categoryTotal, global.shadow]}>
+            <DashboardCategoryTotal
+              type={"Expense"}
+              data={this.state.expenseData}
             />
           </View>
         </View>
@@ -122,11 +172,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  categoryChartsContainer: {
+  categoryContainer: {
     flex: 1,
-    // flexDirection: 'row',
+    flexDirection: 'row',
   },
-  categoryChart: {
+  categoryTotal: {
     flex: 1,
     margin: 5,
     borderRadius: 10,

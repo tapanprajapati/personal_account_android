@@ -37,6 +37,8 @@ export default class Year extends Component {
       this.setState({
         amount: result
       })
+
+      this.props.passTotal(result);
     })
   };
 

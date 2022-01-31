@@ -24,6 +24,7 @@ export default class Date extends Component {
     this.entryHandler
       .getSearchEntriesByDate(searchText, date, this.props.categories)
       .then((result) => {
+        console.log(result)
         this.setState({
           entries: result,
         });

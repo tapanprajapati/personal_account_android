@@ -15,7 +15,7 @@ export const dimensions = {
   },
   entryForm: {
     input: {
-      margin: 12,
+      margin: 5,
       text: 20,
       textMargin: 3,
       dropdownHeight: 30,

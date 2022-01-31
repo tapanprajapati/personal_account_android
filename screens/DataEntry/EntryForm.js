@@ -21,6 +21,7 @@ import CategoryForm from '../../modals/CategoryFormModal';
 import CameraModal from '../../modals/CameraModal';
 import CameraImagePreviewModal from '../../modals/CameraImagePreviewModal';
 import CameraImageHandler from '../../databasehandler/cameraImageHandler';
+import UserDBHandler from '../../databasehandler/userhandler';
 
 export default class EntryForm extends Component {
   constructor(props) {
@@ -42,7 +43,9 @@ export default class EntryForm extends Component {
         amount: '',
         description: '',
         categories: [],
+        users: [],
         imagePath: '',
+        selectedUser: ""
       };
     } else {
       this.state = {
@@ -57,7 +60,9 @@ export default class EntryForm extends Component {
         amount: props.entry.amount.toString(),
         description: props.entry.description,
         categories: [],
+        users: [],
         imagePath: '',
+        selectedUser: props.entry.username
       };
 
       this.cameraImageHandler.imageExists(props.entry.id).then((result) => {
@@ -76,6 +81,7 @@ export default class EntryForm extends Component {
     }
     this.entryHandler = new EntryDBHandler();
     this.categoryHandler = new CategoryDBHandler();
+    this.userHandler = new UserDBHandler();
   }
 
   setType = (type) => {
@@ -107,6 +113,17 @@ export default class EntryForm extends Component {
     });
   };
 
+  getUsers = () =>{
+    this.userHandler.getAllUsers().then((result)=>{
+      this.setState({users: result});
+
+      if(this.state.selectedUser=="")
+      {
+        this.setState({selectedUser: result[0].username})
+      }
+    })
+  }
+
   setEntryDate = (event, selectedDate) => {
     this.setState({
       date: selectedDate || this.state.date,
@@ -134,8 +151,9 @@ export default class EntryForm extends Component {
       .then((result) => {
         if (result.success) {
           this.getCategories(this.state.selectedType);
-          ToastAndroid.show('Category Added Successfully', ToastAndroid.SHORT);
+          ToastAndroid.show(`${result.message}`, ToastAndroid.SHORT);
         } else {
+          console.error(result)
           ToastAndroid.show('Error Adding Category', ToastAndroid.SHORT);
         }
       });
@@ -153,6 +171,7 @@ export default class EntryForm extends Component {
     let amount = this.state.amount;
     let date = this.state.date.toISOString().slice(0, 10);
     let categoryId = this.state.selectedCategoryId;
+    let username = this.state.selectedUser;
 
     let error = false;
     let errorMessage = 'Correct Following';
@@ -185,6 +204,7 @@ export default class EntryForm extends Component {
         amount: amount,
         date: date,
         category: {id: categoryId},
+        username: username
       };
 
       if (this.props.entry) {
@@ -209,6 +229,7 @@ export default class EntryForm extends Component {
 
   componentDidMount() {
     this.getCategories(this.state.selectedType);
+    this.getUsers();
   }
 
   render() {
@@ -303,8 +324,28 @@ export default class EntryForm extends Component {
               />
             </View>
           </View>
+          <View style={[styles.inputHolder,{marginTop: -10}]}>
+            <Text style={styles.inputText}>User</Text>
+            <Picker
+              onValueChange={(value, index) => {
+                this.setState({selectedUser: value});
+              }}
+              selectedValue={this.state.selectedUser}
+              style={([styles.inputElement, styles.dropDown], {flex: 7})}
+              mode="dropdown">
+              {this.state.users.map((item) => {
+                return (
+                  <Picker.Item
+                    key={item.username}
+                    label={item.username}
+                    value={item.username}
+                  />
+                );
+              })}
+            </Picker>
+          </View>
 
-          <View style={styles.inputHolder}>
+          <View style={[styles.inputHolder,{marginTop: -10}]}>
             <Text style={styles.inputText}>Add Image</Text>
             <View style={styles.horizontalInputContainer}>
               <Icon
@@ -349,7 +390,7 @@ export default class EntryForm extends Component {
           <View style={styles.inputHolder}>
             <Button
               containerStyle={{
-                marginTop: 10,
+                marginTop: 0,
               }}
               buttonStyle={styles.button}
               title={this.buttonText}
@@ -366,7 +407,7 @@ export default class EntryForm extends Component {
             onRequestClose={this.closeCategoryModal}>
             <View style={styles.categoryModal}>
               <CategoryForm
-                title="Add New Category"
+                title={`Add New ${this.state.selectedType.toUpperCase()} Category`}
                 checkCategory={this.checkCategory}
                 submitData={this.addCategory}
                 closeModal={this.closeCategoryModal}
@@ -408,7 +449,7 @@ const styles = StyleSheet.create({
   container: {
     // height: '100%',
     marginHorizontal: 40,
-    marginTop: 15,
+    marginTop: 0,
     // justifyContent: 'space-around',
   },
   inputHolder: {

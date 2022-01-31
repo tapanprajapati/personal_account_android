@@ -9,7 +9,7 @@ import CategoryFilterModal from '../modals/CategoryFilterModal';
 import LoadingSpinner from '../modals/LoadingSpinner';
 import {ButtonColors} from '../styles/colors';
 import {global} from '../styles/global';
-import {getSelectedCategories} from '../utils/converters';
+import {formatLargeNumber, getSelectedCategories} from '../utils/converters';
 
 export default class AccountType extends Component {
   constructor(props) {
@@ -225,7 +225,7 @@ export default class AccountType extends Component {
           />
         </RefreshControl>
         <Text style={global.footer}>
-          Total: $ {this.state.total.toFixed(2)}
+          Total: $ {formatLargeNumber(this.state.total)}
         </Text>
         {/* <View style={global.floatingButton}>
           

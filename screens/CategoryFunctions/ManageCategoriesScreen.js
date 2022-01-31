@@ -1,6 +1,6 @@
 import {Picker} from '@react-native-picker/picker';
 import React, {Component} from 'react';
-import {StyleSheet} from 'react-native';
+import {Alert, StyleSheet} from 'react-native';
 import {FlatList} from 'react-native';
 import {Modal} from 'react-native';
 import {ToastAndroid} from 'react-native';
@@ -70,23 +70,30 @@ export default class ManageCategoriesScreen extends Component {
 
   updateCategory = (title) => {
     this.categoryHandler
-      .updateCategory(title, this.state.selectedCategory.id)
+      .updateCategory(title, this.state.selectedCategory.id,this.state.selected)
       .then((result) => {
-        if (result == true) {
+        if (result.success) {
           ToastAndroid.show(
             `${this.state.selectedCategory.title} updated successfully`,
             ToastAndroid.LONG,
           );
           this.getCategories();
-        } else {
-          ToastAndroid.show('Error Updating Category', ToastAndroid.LONG);
+        } 
+        else if(result.statusCode==400){
+          Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+        }else {
+          ToastAndroid.show(`Error Updating Category`, ToastAndroid.LONG);
         }
       });
   };
 
   deleteCategory = (category) => {
     this.categoryHandler.deleteCategory(category.id).then((result) => {
-      if (result == true) {
+      if (result.success == true) {
         ToastAndroid.show(
           `${category.title} deleted successfully`,
           ToastAndroid.LONG,
@@ -102,9 +109,9 @@ export default class ManageCategoriesScreen extends Component {
     this.categoryHandler
       .transferCategory(this.state.selectedCategory.id, id)
       .then((result) => {
-        if (result == true) {
+        if (result.success == true) {
           ToastAndroid.show(
-            `${this.state.selectedCategory.title} Transferred successfully`,
+            `${result.message}`.toUpperCase(),
             ToastAndroid.LONG,
           );
           this.getCategories();

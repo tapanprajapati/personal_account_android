@@ -1,7 +1,6 @@
 import {openDatabase} from 'react-native-sqlite-storage';
+import api from '../utils/api';
 import {DB} from './utils';
-import './../utils/api/endpoints'
-import endpoints from './../utils/api/endpoints';
 
 export default class CategoryDBHandler {
   constructor() {
@@ -13,26 +12,25 @@ export default class CategoryDBHandler {
 
   addCategory(category) {
     return new Promise((resolve, reject) => {
-      this.db.transaction((tx) => {
-        const addSQL = `INSERT INTO ${this.table} (${this.columns.id.title},${this.columns.title.title},${this.columns.type.title}) VALUES(?,?,?)`;
-
-        tx.executeSql(
-          addSQL,
-          [Date.now(), category.title, category.type.toLowerCase()],
-          (tnx, result) => {
-            resolve({
-              success: true,
-              result: result,
-            });
-          },
-          (tnx, error) => {
-            resolve({
-              success: true,
-              result: error,
-            });
-          },
-        );
-      });
+      console.log('Starting transaction');
+      fetch(api.category.create,{
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({
+          title: category.title,
+          type: category.type,
+          groupid: "1640932481964",
+        })
+      })
+      .then((response)=>response.json())
+      .then(json=>{
+        resolve(json)
+      })
+      .catch(error=>
+        reject(error))
     });
   }
 
@@ -61,54 +59,54 @@ export default class CategoryDBHandler {
     });
   }
 
-  updateCategory(newTitle, id) {
+  updateCategory(newTitle, id,type) {
     return new Promise((resolve, reject) => {
-      this.db.transaction((tx) => {
-        const updateSQL = `UPDATE ${this.table} SET ${this.columns.title.title}=? WHERE ${this.columns.id.title}=?`;
-
-        tx.executeSql(updateSQL, [newTitle, id], (tnx, result) => {
-          if (result.rowsAffected == 1) {
-            resolve(true);
-          } else {
-            resolve(false);
-          }
-        });
-      });
+      console.log('Update category: '+id);
+      const updateAPI = `${api.category.rename}${id}?title=${newTitle}&type=${type}&groupid=1640932481964`;
+      console.log(updateAPI);
+      fetch(updateAPI,{
+        method: 'put',
+      })
+      .then((response)=>response.json())
+      .then(json=>{
+        console.log(json)
+        resolve(json)
+      })
+      .catch(error=>
+        reject(error))
     });
   }
 
   deleteCategory(id) {
     return new Promise((resolve, reject) => {
-      this.db.transaction((tx) => {
-        const deleteFromEntriesSQL = `DELETE FROM ${this.entryTable.name} WHERE ${this.entryTable.columns.categoryId.title}=?`;
-
-        tx.executeSql(deleteFromEntriesSQL, [id], (tnx, result) => {
-          const deleteSQL = `DELETE FROM ${this.table} WHERE ${this.columns.id.title}=?`;
-
-          tnx.executeSql(deleteSQL, [id], (tnxx, result) => {
-            if (result.rowsAffected == 1) {
-              resolve(true);
-            } else {
-              resolve(false);
-            }
-          });
-        });
-      });
+      console.log('Delete category: '+id);
+      fetch(`${api.category.delete}${id}`,{
+        method: 'delete',
+      })
+      .then((response)=>response.json())
+      .then(json=>{
+        resolve(json)
+      })
+      .catch(error=>
+        reject(error))
     });
   }
 
   transferCategory(sourceID, targetID) {
     return new Promise((resolve, reject) => {
-      this.db.transaction((tx) => {
-        const transferSQL = `UPDATE ${this.entryTable.name} SET ${this.entryTable.columns.categoryId.title}=? WHERE ${this.entryTable.columns.categoryId.title}=?`;
-        tx.executeSql(transferSQL, [targetID, sourceID], (tnx, result) => {
-          if (result) {
-            resolve(true);
-          } else {
-            resolve(false);
-          }
-        });
-      });
+      console.log('Transfer category: '+sourceID +"to id "+targetID);
+      const transferAPI = `${api.category.transfer}${sourceID}?to=${targetID}`;
+      console.log(transferAPI);
+      fetch(transferAPI,{
+        method: 'put',
+      })
+      .then((response)=>response.json())
+      .then(json=>{
+        console.log(json)
+        resolve(json)
+      })
+      .catch(error=>
+        reject(error))
     });
   }
 
@@ -136,15 +134,15 @@ export default class CategoryDBHandler {
 
   getCategories(type) {
     console.log(`Getting categories for ${type}`);
-    console.log(`${endpoints.category.getCategories}1640932481964`)
+    const getAPI = `${api.category.getByType}${type}`;
+    console.log(`${getAPI}`)
 
     return new Promise((resolve, reject)=>{
-      fetch(`${endpoints.category.getCategories}1640932481964`)
+      fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
         const message = json.message;
-        console.log(message)
-        resolve(message.filter(item=>item.type===type))
+        resolve(message)
       }).catch(error=>{
         console.log(error)
       })
@@ -315,5 +313,39 @@ export default class CategoryDBHandler {
         );
       });
     });
+  }
+
+  getAllCategoriesTotal(type,date) {
+    console.log(`Getting total for all categories: ${type}`);
+    const getAPI = `${api.summary.getAllCategoriesTotal}${type}?date=${date}&groupid=1640932481964`;
+    console.log(`${getAPI}`)
+
+    return new Promise((resolve, reject)=>{
+      fetch(getAPI)
+      .then((response)=>response.json())
+      .then(json=>{
+        const message = json.message;
+        resolve(message)
+      }).catch(error=>{
+        console.log(error)
+      })
+    })
+  }
+
+  getTypeTotal(type,date) {
+    console.log(`Getting total for type: ${type}`);
+    const getAPI = `${api.summary.getTypeTotal}${type}?date=${date}&groupid=1640932481964`;
+    console.log(`${getAPI}`)
+
+    return new Promise((resolve, reject)=>{
+      fetch(getAPI)
+      .then((response)=>response.json())
+      .then(json=>{
+        const message = json.message;
+        resolve(message)
+      }).catch(error=>{
+        console.log(error)
+      })
+    })
   }
 }

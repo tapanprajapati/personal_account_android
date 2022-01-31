@@ -98,17 +98,20 @@ Type: ${entry.category.type.toUpperCase()}`;
             onPress={this.confirmAndDelete}></Icon>
         </View>
         <Text style={styles.categoryText}>
-          {/* {this.props.entry.category.title} */}
-          Hello
+          {this.props.entry.category.title}
         </Text>
         <View style={styles.entryContainer}>
           <Text style={styles.entryText}>{this.props.entry.title}</Text>
           <Text style={styles.amountText}> $ {this.props.entry.amount}</Text>
         </View>
+        <View style={styles.bottomContainer}>
         {this.props.entry.description != '' &&
           this.props.entry.description != null && (
-            <Text style={styles.descText}>{this.props.entry.description}</Text>
-          )}
+
+              <Text style={styles.descText}>{this.props.entry.description}</Text>
+              )}
+              <Text style={styles.usernameText}>{this.props.entry.username}</Text>
+              </View>
       </View>
     );
   }
@@ -124,6 +127,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  
+  bottomContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   entryText: {
     fontSize: dimensions.entry.titleText,
     fontWeight: 'bold',
@@ -134,12 +143,19 @@ const styles = StyleSheet.create({
     fontSize: dimensions.entry.amountText,
     textAlign: 'right',
   },
+  usernameText: {
+    flex: 1,
+    fontSize: dimensions.entry.amountText,
+    textAlign: 'right',
+    color: 'grey'
+  },
   categoryText: {
     color: 'grey',
     fontSize: dimensions.entry.categoryText,
   },
   descText: {
     color: 'grey',
+    flex: 2.5,
     fontSize: dimensions.entry.desText,
   },
   controlButtonsContainer: {

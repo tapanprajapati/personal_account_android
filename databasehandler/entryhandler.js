@@ -1,7 +1,6 @@
 import {openDatabase} from 'react-native-sqlite-storage';
+import api from '../utils/api';
 import {DB} from './utils';
-import './../utils/api/endpoints'
-import endpoints from './../utils/api/endpoints';
 
 export default class EntryDBHandler {
   constructor() {
@@ -50,7 +49,7 @@ export default class EntryDBHandler {
     console.log('In handler');
     return new Promise((resolve, reject) => {
       console.log('Starting transaction');
-      fetch(endpoints.entry.createEntry,{
+      fetch(api.entry.createEntry,{
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -62,7 +61,7 @@ export default class EntryDBHandler {
           amount: parseFloat(entry.amount),
           date: entry.date,
           categoryid: entry.category.id,
-          username: "tapan"
+          username: entry.username
         })
       })
       .then((response)=>response.json())
@@ -76,112 +75,79 @@ export default class EntryDBHandler {
 
   updateEntry(entry) {
     return new Promise((resolve, reject) => {
-      this.db.transaction((tx) => {
-        const updateSQL = `UPDATE ${this.table} 
-          SET 
-          ${this.columns.title.title}=?,
-          ${this.columns.description.title}=?,
-          ${this.columns.amount.title}=?,
-          ${this.columns.date.title}=?,
-          ${this.columns.categoryId.title}=? 
-          WHERE 
-          ${this.columns.id.title}=?`;
-
-        let data = [
-          entry.title,
-          entry.description,
-          entry.amount,
-          entry.date,
-          entry.category.id,
-          entry.id,
-        ];
-
-        tx.executeSql(
-          updateSQL,
-          data,
-          (tnx, result) => {
-            resolve({
-              success: true,
-              result: result,
-            });
-          },
-          (tnx, error) => {
-            resolve({
-              success: false,
-              result: error,
-            });
-          },
-        );
-      });
+      console.log('Starting transaction to update entry');
+      fetch(api.entry.updateEntry,{
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({
+          id: entry.id,
+          title: entry.title,
+          description: entry.description,
+          amount: parseFloat(entry.amount),
+          date: entry.date,
+          categoryid: entry.category.id,
+          username: entry.username
+        })
+      })
+      .then((response)=>response.json())
+      .then(json=>{
+        resolve(json)
+      })
+      .catch(error=>
+        reject(error))
     });
   }
 
   deleteEntry(entry) {
     return new Promise((resolve, reject) => {
-      this.db.transaction((tx) => {
-        const deleteSQL = `DELETE FROM ${this.table} WHERE ${this.columns.id.title}=?`;
-
-        tx.executeSql(
-          deleteSQL,
-          [entry.id],
-          (tnx, result) => {
-            resolve({
-              success: true,
-              result: result,
-            });
-          },
-          (tnx, result) => {
-            resolve({
-              success: false,
-              result: result,
-            });
-          },
-        );
-      });
+      console.log('Delete entry '+entry);
+      fetch(`${api.entry.deleteEntry}${entry.id}`,{
+        method: 'DELETE',
+      })
+      .then((response)=>response.json())
+      .then(json=>{
+        resolve(json)
+      })
+      .catch(error=>
+        reject(error))
     });
   }
 
   getYears() {
-    console.log('Fetching Years from Database');
+    console.log('Fetching All Years from Database');
     return new Promise((resolve, reject) => {
-      this.db.transaction((tx) => {
-        let getSQL = `SELECT distinct(strftime('%Y',${this.columns.date.title})) as date from ${this.table} order by date`;
-
-        tx.executeSql(getSQL, [], (tnx, result) => {
-          let temp = [];
-
-          for (let i = 0; i < result.rows.length; i++) {
-            temp.push(result.rows.item(i).date);
-          }
-          resolve(temp);
-        });
-      });
+      fetch(`${api.summary.getAllYears}`)
+      .then((response)=>response.json())
+      .then(json=>{
+        resolve(json.message)
+      })
+      .catch(error=>{
+        reject(error)
+      })
     });
   }
 
   getMonths(year) {
+    console.log('Fetching All Months from Database for year: '+year);
     return new Promise((resolve, reject) => {
-      this.db.transaction((tx) => {
-        let getSQL = `SELECT distinct(strftime('%m',${this.columns.date.title})) as date from ${this.table}
-        where strftime('%Y',${this.columns.date.title})=?
-        order by date`;
-
-        tx.executeSql(getSQL, [year], (tnx, result) => {
-          let temp = [];
-
-          for (let i = 0; i < result.rows.length; i++) {
-            temp.push(result.rows.item(i).date);
-          }
-          resolve(temp);
-        });
-      });
+      fetch(`${api.summary.getAllMonths}date=${year}`)
+      .then((response)=>response.json())
+      .then(json=>{
+        resolve(json.message)
+      })
+      .catch(error=>{
+        reject(error)
+      })
     });
   }
 
   getSearchYears(searchString, categories) {
     console.log('Fetching Years from Database');
     return new Promise((resolve, reject) => {
-      fetch(`${endpoints.entry.getYears}?search=${searchString}&categories=${categories}`)
+      fetch(`${api.summary.getYears}search=${searchString}&categories=${categories}`)
       .then((response)=>response.json())
       .then(json=>{
         resolve(json.message)
@@ -194,9 +160,10 @@ export default class EntryDBHandler {
 
   getSearchMonthsOfYear(searchString, year, categories) {
     console.log('Fetching months from Database');
-    console.log(`${endpoints.entry.getMonths}?search=${searchString}&categories=${categories}&date=${year}`)
+    const getAPI = `${api.summary.getMonths}search=${searchString}&categories=${categories}&date=${year}`
+    console.log(getAPI)
     return new Promise((resolve, reject) => {
-      fetch(`${endpoints.entry.getMonths}?search=${searchString}&categories=${categories}&date=${year}`)
+      fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
         console.log(json.message)
@@ -210,9 +177,10 @@ export default class EntryDBHandler {
 
   getSearchDatesFromMonthAndYear(searchString, monthYear, categories) {
     console.log('Fetching dates from Database');
-    console.log(`${endpoints.entry.getDates}?search=${searchString}&categories=${categories}&date=${monthYear}`);
+    const getAPI = `${api.summary.getDates}search=${searchString}&categories=${categories}&date=${monthYear}`;
+    console.log(getAPI);
     return new Promise((resolve, reject) => {
-      fetch(`${endpoints.entry.getDates}?search=${searchString}&categories=${categories}&date=${monthYear}`)
+      fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
         console.log(json.message)
@@ -252,17 +220,18 @@ export default class EntryDBHandler {
   fromEntries(result) {
     let temp = [];
 
-    for (let i = 0; i < result.rows.length; i++) {
+    for (let i = 0; i < result.length; i++) {
       temp.push({
-        id: result.rows.item(i).id,
-        title: result.rows.item(i).title,
-        description: result.rows.item(i).description,
-        amount: result.rows.item(i).amount,
-        date: result.rows.item(i).date,
+        id: result[i].id,
+        title: result[i].title,
+        description: result[i].description,
+        amount: result[i].amount,
+        date: result[i].date,
+        username: result[i].username,
         category: {
-          id: result.rows.item(i).cId,
-          title: result.rows.item(i).cTitle,
-          type: result.rows.item(i).cType,
+          id: result[i].cId,
+          title: result[i].cTitle,
+          type: result[i].cType,
         },
       });
     }
@@ -272,13 +241,14 @@ export default class EntryDBHandler {
   
   getSearchEntriesByDate(searchString, date, categories) {
     console.log('Fetching entries from Database');
-    console.log(`${endpoints.entry.getEntries}?search=${searchString}&categories=${categories}&date=${date}`)
+    const getAPI = `${api.entry.getEntries}search=${searchString}&categories=${categories}&date=${date}`
+    console.log(getAPI)
     return new Promise((resolve, reject) => {
-      fetch(`${endpoints.entry.getEntries}?search=${searchString}&categories=${categories}&date=${date}`)
+      fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
         console.log(json.message)
-        resolve(json.message)
+        resolve(this.fromEntries(json.message))
       })
       .catch(error=>{
         reject(error)
@@ -288,13 +258,21 @@ export default class EntryDBHandler {
   
   getSearchYearTotal(searchString, year, categories) {
     console.log('Fetching year total from Database');
-    console.log(`${endpoints.entry.getYearTotal}?search=${searchString}&categories=${categories}&date=${year}`)
+    const getAPI = `${api.summary.getYearTotal}search=${searchString}&categories=${categories}&date=${year}`
+    console.log(getAPI)
     return new Promise((resolve, reject) => {
-      fetch(`${endpoints.entry.getYearTotal}?search=${searchString}&categories=${categories}&date=${year}`)
+      fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
         console.log(json.message)
-        resolve(json.message)
+        if(json.success)
+        {
+          resolve(json.message)
+        }
+        else
+        {
+          reject(json.message)
+        }
       })
       .catch(error=>{
         reject(error)
@@ -304,9 +282,10 @@ export default class EntryDBHandler {
 
   getSearchMonthTotal(searchString, monthAndYear, categories) {
     console.log('Fetching month total from Database');
-    console.log(`${endpoints.entry.getMonthTotal}?search=${searchString}&categories=${categories}&date=${monthAndYear}`)
+    const getAPI = `${api.summary.getMonthTotal}search=${searchString}&categories=${categories}&date=${monthAndYear}`
+    console.log(getAPI)
     return new Promise((resolve, reject) => {
-      fetch(`${endpoints.entry.getMonthTotal}?search=${searchString}&categories=${categories}&date=${monthAndYear}`)
+      fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
         console.log(json.message)
@@ -320,9 +299,10 @@ export default class EntryDBHandler {
 
   getSearchDateTotal(searchString, date, categories) {
     console.log('Fetching date total from Database');
-    console.log(`${endpoints.entry.getDateTotal}?search=${searchString}&categories=${categories}&date=${date}`)
+    const getAPI = `${api.summary.getDateTotal}?search=${searchString}&categories=${categories}&date=${date}`
+    console.log(getAPI)
     return new Promise((resolve, reject) => {
-      fetch(`${endpoints.entry.getDateTotal}?search=${searchString}&categories=${categories}&date=${date}`)
+      fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
         console.log(json.message)
@@ -391,34 +371,6 @@ export default class EntryDBHandler {
           (tnx, error) => {
             console.error('Error');
             console.error(error);
-            resolve(0);
-          },
-        );
-      });
-    });
-  }
-  getCategoryTotal(category) {
-    return new Promise((resolve, reject) => {
-      this.db.transaction((tx) => {
-        const getSQL = `SELECT 
-          sum(e.${this.columns.amount.title}) as total
-        FROM ${this.table} as e, ${this.catTable.name} as c
-        where e.${this.columns.categoryId.title}=c.${this.catTable.columns.id.title} and c.${this.catTable.columns.type.title} = ?`;
-
-        // console.log(getSQL);
-        tx.executeSql(
-          getSQL,
-          [category],
-          (tnx, result) => {
-            let total = result.rows.item(0).total;
-
-            if (total == null) {
-              total = 0;
-            }
-            resolve(total.toFixed(2));
-          },
-          (tnx, error) => {
-            console.log('Error');
             resolve(0);
           },
         );

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {global} from '../../../styles/global';
 import {PieChart} from 'react-native-charts-wrapper';
 import {StyleSheet, View, Text, processColor} from 'react-native';
 import EntryDBHandler from '../../../databasehandler/entryhandler';
@@ -9,44 +8,14 @@ import {formatLargeNumber} from '../../../utils/converters';
 export default class TypePieChart extends Component {
   constructor(props) {
     super(props);
-    this.entryHandler = new EntryDBHandler();
-    this.state = {
-      income: 0,
-      expense: 0,
-    };
   }
-
-  getData = () => {
-    const date = this.props.date;
-    const monthYear =
-      (date.getMonth() + 1 < 10
-        ? '0' + (date.getMonth() + 1)
-        : date.getMonth() + 1) +
-      '/' +
-      date.getFullYear();
-    let expensePromise = this.entryHandler.getMonthTotal(monthYear, 'expense');
-    let incomePromise = this.entryHandler.getMonthTotal(monthYear, 'income');
-
-    Promise.all([expensePromise, incomePromise]).then((result) => {
-      this.setState({
-        expense: parseFloat(result[0]),
-        income: parseFloat(result[1]),
-      });
-    });
-  };
 
   componentDidMount() {
-    this.getData();
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.date != prevProps.date) {
-      this.getData();
-    }
-  }
 
   render() {
-    const diff = this.state.income - this.state.expense;
+    const diff = this.props.income - this.props.expense;
     return (
       <View style={styles.chartContainer}>
         <PieChart
@@ -56,8 +25,8 @@ export default class TypePieChart extends Component {
             dataSets: [
               {
                 values: [
-                  {value: this.state.expense, label: 'Expense'},
-                  {value: this.state.income, label: 'Income'},
+                  {value: this.props.expense, label: 'Expense'},
+                  {value: this.props.income, label: 'Income'},
                 ],
                 label: 'Summary',
                 config: {
