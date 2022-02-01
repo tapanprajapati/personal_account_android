@@ -47,7 +47,7 @@ export default class CategoryLine extends Component {
     this.state.months.forEach((month) => {
       const monthYear = `${month}/${this.props.year}`;
       this.categoryHandler
-        .getCategoryTotalByMonthYear(monthYear, this.props.type)
+        .getAllCategoriesTotalMonth(this.props.type, monthYear)
         .then((categories) => {
           let data = this.state.data;
           data[month] = categories;

@@ -46,7 +46,7 @@ export default class DashboardScreen extends Component {
         : this.state.date.getMonth() + 1) +
       '/' +
       this.state.date.getFullYear();
-    this.categoryHandler.getAllCategoriesTotal(type,monthYear).then(data=>{
+    this.categoryHandler.getAllCategoriesTotalMonth(type,monthYear).then(data=>{
 
       const t = this.getTypeTotal(data)
       if(type==="income")
@@ -81,6 +81,10 @@ export default class DashboardScreen extends Component {
     this.getCategoryData("expense")
     // this.getTypeTotal("income")
     // this.getTypeTotal("expense")
+  }
+
+  refresh = () => {
+    this.saveDate(this.state.date)
   }
 
   render() {

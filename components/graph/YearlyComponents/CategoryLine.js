@@ -34,7 +34,7 @@ export default class CategoryLine extends Component {
       // this.setState({years: years})
       years.forEach((year) => {
         this.categoryHandler
-          .getCategoryTotalByYear(year, this.props.type)
+          .getAllCategoriesTotalYear(this.props.type,year)
           .then((categories) => {
             let data = this.state.data;
             data[year] = categories;
@@ -42,7 +42,7 @@ export default class CategoryLine extends Component {
             this.setState({data: data});
 
             this.setCategories(categories);
-            this.setState({years: [...this.state.years, year]});
+            this.setState({years: [...this.state.years, year].sort()});
           });
       });
     });
@@ -75,6 +75,7 @@ export default class CategoryLine extends Component {
 
     this.state.categories.forEach((category) => {
       if (category.status) {
+        console.log(category)
         let values = [];
         this.state.years.forEach((year) => {
           values.push({
@@ -84,6 +85,8 @@ export default class CategoryLine extends Component {
         });
 
         const c = processColor(Graph.random());
+
+        console.log(values)
 
         dataSets.push({
           values: values,

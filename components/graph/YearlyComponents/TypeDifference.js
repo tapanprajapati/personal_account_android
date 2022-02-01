@@ -22,23 +22,35 @@ export default class TypeDifference extends Component {
 
   componentDidMount() {
     this.entryHandler.getYears().then((years) => {
+      years = years.sort()
       this.setState({
         years: years,
       });
 
-      years.forEach((year) => {
+      console.log(years.length)
+      let a = []
+      years.forEach(i=>{a.push(0)})
+      
+      this.setState({incomeData: a,expenseData: a})
+      
+      years.forEach((year,ind) => {
         this.entryHandler.getYearsTotal(year, 'expense').then((total) => {
           total = parseInt(total);
+          let tempA = [...this.state.expenseData]
+          tempA[years.indexOf(year)] = total;
           this.setState({
-            expenseData: [...this.state.expenseData, total],
-          });
+            expenseData: tempA
+          })
         });
 
         this.entryHandler.getYearsTotal(year, 'income').then((total) => {
           total = parseInt(total);
+          
+          let tempA = [...this.state.incomeData]
+          tempA[years.indexOf(year)] = total;
           this.setState({
-            incomeData: [...this.state.incomeData, total],
-          });
+            incomeData: tempA
+          })
         });
       });
     });

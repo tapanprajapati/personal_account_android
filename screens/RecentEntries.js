@@ -49,6 +49,7 @@ export default class RecentEntries extends Component {
           </View>
           <View style={styles.date}>
             <Text style={styles.dateText}>{entry.date}</Text>
+            <Text style={styles.userText}>{entry.username}</Text>
           </View>
         </View>
       </View>
@@ -148,5 +149,8 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 18,
+  },
+  userText: {
+    color: 'grey',
   },
 });

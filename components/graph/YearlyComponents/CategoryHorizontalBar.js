@@ -22,9 +22,9 @@ export default class CategoryHorizontalBar extends Component {
     if (this.props.year == undefined) {
       method = this.categoryHanlder.getCategoryTotal(this.props.type);
     } else {
-      method = this.categoryHanlder.getCategoryTotalByYear(
-        this.props.year,
+      method = this.categoryHanlder.getAllCategoriesTotalYear(
         this.props.type,
+        this.props.year,
       );
     }
 

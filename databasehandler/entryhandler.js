@@ -1,55 +1,22 @@
-import {openDatabase} from 'react-native-sqlite-storage';
-import api from '../utils/api';
-import {DB} from './utils';
+import API from "../utils/api";
+
 
 export default class EntryDBHandler {
   constructor() {
-    this.db = openDatabase({name: DB.dbname});
-    this.table = DB.tables.entries.name;
-    this.columns = DB.tables.entries.columns;
-    this.catTable = DB.tables.categories;
-  }
-
-  importEntry(entry) {
-    console.log('In handler');
-    return new Promise((resolve, reject) => {
-      console.log('Starting transaction');
-      this.db.transaction((tx) => {
-        const addSQL = `INSERT INTO ${this.table} (${this.columns.id.title},${this.columns.title.title},${this.columns.description.title},${this.columns.amount.title},${this.columns.date.title},${this.columns.categoryId.title}) VALUES (?,?,?,?,?,?)`;
-        let data = [
-          entry.id,
-          entry.title,
-          entry.description,
-          entry.amount,
-          entry.date,
-          entry.category.id,
-        ];
-
-        tx.executeSql(
-          addSQL,
-          data,
-          (tnx, result) => {
-            resolve({
-              success: true,
-              result: result,
-            });
-          },
-          (tnx, error) => {
-            resolve({
-              success: false,
-              result: error,
-            });
-          },
-        );
-      });
-    });
+    if(EntryDBHandler._instance)
+    {
+      return EntryDBHandler._instance;
+    }
+    EntryDBHandler._instance = this;
+    this.api = new API()
+    return EntryDBHandler._instance;
   }
 
   addEntry(entry) {
     console.log('In handler');
     return new Promise((resolve, reject) => {
       console.log('Starting transaction');
-      fetch(api.entry.createEntry,{
+      fetch(this.api.entry.createEntry(),{
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -76,7 +43,7 @@ export default class EntryDBHandler {
   updateEntry(entry) {
     return new Promise((resolve, reject) => {
       console.log('Starting transaction to update entry');
-      fetch(api.entry.updateEntry,{
+      fetch(this.api.entry.updateEntry(),{
         method: 'PUT',
         headers: {
           Accept: 'application/json',
@@ -104,7 +71,7 @@ export default class EntryDBHandler {
   deleteEntry(entry) {
     return new Promise((resolve, reject) => {
       console.log('Delete entry '+entry);
-      fetch(`${api.entry.deleteEntry}${entry.id}`,{
+      fetch(`${this.api.entry.deleteEntry()}${entry.id}`,{
         method: 'DELETE',
       })
       .then((response)=>response.json())
@@ -117,11 +84,13 @@ export default class EntryDBHandler {
   }
 
   getYears() {
-    console.log('Fetching All Years from Database');
     return new Promise((resolve, reject) => {
-      fetch(`${api.summary.getAllYears}`)
+      console.log('Fetching All Years from Database');
+      console.log(this.api.summary.getAllYears())
+      fetch(`${this.api.summary.getAllYears()}`)
       .then((response)=>response.json())
       .then(json=>{
+        console.log(json.message);
         resolve(json.message)
       })
       .catch(error=>{
@@ -131,11 +100,13 @@ export default class EntryDBHandler {
   }
 
   getMonths(year) {
-    console.log('Fetching All Months from Database for year: '+year);
     return new Promise((resolve, reject) => {
-      fetch(`${api.summary.getAllMonths}date=${year}`)
+      console.log('Fetching All Months from Database for year: '+year);
+      console.log(`${this.api.summary.getAllMonths()}date=${year}`);
+      fetch(`${this.api.summary.getAllMonths()}date=${year}`)
       .then((response)=>response.json())
       .then(json=>{
+        console.log(json.message)
         resolve(json.message)
       })
       .catch(error=>{
@@ -145,9 +116,9 @@ export default class EntryDBHandler {
   }
 
   getSearchYears(searchString, categories) {
-    console.log('Fetching Years from Database');
     return new Promise((resolve, reject) => {
-      fetch(`${api.summary.getYears}search=${searchString}&categories=${categories}`)
+      console.log('Fetching Years from Database');
+      fetch(`${this.api.summary.getYears()}search=${searchString}&categories=${categories}`)
       .then((response)=>response.json())
       .then(json=>{
         resolve(json.message)
@@ -159,10 +130,10 @@ export default class EntryDBHandler {
   }
 
   getSearchMonthsOfYear(searchString, year, categories) {
-    console.log('Fetching months from Database');
-    const getAPI = `${api.summary.getMonths}search=${searchString}&categories=${categories}&date=${year}`
-    console.log(getAPI)
+    const getAPI = `${this.api.summary.getMonths()}search=${searchString}&categories=${categories}&date=${year}`
     return new Promise((resolve, reject) => {
+      console.log('Fetching months from Database');
+      console.log(getAPI)
       fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
@@ -176,10 +147,10 @@ export default class EntryDBHandler {
   }
 
   getSearchDatesFromMonthAndYear(searchString, monthYear, categories) {
-    console.log('Fetching dates from Database');
-    const getAPI = `${api.summary.getDates}search=${searchString}&categories=${categories}&date=${monthYear}`;
-    console.log(getAPI);
+    const getAPI = `${this.api.summary.getDates()}search=${searchString}&categories=${categories}&date=${monthYear}`;
     return new Promise((resolve, reject) => {
+      console.log('Fetching dates from Database');
+      console.log(getAPI);
       fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
@@ -193,27 +164,18 @@ export default class EntryDBHandler {
   }
 
   getRecentEntries() {
-    console.log('Fetching Recent Entries');
+    const getAPI = `${this.api.entry.recentEntries()}${50}`
     return new Promise((resolve, reject) => {
-      const limit = 50;
-      this.db.transaction((tx) => {
-        const getSQL = `SELECT 
-          e.${this.columns.id.title} as id,
-          e.${this.columns.categoryId.title} as categoryid,
-          e.${this.columns.title.title} as title,
-          e.${this.columns.description.title} as description,
-          e.${this.columns.amount.title} as amount,
-          e.${this.columns.date.title} as date,
-          c.${this.catTable.columns.title.title} as cTitle,
-          c.${this.catTable.columns.id.title} as cId,
-          c.${this.catTable.columns.type.title} as cType
-        FROM ${this.table} as e, ${this.catTable.name} as c
-        where categoryid=cId order by id desc limit ${limit}`;
-
-        tx.executeSql(getSQL, [], (tnx, result) => {
-          resolve(this.fromEntries(result));
-        });
-      });
+      console.log('Fetching recent entries from Database');
+      console.log(getAPI)
+      fetch(getAPI)
+      .then((response)=>response.json())
+      .then(json=>{
+        resolve(this.fromEntries(json.message))
+      })
+      .catch(error=>{
+        reject(error)
+      })
     });
   }
 
@@ -240,14 +202,13 @@ export default class EntryDBHandler {
 
   
   getSearchEntriesByDate(searchString, date, categories) {
-    console.log('Fetching entries from Database');
-    const getAPI = `${api.entry.getEntries}search=${searchString}&categories=${categories}&date=${date}`
-    console.log(getAPI)
+    const getAPI = `${this.api.entry.getEntries()}search=${searchString}&categories=${categories}&date=${date}`
     return new Promise((resolve, reject) => {
+      console.log('Fetching entries from Database');
+      console.log(getAPI)
       fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
-        console.log(json.message)
         resolve(this.fromEntries(json.message))
       })
       .catch(error=>{
@@ -257,10 +218,10 @@ export default class EntryDBHandler {
   }
   
   getSearchYearTotal(searchString, year, categories) {
-    console.log('Fetching year total from Database');
-    const getAPI = `${api.summary.getYearTotal}search=${searchString}&categories=${categories}&date=${year}`
-    console.log(getAPI)
+    const getAPI = `${this.api.summary.getYearTotal()}search=${searchString}&categories=${categories}&date=${year}`
     return new Promise((resolve, reject) => {
+      console.log('Fetching year total from Database');
+      console.log(getAPI)
       fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
@@ -281,10 +242,10 @@ export default class EntryDBHandler {
   }
 
   getSearchMonthTotal(searchString, monthAndYear, categories) {
-    console.log('Fetching month total from Database');
-    const getAPI = `${api.summary.getMonthTotal}search=${searchString}&categories=${categories}&date=${monthAndYear}`
-    console.log(getAPI)
+    const getAPI = `${this.api.summary.getMonthTotal()}search=${searchString}&categories=${categories}&date=${monthAndYear}`
     return new Promise((resolve, reject) => {
+      console.log('Fetching month total from Database');
+      console.log(getAPI)
       fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
@@ -298,10 +259,10 @@ export default class EntryDBHandler {
   }
 
   getSearchDateTotal(searchString, date, categories) {
-    console.log('Fetching date total from Database');
-    const getAPI = `${api.summary.getDateTotal}?search=${searchString}&categories=${categories}&date=${date}`
-    console.log(getAPI)
+    const getAPI = `${this.api.summary.getDateTotal()}?search=${searchString}&categories=${categories}&date=${date}`
     return new Promise((resolve, reject) => {
+      console.log('Fetching date total from Database');
+      console.log(getAPI)
       fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
@@ -316,65 +277,36 @@ export default class EntryDBHandler {
 
 
   getMonthTotal(month, type) {
+    const getAPI = `${this.api.summary.getMonthTotalAllCategories()}&type=${type}&date=${month}&groupid=1640932481964`
     return new Promise((resolve, reject) => {
-      this.db.transaction((tx) => {
-        const getSQL = `SELECT
-        sum(e.${this.columns.amount.title}) as total
-        FROM ${this.table} as e, ${this.catTable.name} as c
-        where e.${this.columns.categoryId.title}=c.${this.catTable.columns.id.title}
-        and c.${this.catTable.columns.type.title} = ?
-        and strftime('%m/%Y',e.${this.columns.date.title})=?`;
-
-        tx.executeSql(
-          getSQL,
-          [type, month],
-          (tnx, result) => {
-            let total = result.rows.item(0).total;
-
-            if (total == null) {
-              total = 0;
-            }
-            resolve(total.toFixed(2));
-          },
-          (tnx, error) => {
-            console.log('Error');
-            resolve(0);
-          },
-        );
-      });
+      console.log('Fetching month total for all categories from Database');
+      console.log(getAPI)
+      fetch(getAPI)
+      .then((response)=>response.json())
+      .then(json=>{
+        console.log(json.message)
+        resolve(json.message)
+      })
+      .catch(error=>{
+        reject(error)
+      })
     });
   }
 
   getYearsTotal(year, type) {
+    const getAPI = `${this.api.summary.getYearTotalAllCategories()}&type=${type}&date=${year}&groupid=1640932481964`
     return new Promise((resolve, reject) => {
-      console.log(`${type} total of ${year}`);
-
-      this.db.transaction((tx) => {
-        const getSQL = `SELECT 
-        sum(e.${this.columns.amount.title}) as total
-        FROM ${this.table} as e, ${this.catTable.name} as c
-        where e.${this.columns.categoryId.title}=c.${this.catTable.columns.id.title} 
-        and c.${this.catTable.columns.type.title} = ? 
-        and strftime('%Y',e.${this.columns.date.title})=?`;
-
-        tx.executeSql(
-          getSQL,
-          [type, year],
-          (tnx, result) => {
-            let total = result.rows.item(0).total;
-            if (total == null) {
-              total = 0;
-            }
-
-            resolve(total.toFixed(2));
-          },
-          (tnx, error) => {
-            console.error('Error');
-            console.error(error);
-            resolve(0);
-          },
-        );
-      });
+      console.log('Fetching year total for all categories from Database');
+      console.log(getAPI)
+      fetch(getAPI)
+      .then((response)=>response.json())
+      .then(json=>{
+        console.log(json.message)
+        resolve(json.message)
+      })
+      .catch(error=>{
+        reject(error)
+      })
     });
   }
 }

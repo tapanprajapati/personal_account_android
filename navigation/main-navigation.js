@@ -13,9 +13,12 @@ import HomeTabNavigation from './home-tab-navigation';
 import YearsGraphScreen from '../screens/Graphs/YearsGraphScreen';
 import MonthsGraphScreen from '../screens/Graphs/MonthsGraphScreen';
 import ManageCategoriesScreen from '../screens/CategoryFunctions/ManageCategoriesScreen';
+import Storage from '../databasehandler/local-storage/Storage';
+import ConfigScreen from '../screens/Config/ConfigScreen';
 
 export default function HomeNavigation() {
   const Stack = createStackNavigator();
+  const storage = new Storage();
 
   return (
     <NavigationContainer>
@@ -103,6 +106,17 @@ export default function HomeNavigation() {
           component={ManageCategoriesScreen}
           options={{
             title: 'Manage Categories',
+            headerTitleContainerStyle: {
+              left: 45,
+            },
+          }}
+        />
+
+        <Stack.Screen
+          name="Configs"
+          component={ConfigScreen}
+          options={{
+            title: 'Configs',
             headerTitleContainerStyle: {
               left: 45,
             },

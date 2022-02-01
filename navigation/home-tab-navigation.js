@@ -4,18 +4,13 @@ import React from 'react';
 import Difference from '../screens/DifferenceScreen/DifferenceScreen';
 import {useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
-import checkAndCreateDatabase from '../databasehandler/dbinit';
 import {Icon} from 'react-native-elements';
 import Menu, {MenuItem} from 'react-native-material-menu';
-import DocumentPicker from 'react-native-document-picker';
-import BackupHandler from '../backupmanager/BackupHandler';
-import {ToastAndroid} from 'react-native';
 import DashboardScreen from '../screens/DashboardScreen';
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function HomeTabNavigation(props) {
-  backupHandler = new BackupHandler();
 
   useEffect(() => {
     _menu = null;
@@ -65,14 +60,19 @@ export default function HomeTabNavigation(props) {
                 onPress={show}
               />
             }>
-            <MenuItem onPress={exportData}>Backup</MenuItem>
-            <MenuItem onPress={openPicker}>Restore</MenuItem>
             <MenuItem
               onPress={() => {
                 props.navigation.navigate('ManageCategories');
                 hide();
               }}>
               Manage Categories
+            </MenuItem>
+            <MenuItem
+              onPress={() => {
+                props.navigation.navigate('Configs');
+                hide();
+              }}>
+              Configs
             </MenuItem>
           </Menu>
           {/* <Icon
@@ -87,29 +87,8 @@ export default function HomeTabNavigation(props) {
         </View>
       ),
     });
-    checkAndCreateDatabase();
   }, []);
 
-  openPicker = () => {
-    DocumentPicker.pick().then((res) => {
-      backupHandler.importData(res.uri);
-    });
-  };
-
-  exportData = () => {
-    backupHandler.exportData().then(
-      (success) => {
-        ToastAndroid.show(
-          "Exported to: 'Downloads/personalaccountsbackup.json'",
-          ToastAndroid.LONG,
-        );
-      },
-      (error) => {
-        ToastAndroid.show('Error Exporting Data', ToastAndroid.LONG);
-      },
-    );
-    console.log('Export Pressed');
-  };
 
   return (
     <Tab.Navigator
