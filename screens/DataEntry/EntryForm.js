@@ -22,12 +22,14 @@ import CameraModal from '../../modals/CameraModal';
 import CameraImagePreviewModal from '../../modals/CameraImagePreviewModal';
 import CameraImageHandler from '../../databasehandler/cameraImageHandler';
 import UserDBHandler from '../../databasehandler/userhandler';
+import LocalStorage from '../../databasehandler/local-storage/Storage'
 
 export default class EntryForm extends Component {
   constructor(props) {
     super(props);
 
     this.cameraImageHandler = new CameraImageHandler();
+    this.storage = new LocalStorage();
 
     if (!props.entry) {
       // console.log('In');
@@ -45,7 +47,7 @@ export default class EntryForm extends Component {
         categories: [],
         users: [],
         imagePath: '',
-        selectedUser: ""
+        selectedUser: this.storage.user
       };
     } else {
       this.state = {
@@ -66,9 +68,9 @@ export default class EntryForm extends Component {
       };
 
       this.cameraImageHandler.imageExists(props.entry.id).then((result) => {
-        if (result) {
+        if (result.success) {
           this.setState({
-            imagePath: this.cameraImageHandler.getImagePath(props.entry.id),
+            imagePath: this.cameraImageHandler.getImageURL(props.entry.id),
           });
         }
       });
@@ -98,28 +100,52 @@ export default class EntryForm extends Component {
 
   getCategories = (type) => {
     this.categoryHandler.getCategories(type).then((result) => {
-      // console.log(result);
-      this.setState({
-        categories: result,
-      });
-
-      if (this.state.selectedType!=type) {
+      if(result.success)
+      {
+        const categories = result.message
+        // console.log(result);
         this.setState({
-          selectedCategoryId: result[0].id,
+          categories: categories,
         });
+  
+        if (this.state.selectedType!=type) {
+          this.setState({
+            selectedCategoryId: categories[0].id,
+          });
+        }
+  
+        this.setState({selectedType: type})
       }
-
-      this.setState({selectedType: type})
+      else
+      {
+        Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+      }
     });
   };
 
   getUsers = () =>{
     this.userHandler.getAllUsers().then((result)=>{
-      this.setState({users: result});
-
-      if(this.state.selectedUser=="")
+      if(result.success)
       {
-        this.setState({selectedUser: result[0].username})
+        const users = result.message
+        this.setState({users: users});
+  
+        if(this.state.selectedUser=="")
+        {
+          this.setState({selectedUser: users[0].username})
+        }
+      }
+      else
+      {
+        Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
       }
     })
   }
@@ -213,7 +239,7 @@ export default class EntryForm extends Component {
 
       console.log(entry);
 
-      this.props.handleFormData(entry, this.state.imagePath);
+      this.props.handleFormData(entry, this.state.imagePath, this.state.image);
       this.resetInputs();
     }
   };

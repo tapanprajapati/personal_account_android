@@ -21,10 +21,20 @@ export default class RecentEntries extends Component {
   }
 
   getRecentEntries = () => {
-    this.entryHandler.getRecentEntries().then((entries) => {
-      this.setState({
-        entries: entries,
-      });
+    this.entryHandler.getRecentEntries().then((result) => {
+      if(result.success)
+      {
+        this.setState({
+          entries: result.message,
+        });
+      }else
+      {
+        Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+          {
+            text: 'Close',  
+          },
+        ]);
+      }
     });
   };
 

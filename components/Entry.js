@@ -6,12 +6,14 @@ import EntryDBHandler from '../databasehandler/entryhandler';
 import {dimensions} from '../utils/constants';
 import {ButtonColors} from '../styles/colors';
 import RNFS from 'react-native-fs';
+import CameraImageHandler from '../databasehandler/cameraImageHandler';
 
 export default class Entry extends Component {
   constructor(props) {
     super(props);
     this.controlButtonSize = dimensions.entry.controlButtonSize;
     this.entryHandler = new EntryDBHandler();
+    this.cameraHandler = new CameraImageHandler();
 
     this.state = {
       imageExists: false,
@@ -43,6 +45,14 @@ Type: ${entry.category.type.toUpperCase()}`;
               this.props.refresh();
               ToastAndroid.show('Entry Deleted', ToastAndroid.SHORT);
             }
+            else
+            {
+              Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+            }
           });
         },
       },
@@ -50,16 +60,15 @@ Type: ${entry.category.type.toUpperCase()}`;
   };
 
   imageExists = () => {
-    RNFS.exists(
-      RNFS.ExternalStorageDirectoryPath +
-        '/PersonalAccount/Images/' +
-        this.props.entry.id +
-        '.jpg',
-    ).then((result) => {
-      if (result) {
-        this.setState({imageExists: true});
+
+    this.cameraHandler.imageExists(this.props.entry.id).then(response=>{
+      if(response.success)
+      {
+        this.setState({
+          imageExists: true
+        })
       }
-    });
+    })
   };
 
   render() {

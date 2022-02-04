@@ -22,9 +22,13 @@ export default class UpdateEntry extends Component {
         console.log('Entry Updated');
         ToastAndroid.show('Entry Updated', ToastAndroid.SHORT);
         if (imagePath != '') {
-          this.cameraImageHandler.updateImage(entry.id, imagePath);
+          this.cameraImageHandler.saveImage(entry.id, imagePath).then(result=>{
+            console.log(result)
+          });;
         } else {
-          this.cameraImageHandler.deleteImage(entry.id);
+          this.cameraImageHandler.deleteImage(entry.id).then(result=>{
+            console.log(result)
+          });
         }
         this.props.navigation.goBack();
       } else {

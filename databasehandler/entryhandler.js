@@ -1,5 +1,8 @@
 import API from "../utils/api";
+import CameraImageHandler from "./cameraImageHandler";
 
+//TODO: Handle unsuccessful API calls properly
+//TODO: Check how to handle if connection cannot be made to server
 
 export default class EntryDBHandler {
   constructor() {
@@ -9,6 +12,7 @@ export default class EntryDBHandler {
     }
     EntryDBHandler._instance = this;
     this.api = new API()
+    this.cameraHandler = new CameraImageHandler();
     return EntryDBHandler._instance;
   }
 
@@ -76,6 +80,12 @@ export default class EntryDBHandler {
       })
       .then((response)=>response.json())
       .then(json=>{
+        if(json.success)
+        {
+          this.cameraHandler.deleteImage(entry.id).then(result=>{
+            console.log(result)
+          })
+        }
         resolve(json)
       })
       .catch(error=>
@@ -91,7 +101,7 @@ export default class EntryDBHandler {
       .then((response)=>response.json())
       .then(json=>{
         console.log(json.message);
-        resolve(json.message)
+        resolve(json)
       })
       .catch(error=>{
         reject(error)
@@ -107,7 +117,7 @@ export default class EntryDBHandler {
       .then((response)=>response.json())
       .then(json=>{
         console.log(json.message)
-        resolve(json.message)
+        resolve(json)
       })
       .catch(error=>{
         reject(error)
@@ -121,7 +131,7 @@ export default class EntryDBHandler {
       fetch(`${this.api.summary.getYears()}search=${searchString}&categories=${categories}`)
       .then((response)=>response.json())
       .then(json=>{
-        resolve(json.message)
+        resolve(json)
       })
       .catch(error=>{
         reject(error)
@@ -137,8 +147,8 @@ export default class EntryDBHandler {
       fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
-        console.log(json.message)
-        resolve(json.message)
+        console.log(json)
+        resolve(json)
       })
       .catch(error=>{
         reject(error)
@@ -154,8 +164,8 @@ export default class EntryDBHandler {
       fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
-        console.log(json.message)
-        resolve(json.message)
+        console.log(json)
+        resolve(json)
       })
       .catch(error=>{
         reject(error)
@@ -171,7 +181,15 @@ export default class EntryDBHandler {
       fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
-        resolve(this.fromEntries(json.message))
+        if(json.success)
+        {
+          json.message = this.fromEntries(json.message)
+          resolve(json)
+        }
+        else
+        {
+          resolve(json)
+        }
       })
       .catch(error=>{
         reject(error)
@@ -209,7 +227,15 @@ export default class EntryDBHandler {
       fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
-        resolve(this.fromEntries(json.message))
+        if(json.success)
+        {
+          json.message = this.fromEntries(json.message)
+          resolve(json)
+        }
+        else
+        {
+          resolve(json)
+        }
       })
       .catch(error=>{
         reject(error)
@@ -225,15 +251,8 @@ export default class EntryDBHandler {
       fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
-        console.log(json.message)
-        if(json.success)
-        {
-          resolve(json.message)
-        }
-        else
-        {
-          reject(json.message)
-        }
+        console.log(json)
+        resolve(json)
       })
       .catch(error=>{
         reject(error)
@@ -249,8 +268,8 @@ export default class EntryDBHandler {
       fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
-        console.log(json.message)
-        resolve(json.message)
+        console.log(json)
+        resolve(json)
       })
       .catch(error=>{
         reject(error)
@@ -266,8 +285,8 @@ export default class EntryDBHandler {
       fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
-        console.log(json.message)
-        resolve(json.message)
+        console.log(json)
+        resolve(json)
       })
       .catch(error=>{
         reject(error)
@@ -284,8 +303,8 @@ export default class EntryDBHandler {
       fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
-        console.log(json.message)
-        resolve(json.message)
+        console.log(json)
+        resolve(json)
       })
       .catch(error=>{
         reject(error)
@@ -301,8 +320,8 @@ export default class EntryDBHandler {
       fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
-        console.log(json.message)
-        resolve(json.message)
+        console.log(json)
+        resolve(json)
       })
       .catch(error=>{
         reject(error)

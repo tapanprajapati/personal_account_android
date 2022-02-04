@@ -21,38 +21,72 @@ export default class TypeDifference extends Component {
   }
 
   componentDidMount() {
-    this.entryHandler.getYears().then((years) => {
-      years = years.sort()
-      this.setState({
-        years: years,
-      });
-
-      console.log(years.length)
-      let a = []
-      years.forEach(i=>{a.push(0)})
-      
-      this.setState({incomeData: a,expenseData: a})
-      
-      years.forEach((year,ind) => {
-        this.entryHandler.getYearsTotal(year, 'expense').then((total) => {
-          total = parseInt(total);
-          let tempA = [...this.state.expenseData]
-          tempA[years.indexOf(year)] = total;
-          this.setState({
-            expenseData: tempA
-          })
+    this.entryHandler.getYears().then((result) => {
+      if(result.success)
+      {
+        let years = result.message;
+        years = years.sort()
+        this.setState({
+          years: years,
         });
-
-        this.entryHandler.getYearsTotal(year, 'income').then((total) => {
-          total = parseInt(total);
-          
-          let tempA = [...this.state.incomeData]
-          tempA[years.indexOf(year)] = total;
-          this.setState({
-            incomeData: tempA
-          })
+  
+        console.log(years.length)
+        let a = []
+        years.forEach(i=>{a.push(0)})
+        
+        this.setState({incomeData: a,expenseData: a})
+        
+        years.forEach((year,ind) => {
+          this.entryHandler.getYearsTotal(year, 'expense').then((result) => {
+            if(result.success)
+            {
+              let total = parseInt(result.message);
+              let tempA = [...this.state.expenseData]
+              tempA[years.indexOf(year)] = total;
+              this.setState({
+                expenseData: tempA
+              })
+            }
+            else
+            {
+              Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+            }
+          });
+  
+          this.entryHandler.getYearsTotal(year, 'income').then((result) => {
+            if(result.success)
+            {
+              let total = parseInt(result.message);
+              
+              let tempA = [...this.state.incomeData]
+              tempA[years.indexOf(year)] = total;
+              this.setState({
+                incomeData: tempA
+              })
+            }
+            else
+            {
+              Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+            }
+          });
         });
-      });
+      }
+      else
+      {
+        Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+      }
     });
   }
 

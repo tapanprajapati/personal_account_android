@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {Icon, Button, CheckBox} from 'react-native-elements';
-import EntryDBHandler from '../databasehandler/entryhandler';
 import {dimensions} from '../utils/constants';
 
 export default class CategoryFilterModal extends Component {
@@ -11,7 +10,6 @@ export default class CategoryFilterModal extends Component {
       categories: this.props.categories,
       checkAll: true,
     };
-    this.entryHandler = new EntryDBHandler();
   }
 
   changeStatus = (item) => {

@@ -28,10 +28,22 @@ export default class CategoryHorizontalBar extends Component {
       );
     }
 
-    method.then((categories) => {
-      this.setState({
-        categories: categories,
-      });
+    method.then((result) => {
+      if(result.success)
+      {
+        const categories = result.message
+        this.setState({
+          categories: categories,
+        });
+      }
+      else
+      {
+        Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+      }
     });
   }
 

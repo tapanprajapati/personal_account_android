@@ -6,7 +6,6 @@ import {processColor, View} from 'react-native';
 import {LineChart} from 'react-native-charts-wrapper';
 import {Icon} from 'react-native-elements';
 import CategoryDBHandler from '../../../databasehandler/categoryhandler';
-import EntryDBHandler from '../../../databasehandler/entryhandler';
 import CategoryFilterModal from '../../../modals/CategoryFilterModal';
 import {Graph} from '../../../styles/colors';
 import {global} from '../../../styles/global';
@@ -37,7 +36,6 @@ export default class CategoryLine extends Component {
     };
 
     this.categoryHandler = new CategoryDBHandler();
-    this.entryHandler = new EntryDBHandler();
   }
 
   componentDidMount() {
@@ -48,13 +46,25 @@ export default class CategoryLine extends Component {
       const monthYear = `${month}/${this.props.year}`;
       this.categoryHandler
         .getAllCategoriesTotalMonth(this.props.type, monthYear)
-        .then((categories) => {
-          let data = this.state.data;
-          data[month] = categories;
-
-          this.setState({data: data});
-
-          this.setCategories(categories);
+        .then((result) => {
+          if(result.success)
+          {
+            const categories = result.message;
+            let data = this.state.data;
+            data[month] = categories;
+  
+            this.setState({data: data});
+  
+            this.setCategories(categories);
+          }
+          else
+          {
+            Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+          }
         });
     });
   }

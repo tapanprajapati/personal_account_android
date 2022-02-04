@@ -25,10 +25,22 @@ export default class CategoryHorizontalBar extends Component {
       date.getFullYear();
     this.categoryHanlder
       .getCategoryTotalByMonthYear(monthYear, this.props.type)
-      .then((categories) => {
-        this.setState({
-          categories: categories,
-        });
+      .then((result) => {
+        if(result.success)
+        {
+          const categories = result.message
+          this.setState({
+            categories: categories,
+          });
+        }
+        else
+        {
+          Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+        }
       });
   };
 

@@ -30,10 +30,22 @@ export default class ManageCategoriesScreen extends Component {
   }
 
   getCategories = (type = this.state.selected) => {
-    this.categoryHandler.getCategories(type).then((categories) => {
-      this.setState({
-        categories: categories,
-      });
+    this.categoryHandler.getCategories(type).then((result) => {
+      if(result.success)
+      {
+        const categories = result.message
+        this.setState({
+          categories: categories,
+        });
+      }
+      else
+      {
+        Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+      }
     });
   };
 

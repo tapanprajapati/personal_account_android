@@ -52,34 +52,58 @@ export default class Difference extends Component {
     this.setState({
       edit: false,
     });
-    this.entryHandler.getYears().then((years) => {
-      console.log(years);
-      this.setState({
-        years: years,
-        refresh: false,
-      });
+    this.entryHandler.getYears().then((result) => {
+      if(result.success)
+      {
+        const years = result.message
+        console.log(years);
+        this.setState({
+          years: years,
+          refresh: false,
+        });
+      }
+      else
+      {
+        Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+      }
     });
   };
 
   getCategories = (type) => {
-    this.categoryHandler.getCategories(type).then((categories) => {
-      let temp = [];
-
-      categories.forEach((category) => {
-        temp.push({
-          category: category,
-          status: true,
+    this.categoryHandler.getCategories(type).then((result) => {
+      if(result.success)
+      {
+        const categories = result.message;
+        let temp = [];
+  
+        categories.forEach((category) => {
+          temp.push({
+            category: category,
+            status: true,
+          });
         });
-      });
-
-      if (type == 'income') {
-        this.setState({
-          incomeCategories: temp,
-        });
-      } else {
-        this.setState({
-          expenseCategories: temp,
-        });
+  
+        if (type == 'income') {
+          this.setState({
+            incomeCategories: temp,
+          });
+        } else {
+          this.setState({
+            expenseCategories: temp,
+          });
+        }
+      }
+      else
+      {
+        Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
       }
     });
   };

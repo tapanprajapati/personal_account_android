@@ -6,7 +6,7 @@ import {Image} from 'react-native-elements';
 export default class CameraImagePreviewModal extends Component {
   constructor(props) {
     super(props);
-    // console.log(props.uri);
+    console.log(props.uri);
   }
 
   render() {
@@ -29,6 +29,6 @@ export default class CameraImagePreviewModal extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 15,
+    margin: 15
   },
 });

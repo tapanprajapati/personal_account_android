@@ -26,7 +26,7 @@ export default class EntryList extends Component {
       showCategoryModal: false,
       edit: false,
       total: 0,
-      imagePath: '',
+      imageURL: '',
       showImage: false,
     };
   }
@@ -39,27 +39,48 @@ export default class EntryList extends Component {
     let date = `${this.props.route.params.month}/${this.props.route.params.year}`;
     this.entryHandler
       .getSearchDatesFromMonthAndYear(searchText, date, categories)
-      .then((dates) => {
-        this.setState({
-          dates: dates,
-          edit: false,
-        });
+      .then((result) => {
+        if(result.success)
+        {
+          this.setState({
+            dates: result.message,
+            edit: false,
+          });
+        }
+        else
+        {
+          Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+        }
       });
 
     this.entryHandler
       .getSearchMonthTotal(searchText, date, categories)
-      .then((total) => {
-        this.setState({total: total});
+      .then((result) => {
+        if(result.success)
+        {
+          this.setState({total: result.message});
+        }
+        else
+        {
+          Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+        }
       });
   };
 
   openImage = (id) => {
-    const path = this.cameraImageHandler.getImagePath(id);
+    const path = this.cameraImageHandler.getImageURL(id);
     this.setState({
       showImage: true,
-      imagePath: path,
+      imageURL: path,
     });
-    console.log(path);
   };
 
   componentDidMount() {
@@ -149,7 +170,7 @@ export default class EntryList extends Component {
         </Modal>
         <CameraImagePreviewModal
           visible={this.state.showImage}
-          uri={this.state.imagePath}
+          uri={this.state.imageURL}
           close={() => {
             this.setState({showImage: false});
           }}

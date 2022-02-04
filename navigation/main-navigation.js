@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {HeaderColors} from '../styles/colors';
@@ -13,15 +13,23 @@ import HomeTabNavigation from './home-tab-navigation';
 import YearsGraphScreen from '../screens/Graphs/YearsGraphScreen';
 import MonthsGraphScreen from '../screens/Graphs/MonthsGraphScreen';
 import ManageCategoriesScreen from '../screens/CategoryFunctions/ManageCategoriesScreen';
-import Storage from '../databasehandler/local-storage/Storage';
 import ConfigScreen from '../screens/Config/ConfigScreen';
+import LocalStorage from '../databasehandler/local-storage/Storage';
 
 export default function HomeNavigation() {
-  const Stack = createStackNavigator();
-  const storage = new Storage();
+  const [done, isDone] = useState(false)
 
+  useEffect(()=>{
+    new LocalStorage().readValuesFromStorage().then(d=>{
+      isDone(true)
+    })
+  },[])
+  const Stack = createStackNavigator();
   return (
     <NavigationContainer>
+      {
+        done && (
+
       <Stack.Navigator
         screenOptions={{
           headerStyle: {
@@ -146,6 +154,8 @@ export default function HomeNavigation() {
           })}
         />
       </Stack.Navigator>
+        )
+      }
     </NavigationContainer>
   );
 }

@@ -1,39 +1,84 @@
-import RNFS from 'react-native-fs';
+import API from "../utils/api";
+import RNFS from "react-native-fs"
 
 export default class CameraImageHandler {
-  imageDirectoryPath =
-    RNFS.ExternalStorageDirectoryPath + '/PersonalAccount/Images';
 
-  async saveImage(id, imagePath) {
-    const dirExists = await this.imageDirectoryExists();
-
-    if (!dirExists) {
-      console.log('Image directory does not exist');
-      await this.createImageDirectory();
+  constructor() {
+    if(CameraImageHandler._instance)
+    {
+      return CameraImageHandler._instance;
     }
 
-    RNFS.copyFile(imagePath, `${this.imageDirectoryPath}/${id}.jpg`);
+    CameraImageHandler._instance = this;
+
+    this.api = new API()
+    return CameraImageHandler._instance;
   }
 
-  async imageDirectoryExists() {
-    return RNFS.exists(this.imageDirectoryPath);
+  getImageURL(id) {
+      return this.api.entry.getImage()+id;
+  }
+
+  async saveImage(id, imagePath) {
+    // const dirExists = await this.imageDirectoryExists();
+
+    // if (!dirExists) {
+    //   console.log('Image directory does not exist');
+    //   await this.createImageDirectory();
+    // }
+
+    return new Promise((resolve,reject)=>{
+      // RNFS.copyFile(imagePath, `${this.imageDirectoryPath}/${id}.jpg`);
+      // RNFS.readFile(imagePath,"base64").then(image=>{
+        let formData = new FormData();
+        formData.append("name",id);
+        formData.append("image",{uri: imagePath, name: `${id}.jpg`, type: 'image/jpg'})
+  
+        console.log(formData)
+        fetch(this.api.entry.saveImage(),{
+          method: 'POST',
+          headers: {
+            Accept: '*/*',
+            'Content-Type': 'multipart/form-data'
+          },
+          body:formData
+        })
+        .then((response)=>response.json())
+        .then(json=>{
+          resolve(json)
+        })
+        .catch(error=>
+          reject(error))
+      });
+    // })
   }
 
   async imageExists(id) {
-    return RNFS.exists(`${this.imageDirectoryPath}/${id}.jpg`);
-  }
-
-  async createImageDirectory() {
-    console.log('Creating image directory');
-    await RNFS.mkdir(this.imageDirectoryPath);
+    return new Promise((resolve, reject) => {
+      console.log('Check if image exists for ID '+id);
+      fetch(`${this.api.entry.checkImageExists()}${id}`)
+      .then((response)=>response.json())
+      .then(json=>{
+        resolve(json)
+      })
+      .catch(error=>
+        reject(error))
+    });
   }
 
   async deleteImage(id) {
-    const exists = this.imageExists(id);
-
-    if (exists) {
-      await RNFS.unlink(`${this.imageDirectoryPath}/${id}.jpg`);
-    }
+    return new Promise((resolve, reject) => {
+    console.log('Delete image '+id);
+    fetch(`${this.api.entry.deleteImage()}${id}`,{
+      method: 'DELETE',
+    })
+    .then((response)=>response.json())
+    .then(json=>{
+      resolve(json)
+    })
+    .catch(error=>
+      reject(error))
+  });
   }
 
   async updateImage(id, imagePath) {
@@ -46,9 +91,5 @@ export default class CameraImageHandler {
 
     this.deleteImage(id);
     RNFS.copyFile(imagePath, `${this.imageDirectoryPath}/${id}.jpg`);
-  }
-
-  getImagePath(id) {
-    return `file://${this.imageDirectoryPath}/${id}.jpg`;
   }
 }

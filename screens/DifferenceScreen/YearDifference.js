@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet} from 'react-native';
+import {Alert, StyleSheet} from 'react-native';
 import {FlatList} from 'react-native';
 import {View, Text} from 'react-native';
 import EntryDBHandler from '../../databasehandler/entryhandler';
@@ -25,12 +25,24 @@ export default class YearDifference extends Component {
   }
 
   getMonths = () => {
-    this.entryHandler.getMonths(this.props.year).then((months) => {
-      console.log(`Months: ${this.props.year}`);
-      console.log(months);
-      this.setState({
-        months: months,
-      });
+    this.entryHandler.getMonths(this.props.year).then((result) => {
+      if(result.success)
+      {
+        const months = result.message
+        console.log(`Months: ${this.props.year}`);
+        console.log(months);
+        this.setState({
+          months: months,
+        });
+      }
+      else
+      {
+        Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+      }
     });
   };
 

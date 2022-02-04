@@ -30,21 +30,44 @@ export default class CategoryLine extends Component {
   componentDidMount() {
     // GET CATEGORIES FROM TYPE props.type
 
-    this.entryHandler.getYears().then((years) => {
-      // this.setState({years: years})
-      years.forEach((year) => {
-        this.categoryHandler
-          .getAllCategoriesTotalYear(this.props.type,year)
-          .then((categories) => {
-            let data = this.state.data;
-            data[year] = categories;
-
-            this.setState({data: data});
-
-            this.setCategories(categories);
-            this.setState({years: [...this.state.years, year].sort()});
-          });
-      });
+    this.entryHandler.getYears().then((result) => {
+      if(result.success)
+      {
+        const years = result.message
+        years.forEach((year) => {
+          this.categoryHandler
+            .getAllCategoriesTotalYear(this.props.type,year)
+            .then((result) => {
+              if(result.success)
+              {
+                const categories = result.message
+                let data = this.state.data;
+                data[year] = categories;
+    
+                this.setState({data: data});
+    
+                this.setCategories(categories);
+                this.setState({years: [...this.state.years, year].sort()});
+              }
+              else
+              {
+                Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+              }
+            });
+        });
+      }
+      else
+      {
+        Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+      }
     });
   }
 

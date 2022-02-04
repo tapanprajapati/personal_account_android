@@ -29,13 +29,25 @@ export default class MonthDifference extends Component {
         date,
         getSelectedCategories(this.props.incomeCategories),
       )
-      .then((amount) => {
-        console.log(`Income: ${date}-> ${amount}`);
-        this.setState({
-          income: amount,
-        });
+      .then((result) => {
+        if(result.success)
+        {
+          const amount = result.message;
+          console.log(`Income: ${date}-> ${amount}`);
+          this.setState({
+            income: amount,
+          });
+          this.props.addToIncome(amount);
+        }
+        else
+        {
+          Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+        }
 
-        this.props.addToIncome(amount);
       });
 
     this.entryHandler
@@ -44,13 +56,25 @@ export default class MonthDifference extends Component {
         date,
         getSelectedCategories(this.props.expenseCategories),
       )
-      .then((amount) => {
-        console.log(`Expense: ${date}-> ${amount}`);
-        this.setState({
-          expense: amount,
-        });
-
-        this.props.addToExpense(amount);
+      .then((result) => {
+        if(result.success)
+        {
+          const amount = result.message;
+          console.log(`Expense: ${date}-> ${amount}`);
+          this.setState({
+            expense: amount,
+          });
+  
+          this.props.addToExpense(amount);
+        }
+        else
+        {
+          Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+        }
       });
   };
 

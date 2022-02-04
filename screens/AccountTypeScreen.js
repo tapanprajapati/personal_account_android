@@ -42,17 +42,28 @@ export default class AccountType extends Component {
     });
     this.entryHandler
       .getSearchYears(searchText, categoryString)
-      .then((years) => {
-        this.setState({
-          years: years,
-          refresh: false,
-        });
-
-        setTimeout(() => {
+      .then((result) => {
+        if(result.success)
+        {
           this.setState({
-            isLoading: false,
+            years: result.message,
+            refresh: false,
           });
-        }, 1500);
+  
+          setTimeout(() => {
+            this.setState({
+              isLoading: false,
+            });
+          }, 1500);
+        }
+        else
+        {
+          Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+        }
       });
   };
 
@@ -91,19 +102,30 @@ export default class AccountType extends Component {
     this.categoryHandler
       .getCategories(this.props.route.params.type.toLowerCase())
       .then((result) => {
-        let tempCategories = [];
-        result.forEach((category) => {
-          tempCategories.push({
-            category: category,
-            status: true,
+        if(result.success)
+        {
+          let tempCategories = [];
+          result.message.forEach((category) => {
+            tempCategories.push({
+              category: category,
+              status: true,
+            });
           });
-        });
-
-        this.setState({
-          categories: tempCategories,
-        });
-
-        this.getYears(this.state.searchText);
+  
+          this.setState({
+            categories: tempCategories,
+          });
+  
+          this.getYears(this.state.searchText);
+        }
+        else
+        {
+          Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+        }
       });
 
     this.unsubscribe = this.props.navigation.addListener(

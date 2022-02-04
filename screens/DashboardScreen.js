@@ -46,23 +46,34 @@ export default class DashboardScreen extends Component {
         : this.state.date.getMonth() + 1) +
       '/' +
       this.state.date.getFullYear();
-    this.categoryHandler.getAllCategoriesTotalMonth(type,monthYear).then(data=>{
-
-      const t = this.getTypeTotal(data)
-      if(type==="income")
+    this.categoryHandler.getAllCategoriesTotalMonth(type,monthYear).then(result=>{
+      if(result.success)
       {
-        this.setState({
-          incomeData: data,
-          incomeTotal: t
-        })
-      }
-      else{
+        const data = result.message
+        const t = this.getTypeTotal(data)
+        if(type==="income")
         {
           this.setState({
-            expenseData: data,
-            expenseTotal: t
+            incomeData: data,
+            incomeTotal: t
           })
         }
+        else{
+          {
+            this.setState({
+              expenseData: data,
+              expenseTotal: t
+            })
+          }
+        }
+      }
+      else
+      {
+        Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
       }
     })
   }

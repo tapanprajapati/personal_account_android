@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Animated} from 'react-native';
 import EntryDBHandler from '../databasehandler/entryhandler';
 import {ListColors} from '../styles/colors';
@@ -26,19 +26,41 @@ export default class Year extends Component {
     this.entryHandler
       .getSearchMonthsOfYear(searchText, this.props.year, categories)
       .then((result) => {
-        this.setState({
-          months: result,
-        });
+        if(result.success)
+        {
+          this.setState({
+            months: result.message,
+          });
+        }
+        else
+        {
+          Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+        }
       });
     
     this.entryHandler
     .getSearchYearTotal(searchText, this.props.year, categories)
     .then((result)=>{
-      this.setState({
-        amount: result
-      })
+      if(result.success)
+      {
+        this.setState({
+          amount: result.message
+        })
 
-      this.props.passTotal(result);
+        this.props.passTotal(result.message);
+      }
+      else
+      {
+        Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+      }
     })
   };
 
@@ -169,10 +191,21 @@ class Month extends Component {
     let date = `${this.props.month}/${this.props.year}`;
     this.entryHandler
       .getSearchMonthTotal(searchText, date, categories)
-      .then((total) => {
-        this.setState({
-          amount: total,
-        });
+      .then((result) => {
+        if(result.success)
+        {
+          this.setState({
+            amount: result.message,
+          });
+        }
+        else
+        {
+          Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+        }
       });
   };
   componentDidMount() {

@@ -48,20 +48,51 @@ export default class TypeDifference extends Component {
   }
 
   componentDidMount() {
+    let a = []
+    this.state.months.forEach(i=>{a.push(0)})
+    
+    this.setState({incomeData: a,expenseData: a})
+        
     this.state.months.forEach((month) => {
       const monthYear = `${month}/${this.props.year}`;
-      this.entryHandler.getMonthTotal(monthYear, 'expense').then((total) => {
-        total = parseInt(total);
-        this.setState({
-          expenseData: [...this.state.expenseData, total],
-        });
+      this.entryHandler.getMonthTotal(monthYear, 'expense').then((result) => {
+        if(result.success)
+        {
+          total = parseInt(result.message);
+          let tempA = [...this.state.expenseData]
+          tempA[this.state.months.indexOf(month)] = total;
+          this.setState({
+            expenseData: tempA
+          })
+        }
+        else
+        {
+          Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+        }
       });
 
-      this.entryHandler.getMonthTotal(monthYear, 'income').then((total) => {
-        total = parseInt(total);
-        this.setState({
-          incomeData: [...this.state.incomeData, total],
-        });
+      this.entryHandler.getMonthTotal(monthYear, 'income').then((result) => {
+        if(result.success)
+        {
+          total = parseInt(result.message);
+          let tempA = [...this.state.incomeData]
+          tempA[this.state.months.indexOf(month)] = total;
+          this.setState({
+            incomeData: tempA
+          })
+        }
+        else
+        {
+          Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+        }
       });
     });
   }

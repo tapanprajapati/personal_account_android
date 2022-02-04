@@ -19,11 +19,14 @@ export default class AddEntry extends Component {
       console.log(JSON.stringify(result));
       if (result.success) {
         console.log('Entry Added');
+        console.log(result)
         // this.props.navigation.goBack();
         // this.props.route.params.refresh();
 
         if (imagePath != '') {
-          this.cameraImageHandler.saveImage(result.result.insertId, imagePath);
+          this.cameraImageHandler.saveImage(result.id, imagePath).then(result=>{
+            console.log(result)
+          });
         }
         ToastAndroid.show('Entry Added Successfully', ToastAndroid.SHORT);
       } else {

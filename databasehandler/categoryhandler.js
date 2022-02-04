@@ -1,5 +1,6 @@
 import API from "../utils/api";
 
+//TODO: Handle unsuccessful API calls properly
 
 export default class CategoryDBHandler {
   constructor() {
@@ -87,28 +88,6 @@ export default class CategoryDBHandler {
     });
   }
 
-  // categoryExists(categoryTitle, type) {
-  //   return new Promise((resolve, reject) => {
-  //     this.db.transaction((tx) => {
-  //       const getSQL = `SELECT * FROM ${this.table} WHERE ${this.columns.title.title} = ? AND ${this.columns.type.title} = ?`;
-  //       tx.executeSql(
-  //         getSQL,
-  //         [categoryTitle, type.toLowerCase()],
-  //         (tnx, result) => {
-  //           if (result.rows.length == 0) {
-  //             resolve(false);
-  //           } else {
-  //             resolve(true);
-  //           }
-  //         },
-  //         (tnx, error) => {
-  //           console.error(error);
-  //         },
-  //       );
-  //     });
-  //   });
-  // }
-
   getCategories(type) {
     console.log(`Getting categories for ${type}`);
     const getAPI = `${this.api.category.getByType()}${type}`;
@@ -118,36 +97,13 @@ export default class CategoryDBHandler {
       fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
-        const message = json.message;
-        resolve(message)
+        resolve(json)
       }).catch(error=>{
         console.log(error)
+        reject(error)
       })
     })
   }
-
-  // getAllCategories() {
-  //   console.log('Getting Categories');
-  //   return new Promise((resolve, reject) => {
-  //     this.db.transaction((tx) => {
-  //       const getSQL = `SELECT * FROM ${this.table}`;
-
-  //       tx.executeSql(getSQL, [], (tnx, result) => {
-  //         let temp = [];
-
-  //         for (let i = 0; i < result.rows.length; i++) {
-  //           temp.push({
-  //             id: result.rows.item(i).id,
-  //             title: result.rows.item(i).title,
-  //             type: result.rows.item(i).type,
-  //           });
-  //         }
-
-  //         resolve(temp);
-  //       });
-  //     });
-  //   });
-  // }
 
   getCategoryTotal(type) {
     console.log(`Getting total for all categories: ${type}`);
@@ -158,11 +114,11 @@ export default class CategoryDBHandler {
       fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
-        const message = json.message;
-        console.log(message)
-        resolve(message)
+        console.log(json)
+        resolve(json)
       }).catch(error=>{
         console.log(error)
+        reject(error)
       })
     })
   }
@@ -176,11 +132,11 @@ export default class CategoryDBHandler {
       fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
-        const message = json.message;
-        console.log(message)
-        resolve(message)
+        console.log(json)
+        resolve(json)
       }).catch(error=>{
         console.log(error)
+        reject(error)
       })
     })
   }
@@ -194,11 +150,11 @@ export default class CategoryDBHandler {
       fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
-        const message = json.message;
-        console.log(message)
-        resolve(message)
+        console.log(json)
+        resolve(json)
       }).catch(error=>{
         console.log(error)
+        reject(error)
       })
     })
   }
@@ -213,10 +169,11 @@ export default class CategoryDBHandler {
       fetch(getAPI)
       .then((response)=>response.json())
       .then(json=>{
-        const message = json.message;
-        resolve(message)
+        console(json)
+        resolve(json)
       }).catch(error=>{
         console.log(error)
+        reject(error)
       })
     })
   }

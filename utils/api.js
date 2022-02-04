@@ -1,5 +1,4 @@
-import Storage from "../databasehandler/local-storage/Storage";
-
+import LocalStorage from "../databasehandler/local-storage/Storage";
 
 class API{
   constructor()
@@ -10,18 +9,21 @@ class API{
     }
 
     API._instance = this;
-    this.storage = new Storage();
+    this.storage = new LocalStorage();
+    
     this.entry = new EntryAPI(this.storage)
     this.summary = new SummaryAPI(this.storage)
     this.category = new CategoryAPI(this.storage)
     this.user = new UserAPI(this.storage);
+
+    return API._instance;
 
   }
 
 };
 
 class UserAPI{
-  constructor(storage)
+  constructor(_storage)
   {
     if(UserAPI._instance)
     {
@@ -29,7 +31,7 @@ class UserAPI{
     }
 
     UserAPI._instance = this;
-    this.storage = storage;
+    this.storage = _storage;
     return UserAPI._instance;
   }
 
@@ -37,7 +39,7 @@ class UserAPI{
 }
 
 class SummaryAPI{
-  constructor(storage)
+  constructor(_storage)
   {
     if(SummaryAPI._instance)
     {
@@ -45,7 +47,7 @@ class SummaryAPI{
     }
 
     SummaryAPI._instance = this;
-    this.storage = storage;
+    this.storage = _storage;
     return SummaryAPI._instance;
   }
 
@@ -66,7 +68,7 @@ class SummaryAPI{
 }
 
 class EntryAPI{
-  constructor(storage)
+  constructor(_storage)
   {
     if(EntryAPI._instance)
     {
@@ -74,7 +76,7 @@ class EntryAPI{
     }
 
     EntryAPI._instance = this;
-    this.storage = storage;
+    this.storage = _storage;
     return EntryAPI._instance;
   }
 
@@ -83,10 +85,14 @@ class EntryAPI{
   updateEntry(){return `http://${this.storage.IP}/api/entry/update/`}
   deleteEntry(){return `http://${this.storage.IP}/api/entry/`}
   recentEntries(){return `http://${this.storage.IP}/api/entry/recent?limit=`}
+  saveImage(){return `http://${this.storage.IP}/api/entry/image/save/`}
+  getImage(){return `http://${this.storage.IP}/api/entry/image/get?id=`}
+  checkImageExists(){return `http://${this.storage.IP}/api/entry/image/exists?id=`}
+  deleteImage(){return `http://${this.storage.IP}/api/entry/image/delete?id=`}
 }
 
 class CategoryAPI{
-  constructor(storage)
+  constructor(_storage)
   {
     if(CategoryAPI._instance)
     {
@@ -94,7 +100,7 @@ class CategoryAPI{
     }
 
     CategoryAPI._instance = this;
-    this.storage = storage;
+    this.storage = _storage;
     return CategoryAPI._instance;
   }
 

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {Alert, FlatList, StyleSheet, Text, View} from 'react-native';
 import {ListColors} from '../styles/colors';
 import EntryDBHandler from '../databasehandler/entryhandler';
 import Entry from './Entry';
@@ -25,10 +25,21 @@ export default class Date extends Component {
       .getSearchEntriesByDate(searchText, date, this.props.categories)
       .then((result) => {
         console.log(result)
-        this.setState({
-          entries: result,
-        });
-        this.getTotal(result);
+        if(result.success)
+        {
+          this.setState({
+            entries: result.message,
+          });
+          this.getTotal(result.message);
+        }
+        else
+        {
+          Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+        }
       });
   };
 
