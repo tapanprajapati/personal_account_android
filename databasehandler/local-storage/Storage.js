@@ -14,7 +14,7 @@ export default class LocalStorage {
         console.log("Initializing Storage")
 
         LocalStorage._instance = this;
-        this.IP = "192.168.1.10";
+        this.IP = "192.168.1.72";
         this.user = "";
         this.KEYS = {
             IP:"IP",
@@ -47,17 +47,35 @@ export default class LocalStorage {
         return LocalStorage._instance;
     }
 
-    async readValuesFromStorage()
+    readValuesFromStorage()
     {
-        this.IP = await this.storage.load({
-            key: this.KEYS.IP
+        return new Promise((resolve, reject)=>{
+            this.storage.load({
+                key: this.KEYS.IP
+            }).then(IP=>{
+                this.IP = IP;
+                console.log(`IP from Storage: ${this.IP}`)
+                this.storage.load({
+                    key: this.KEYS.USER
+                }).then(user=>{
+                    this.user = user
+                    console.log(`User from Storage: ${this.user}`)
+                    resolve(true)
+                })
+            }).finally(()=>{
+                resolve(true)
+            })
         })
-        console.log(`IP from Storage: ${this.IP}`)
+        // this.IP = await this.storage.load({
+        //     key: this.KEYS.IP
+        // })
 
-        this.user = await this.storage.load({
-            key: this.KEYS.USER
-        })
-        console.log(`User from Storage: ${this.user}`)
+        // console.log(`IP from Storage: ${this.IP}`)
+
+        // this.user = await this.storage.load({
+        //     key: this.KEYS.USER
+        // })
+        // console.log(`User from Storage: ${this.user}`)
     }
 
     setIP(value)

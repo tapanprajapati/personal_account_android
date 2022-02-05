@@ -49,12 +49,6 @@ export default class AccountType extends Component {
             years: result.message,
             refresh: false,
           });
-  
-          setTimeout(() => {
-            this.setState({
-              isLoading: false,
-            });
-          }, 1500);
         }
         else
         {
@@ -64,7 +58,18 @@ export default class AccountType extends Component {
             },
           ]);
         }
-      });
+        setTimeout(() => {
+          this.setState({
+            isLoading: false,
+          });
+        }, 1500);
+      }).finally(error=>{
+        setTimeout(() => {
+          this.setState({
+            isLoading: false,
+          });
+        }, 1500);
+      })
   };
 
   addToTotal = (amount) => {
@@ -126,6 +131,9 @@ export default class AccountType extends Component {
             },
           ]);
         }
+      }).catch(error=>{
+        console.log(error)
+        this.setState({isLoading: false})
       });
 
     this.unsubscribe = this.props.navigation.addListener(

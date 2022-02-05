@@ -34,7 +34,9 @@ export default class DashboardCategoryTotal extends Component
 }
 
 const styles = StyleSheet.create({
-    container: {},
+    container: {
+        overflow:"scroll"
+    },
     title:{
     alignSelf: 'center',
     fontWeight: 'bold',
