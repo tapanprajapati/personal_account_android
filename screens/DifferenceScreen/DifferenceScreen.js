@@ -8,6 +8,7 @@ import {View} from 'react-native';
 import {Icon, Tooltip} from 'react-native-elements';
 import CategoryDBHandler from '../../databasehandler/categoryhandler';
 import EntryDBHandler from '../../databasehandler/entryhandler';
+import UserDBHandler from '../../databasehandler/userhandler';
 import CategoryFilterModal from '../../modals/CategoryFilterModal';
 import {TextBackground} from '../../styles/colors';
 import {global} from '../../styles/global';
@@ -20,6 +21,7 @@ export default class Difference extends Component {
     super(props);
     this.entryHandler = new EntryDBHandler();
     this.categoryHandler = new CategoryDBHandler();
+    this.userHandler = new UserDBHandler();
 
     this.state = {
       years: [],
@@ -31,6 +33,8 @@ export default class Difference extends Component {
       showExpenseFilter: false,
       incomeCategories: [],
       expenseCategories: [],
+      users: [],
+      selectedUser: ""
     };
   }
 
@@ -73,6 +77,24 @@ export default class Difference extends Component {
     });
   };
 
+  getUsers = () => {
+    this.userHandler.getAllUsers().then(result=>{
+      if(result.success)
+      {
+        result.message.push({username: "ALL"})
+        this.setState({users: result.message, selectedUser: "ALL"})
+      }
+      else
+      {
+        Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+      }
+    })
+  }
+
   getCategories = (type) => {
     this.categoryHandler.getCategories(type).then((result) => {
       if(result.success)
@@ -110,6 +132,7 @@ export default class Difference extends Component {
 
   componentDidMount() {
     this.getYears();
+    this.getUsers();
 
     this.getCategories('income');
     this.getCategories('expense');
@@ -130,23 +153,26 @@ export default class Difference extends Component {
     // });
   };
 
-  saveIncomeCategories = (categories) => {
+  saveIncomeCategories = (categories,user="ALL") => {
+    console.log("CategoryModalClosed: "+user)
     this.setState({
       incomeCategories: categories,
       edit: true,
       income: 0,
       expense: 0,
+      selectedUser: user
     });
 
     setTimeout(this.getYears, 10);
   };
 
-  saveExpenseCategories = (categories) => {
+  saveExpenseCategories = (categories,user="ALL") => {
     this.setState({
       expenseCategories: categories,
       edit: true,
       income: 0,
       expense: 0,
+      selectedUser: user
     });
 
     setTimeout(this.getYears, 10);
@@ -202,6 +228,7 @@ export default class Difference extends Component {
                     expenseCategories={this.state.expenseCategories}
                     addToIncome={this.addToIncome}
                     edit={this.state.edit}
+                    selectedUser={this.state.selectedUser}
                     addToExpense={this.addToExpense}></YearDifference>
                 );
               }}></FlatList>
@@ -227,6 +254,8 @@ export default class Difference extends Component {
           <CategoryFilterModal
             categories={this.state.incomeCategories}
             saveChanges={this.saveIncomeCategories}
+            users={this.state.users}
+            selectedUser={this.state.selectedUser}
             close={() => this.setState({showIncomeFilter: false})}
           />
         </Modal>
@@ -238,6 +267,8 @@ export default class Difference extends Component {
           <CategoryFilterModal
             categories={this.state.expenseCategories}
             saveChanges={this.saveExpenseCategories}
+            users={this.state.users}
+            selectedUser={this.state.selectedUser}
             close={() => this.setState({showExpenseFilter: false})}
           />
         </Modal>

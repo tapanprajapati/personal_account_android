@@ -7,9 +7,21 @@ import {dimensions} from '../utils/constants';
 export default class CategoryForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      categoryTitle: '',
-    };
+
+    if(props.categoryTitle)
+    {
+      this.state = {
+        categoryTitle: props.categoryTitle,
+        allowance: `${props.allowance}`
+      };
+    }
+    else
+    {
+      this.state = {
+        categoryTitle: '',
+        allowance: "0"
+      };
+    }
   }
 
   addCategory = () => {
@@ -30,7 +42,12 @@ export default class CategoryForm extends Component {
         //     },
         //   ]);
         // } else {
-          this.props.submitData(input);
+          let allowance = this.state.allowance;
+          if(!allowance)
+          {
+            allowance = '0';
+          }
+          this.props.submitData(input, allowance);
           this.props.closeModal();
         // }
       // });
@@ -43,8 +60,18 @@ export default class CategoryForm extends Component {
         <View style={styles.inputHolder}>
           <Text style={styles.inputText}>{this.props.title}</Text>
           <TextInput
+            value={this.state.categoryTitle}
             onChangeText={(text) => this.setState({categoryTitle: text})}
             style={[styles.inputElement, styles.textInput]}></TextInput>
+        </View>
+        <View style={styles.inputHolder}>
+          <Text style={styles.inputText}>Allowance</Text>
+          <TextInput
+            onChangeText={(text) => this.setState({allowance: text})}
+            style={[styles.inputElement, styles.textInput]}
+            value={this.state.allowance}
+            placeholder="0 indicates no restriction"
+            keyboardType='numeric'></TextInput>
         </View>
         <View style={styles.inputHolder}>
           <Button

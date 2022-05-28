@@ -26,6 +26,7 @@ export default class CategoryDBHandler {
           title: category.title,
           type: category.type,
           groupid: "1640932481964",
+          allowance: category.allowance
         })
       })
       .then((response)=>response.json())
@@ -37,10 +38,10 @@ export default class CategoryDBHandler {
     });
   }
 
-  updateCategory(newTitle, id,type) {
+  updateCategory(newTitle, allowance=0, id, type) {
     return new Promise((resolve, reject) => {
       console.log('Update category: '+id);
-      const updateAPI = `${this.api.category.rename()}${id}?title=${newTitle}&type=${type}&groupid=1640932481964`;
+      const updateAPI = `${this.api.category.update()}${id}?title=${newTitle}&type=${type}&groupid=1640932481964&allowance=${allowance}`;
       console.log(updateAPI);
       fetch(updateAPI,{
         method: 'put',

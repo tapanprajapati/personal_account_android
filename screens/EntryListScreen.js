@@ -28,6 +28,8 @@ export default class EntryList extends Component {
       total: 0,
       imageURL: '',
       showImage: false,
+      users: this.props.route.params.users,
+      selectedUser: this.props.route.params.selectedUser,
     };
   }
 
@@ -58,7 +60,7 @@ export default class EntryList extends Component {
       });
 
     this.entryHandler
-      .getSearchMonthTotal(searchText, date, categories)
+      .getSearchMonthTotal(searchText, date, categories, this.state.selectedUser)
       .then((result) => {
         if(result.success)
         {
@@ -112,13 +114,16 @@ export default class EntryList extends Component {
     // this.getDates();
   };
 
-  saveCategories = (categories) => {
+  saveCategories = (categories, user="ALL") => {
     const cats = getSelectedCategories(categories);
     this.setState({
       selectedCategories: cats,
+      selectedUser: user,
       edit: true,
     });
-    this.getDates(this.state.searchText, cats);
+
+    setTimeout(()=>{
+      this.getDates(this.state.searchText, cats)},10)
   };
 
   render() {
@@ -150,6 +155,7 @@ export default class EntryList extends Component {
                 categories={this.state.selectedCategories}
                 edit={this.state.edit}
                 openImage={this.openImage}
+                selectedUser={this.state.selectedUser}
               />
             );
           }}></FlatList>
@@ -166,6 +172,8 @@ export default class EntryList extends Component {
             categories={this.props.route.params.categories}
             saveChanges={this.saveCategories}
             close={() => this.setState({showCategoryModal: false})}
+            users={this.state.users}
+            selectedUser={this.state.selectedUser}
           />
         </Modal>
         <CameraImagePreviewModal

@@ -171,9 +171,9 @@ export default class EntryForm extends Component {
     );
   };
 
-  addCategory = (category) => {
+  addCategory = (category, allowance) => {
     this.categoryHandler
-      .addCategory({title: category, type: this.state.selectedType})
+      .addCategory({title: category, type: this.state.selectedType, allowance: allowance})
       .then((result) => {
         if (result.success) {
           this.getCategories(this.state.selectedType);

@@ -17,6 +17,8 @@ export default class Year extends Component {
       selectedCats: getSelectedCategories(this.props.categories),
       posY: new Animated.Value(-50),
       tagPosX: new Animated.Value(-100),
+      users: this.props.users,
+      selectedUser: this.props.selectedUser
     };
 
     this.entryHandler = new EntryDBHandler();
@@ -43,7 +45,7 @@ export default class Year extends Component {
       });
     
     this.entryHandler
-    .getSearchYearTotal(searchText, this.props.year, categories)
+    .getSearchYearTotal(searchText, this.props.year, categories,this.props.selectedUser)
     .then((result)=>{
       if(result.success)
       {
@@ -168,6 +170,8 @@ export default class Year extends Component {
                 edit={this.props.edit}
                 categories={this.props.categories}
                 navigation={this.props.navigation}
+                users={this.state.users}
+                selectedUser={this.props.selectedUser}
               />
             );
           }}
@@ -190,7 +194,7 @@ class Month extends Component {
   getMonthTotal = (searchText, categories) => {
     let date = `${this.props.month}/${this.props.year}`;
     this.entryHandler
-      .getSearchMonthTotal(searchText, date, categories)
+      .getSearchMonthTotal(searchText, date, categories, this.props.selectedUser)
       .then((result) => {
         if(result.success)
         {
@@ -247,6 +251,8 @@ class Month extends Component {
       month: this.props.month,
       categories: this.props.categories,
       searchText: this.props.searchText,
+      users: this.props.users,
+      selectedUser: this.props.selectedUser
     });
   };
 

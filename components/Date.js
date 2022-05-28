@@ -22,7 +22,7 @@ export default class Date extends Component {
   getEntries = (searchText = '') => {
     let date = `${this.props.date}/${this.props.month}/${this.props.year}`;
     this.entryHandler
-      .getSearchEntriesByDate(searchText, date, this.props.categories)
+      .getSearchEntriesByDate(searchText, date, this.props.categories, this.props.selectedUser)
       .then((result) => {
         console.log(result)
         if(result.success)

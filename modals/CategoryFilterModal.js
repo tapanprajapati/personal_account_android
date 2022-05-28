@@ -1,3 +1,4 @@
+import { Picker } from '@react-native-picker/picker';
 import React, {Component} from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {Icon, Button, CheckBox} from 'react-native-elements';
@@ -8,7 +9,9 @@ export default class CategoryFilterModal extends Component {
     super(props);
     this.state = {
       categories: this.props.categories,
+      users: this.props.users,
       checkAll: true,
+      selectedUser: this.props.selectedUser
     };
   }
 
@@ -26,7 +29,7 @@ export default class CategoryFilterModal extends Component {
   };
 
   saveChanges = () => {
-    this.props.saveChanges(this.state.categories);
+    this.props.saveChanges(this.state.categories, this.state.selectedUser);
 
     this.props.close();
   };
@@ -52,6 +55,27 @@ export default class CategoryFilterModal extends Component {
           containerStyle={styles.closeIcon}
         />
         <Text style={styles.title}>Filter Category</Text>
+        {
+          this.props.users && (
+
+            <Picker
+              style={[styles.dropDown]}
+              mode="dropdown"
+              itemStyle={{fontSize: dimensions.entryForm.input.text}}
+              onValueChange={(value, index) => {
+                this.setState({selectedUser: value})
+              }}
+              selectedValue={this.state.selectedUser}>
+              {
+                this.state.users.map(user=>{
+                  return(
+                    <Picker.Item label={user.username} value={user.username} key={user.username} />
+                  )
+                })
+              }
+            </Picker>
+          )
+        }
         <CheckBox
           containerStyle={{margin: 0, padding: 5}}
           checked={this.state.checkAll}

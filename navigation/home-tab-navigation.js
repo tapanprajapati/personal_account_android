@@ -74,6 +74,13 @@ export default function HomeTabNavigation(props) {
               }}>
               Configs
             </MenuItem>
+            <MenuItem
+              onPress={() => {
+                props.navigation.navigate('Report');
+                hide();
+              }}>
+              Report
+            </MenuItem>
           </Menu>
           {/* <Icon
                   containerStyle={{marginRight: 10}}

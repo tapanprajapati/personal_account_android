@@ -28,6 +28,7 @@ export default class MonthDifference extends Component {
         '',
         date,
         getSelectedCategories(this.props.incomeCategories),
+        this.props.selectedUser
       )
       .then((result) => {
         if(result.success)
@@ -55,6 +56,7 @@ export default class MonthDifference extends Component {
         '',
         date,
         getSelectedCategories(this.props.expenseCategories),
+        this.props.selectedUser
       )
       .then((result) => {
         if(result.success)

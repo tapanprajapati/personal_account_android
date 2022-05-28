@@ -31,8 +31,9 @@ export default class Category extends Component {
 
   render() {
     return (
-      <View style={[styles.container, global.shadow]}>
+      <View style={[styles.container]}>
         <Text style={styles.title}>{this.props.data.title}</Text>
+        <Text style={styles.allowance}>{this.props.data.allowance}</Text>
         <View style={styles.controlList}>
           <Icon
             name="create"
@@ -66,8 +67,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     padding: 8,
-    margin: 4,
-    borderRadius: 15,
+    margin: 2,
+    // borderRadius: 15,
     backgroundColor: 'white',
   },
   controlList: {
@@ -76,8 +77,15 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    flex: 6,
+    flex: 4,
     fontWeight: 'bold',
+    // color: 'steelblue',
+  },
+  allowance: {
+    fontSize: 14,
+    flex: 2,
+    // paddingLeft: 5,
+    // fontWeight: 'bold',
     // color: 'steelblue',
   },
   controlButton: {

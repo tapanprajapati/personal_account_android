@@ -17,6 +17,8 @@ export default class DashboardScreen extends Component {
       date: new Date(),
       isDatePickerVisible: false,
       incomeData: [],
+      incomeYTD: [],
+      expenseYTD: [],
       expenseData: [],
       incomeTotal: 0,
       expenseTotal: 0
@@ -63,6 +65,34 @@ export default class DashboardScreen extends Component {
             this.setState({
               expenseData: data,
               expenseTotal: t
+            })
+          }
+        }
+      }
+      else
+      {
+        Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+      }
+    })
+
+    this.categoryHandler.getAllCategoriesTotalYear(type,this.state.date.getFullYear()).then(result=>{
+      if(result.success)
+      {
+        const data = result.message
+        if(type==="income")
+        {
+          this.setState({
+            incomeYTD: data,
+          })
+        }
+        else{
+          {
+            this.setState({
+              expenseYTD: data,
             })
           }
         }
@@ -139,6 +169,7 @@ export default class DashboardScreen extends Component {
             <DashboardCategoryTotal
               type={"Income"}
               data={this.state.incomeData}
+              YTD={this.state.incomeYTD}
             />
           </View>
 
@@ -146,6 +177,7 @@ export default class DashboardScreen extends Component {
             <DashboardCategoryTotal
               type={"Expense"}
               data={this.state.expenseData}
+              YTD={this.state.expenseYTD}
             />
           </View>
         </View>
@@ -201,7 +233,7 @@ const styles = StyleSheet.create({
 
   categoryContainer: {
     flex: 1,
-    flexDirection: 'row',
+    // flexDirection: 'row',
   },
   categoryTotal: {
     flex: 1,

@@ -5,6 +5,7 @@ import {Icon, SearchBar} from 'react-native-elements';
 import Year from '../components/Year';
 import CategoryDBHandler from '../databasehandler/categoryhandler';
 import EntryDBHandler from '../databasehandler/entryhandler';
+import UserDBHandler from '../databasehandler/userhandler';
 import CategoryFilterModal from '../modals/CategoryFilterModal';
 import LoadingSpinner from '../modals/LoadingSpinner';
 import {ButtonColors} from '../styles/colors';
@@ -24,9 +25,12 @@ export default class AccountType extends Component {
       edit: false,
       refresh: false,
       isLoading: true,
+      users: [],
+      selectedUser: "ALL"
     };
     this.entryHandler = new EntryDBHandler();
     this.categoryHandler = new CategoryDBHandler();
+    this.userHandler = new UserDBHandler();
   }
 
   getYears = (searchText = this.state.searchText) => {
@@ -136,12 +140,28 @@ export default class AccountType extends Component {
         this.setState({isLoading: false})
       });
 
+    this.userHandler.getAllUsers().then(result=>{
+      if(result.success)
+      {
+        result.message.push({username: "ALL"})
+        this.setState({users: result.message})
+      }
+      else
+        {
+          Alert.alert('ERROR', `${result.message.toUpperCase()}`, [
+            {
+              text: 'Close',  
+            },
+          ]);
+        }
+    })
+
     this.unsubscribe = this.props.navigation.addListener(
       'focus',
       this.handleStateChange,
     );
   }
-
+handleStateChange
   componentWillUnmount() {
     this.unsubscribe();
     console.log('Unmounted');
@@ -155,12 +175,14 @@ export default class AccountType extends Component {
     }
   };
 
-  saveCategories = (categories) => {
+  saveCategories = (categories, user="") => {
     this.setState({
       categories: categories,
+      selectedUser: user,
       edit: true,
     });
 
+    console.log("Selected user: "+user)
     setTimeout(this.getYears, 10);
   };
 
@@ -245,6 +267,8 @@ export default class AccountType extends Component {
                   year={item}
                   edit={this.state.edit}
                   categories={this.state.categories}
+                  users={this.state.users}
+                  selectedUser={this.state.selectedUser}
                   navigation={this.props.navigation}
                   passTotal={this.addToTotal}
                   searchText={this.state.searchText}
@@ -269,6 +293,8 @@ export default class AccountType extends Component {
             categories={this.state.categories}
             saveChanges={this.saveCategories}
             close={() => this.setState({showCategoryModal: false})}
+            users={this.state.users}
+            selectedUser={this.state.selectedUser}
           />
         </Modal>
         <LoadingSpinner isLoading={this.state.isLoading} />

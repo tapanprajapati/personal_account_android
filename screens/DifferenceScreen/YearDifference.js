@@ -101,6 +101,7 @@ export default class YearDifference extends Component {
                 month={item}
                 year={this.props.year}
                 edit={this.props.edit}
+                selectedUser={this.props.selectedUser}
                 incomeCategories={this.props.incomeCategories}
                 expenseCategories={this.props.expenseCategories}
                 addToIncome={this.addToIncome}

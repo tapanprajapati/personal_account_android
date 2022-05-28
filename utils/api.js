@@ -107,7 +107,7 @@ class CategoryAPI{
 
   getByType() {return `http://${this.storage.IP}/api/category/1640932481964?type=`}
   create() {return `http://${this.storage.IP}/api/category/create/`}
-  rename() {return `http://${this.storage.IP}/api/category/rename/`}
+  update() {return `http://${this.storage.IP}/api/category/update/`}
   delete() {return `http://${this.storage.IP}/api/category/`}
   transfer() {return `http://${this.storage.IP}/api/category/transfer/`}
 }

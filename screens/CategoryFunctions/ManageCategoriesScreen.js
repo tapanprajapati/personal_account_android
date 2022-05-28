@@ -80,9 +80,9 @@ export default class ManageCategoriesScreen extends Component {
       });
   };
 
-  updateCategory = (title) => {
+  updateCategory = (title, allowance) => {
     this.categoryHandler
-      .updateCategory(title, this.state.selectedCategory.id,this.state.selected)
+      .updateCategory(title,  allowance, this.state.selectedCategory.id,this.state.selected)
       .then((result) => {
         if (result.success) {
           ToastAndroid.show(
@@ -205,6 +205,8 @@ export default class ManageCategoriesScreen extends Component {
                 });
               }}
               buttonTitle="Update"
+              allowance={this.state.selectedCategory.allowance}
+              categoryTitle={this.state.selectedCategory.title}
             />
           </View>
         </Modal>
@@ -289,7 +291,7 @@ const styles = StyleSheet.create({
     flex: 4,
   },
   categoryList: {
-    marginHorizontal: 60,
+    marginHorizontal: 30,
   },
   categoryModal: {
     padding: 20,

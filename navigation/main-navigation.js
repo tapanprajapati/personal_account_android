@@ -15,6 +15,7 @@ import MonthsGraphScreen from '../screens/Graphs/MonthsGraphScreen';
 import ManageCategoriesScreen from '../screens/CategoryFunctions/ManageCategoriesScreen';
 import ConfigScreen from '../screens/Config/ConfigScreen';
 import LocalStorage from '../databasehandler/local-storage/Storage';
+import ReportScreen from '../screens/Report/ReportScreen';
 
 export default function HomeNavigation() {
   const [done, isDone] = useState(false)
@@ -125,6 +126,17 @@ export default function HomeNavigation() {
           component={ConfigScreen}
           options={{
             title: 'Configs',
+            headerTitleContainerStyle: {
+              left: 45,
+            },
+          }}
+        />
+
+        <Stack.Screen
+          name="Report"
+          component={ReportScreen}
+          options={{
+            title: 'Report',
             headerTitleContainerStyle: {
               left: 45,
             },

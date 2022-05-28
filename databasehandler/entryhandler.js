@@ -219,8 +219,8 @@ export default class EntryDBHandler {
   }
 
   
-  getSearchEntriesByDate(searchString, date, categories) {
-    const getAPI = `${this.api.entry.getEntries()}search=${searchString}&categories=${categories}&date=${date}`
+  getSearchEntriesByDate(searchString, date, categories, user="ALL") {
+    const getAPI = `${this.api.entry.getEntries()}search=${searchString}&categories=${categories}&date=${date}&user=${user}`
     return new Promise((resolve, reject) => {
       console.log('Fetching entries from Database');
       console.log(getAPI)
@@ -243,8 +243,8 @@ export default class EntryDBHandler {
     });
   }
   
-  getSearchYearTotal(searchString, year, categories) {
-    const getAPI = `${this.api.summary.getYearTotal()}search=${searchString}&categories=${categories}&date=${year}`
+  getSearchYearTotal(searchString, year, categories, user="ALL") {
+    const getAPI = `${this.api.summary.getYearTotal()}search=${searchString}&categories=${categories}&date=${year}&user=${user}`
     return new Promise((resolve, reject) => {
       console.log('Fetching year total from Database');
       console.log(getAPI)
@@ -260,8 +260,8 @@ export default class EntryDBHandler {
     });
   }
 
-  getSearchMonthTotal(searchString, monthAndYear, categories) {
-    const getAPI = `${this.api.summary.getMonthTotal()}search=${searchString}&categories=${categories}&date=${monthAndYear}`
+  getSearchMonthTotal(searchString, monthAndYear, categories, user="ALL") {
+    const getAPI = `${this.api.summary.getMonthTotal()}search=${searchString}&categories=${categories}&date=${monthAndYear}&user=${user}`
     return new Promise((resolve, reject) => {
       console.log('Fetching month total from Database');
       console.log(getAPI)
