@@ -11,7 +11,7 @@ export default class CameraModal extends Component {
 
   takePicture = () => {
     let options = {
-      quality: 0.85,
+      quality: 0.10,
       fixOrientation: true,
       forceUpOrientation: true,
     };

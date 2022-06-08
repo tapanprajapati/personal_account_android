@@ -67,10 +67,10 @@ export default class EntryForm extends Component {
         selectedUser: props.entry.username
       };
 
-      this.cameraImageHandler.imageExists(props.entry.id).then((result) => {
-        if (result.success) {
+      this.cameraImageHandler.getImageURL(props.entry.id).then((result) => {
+        if (result) {
           this.setState({
-            imagePath: this.cameraImageHandler.getImageURL(props.entry.id),
+            imagePath: result,
           });
         }
       });

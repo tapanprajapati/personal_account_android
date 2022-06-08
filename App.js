@@ -11,6 +11,10 @@ import {
   StyleSheet,
 } from 'react-native';
 import HomeNavigation from './navigation/main-navigation';
+import Amplify from 'aws-amplify';
+import awsconfig from './src/aws-exports'
+
+Amplify.configure(awsconfig);
 
 const App = () => {
   return <HomeNavigation />;

@@ -58,11 +58,11 @@ export default class ConfigScreen extends Component {
             <View style={styles.main}>
                 <View style={styles.container}>
                     <View style={styles.inputHolder}>
-                        <Text style={styles.inputText}>IP</Text>
+                        <Text style={styles.inputText}>Host</Text>
                         <TextInput
                         value={this.state.IP}
                         style={[styles.inputElement, styles.textInput]}
-                        keyboardType="numeric"
+                        keyboardType="default"
                         onChangeText={(text)=>{this.setState({IP: text})}
                         }></TextInput>
                     </View>

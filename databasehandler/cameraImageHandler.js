@@ -1,5 +1,6 @@
 import API from "../utils/api";
 import RNFS from "react-native-fs"
+import { Storage } from "aws-amplify"
 
 export default class CameraImageHandler {
 
@@ -15,8 +16,15 @@ export default class CameraImageHandler {
     return CameraImageHandler._instance;
   }
 
-  getImageURL(id) {
-      return this.api.entry.getImage()+id;
+  async getImageURL(id) {
+      const url = await Storage.get(`images/${id}.jpg`);
+      const json = await fetch(url)
+
+      if(json.status == 404)
+      {
+        return null;
+      }
+      return url;
   }
 
   async saveImage(id, imagePath) {
@@ -27,58 +35,66 @@ export default class CameraImageHandler {
     //   await this.createImageDirectory();
     // }
 
-    return new Promise((resolve,reject)=>{
-      // RNFS.copyFile(imagePath, `${this.imageDirectoryPath}/${id}.jpg`);
-      // RNFS.readFile(imagePath,"base64").then(image=>{
-        let formData = new FormData();
-        formData.append("name",id);
-        formData.append("image",{uri: imagePath, name: `${id}.jpg`, type: 'image/jpg'})
+    // RNFS.readFile(imagePath,"base64").then(image=>{
+    const response = await fetch(imagePath);
+    const blob = await response.blob();
+
+    console.log(blob)
+
+    return Storage.put(`images/${id}.jpg`, blob, {
+      contentType: "image/jpeg", // contentType is optional
+    })
+    // return new Promise((resolve,reject)=>{
+    //   // RNFS.copyFile(imagePath, `${this.imageDirectoryPath}/${id}.jpg`);
+    //   // RNFS.readFile(imagePath,"base64").then(image=>{
+    //     // let formData = new FormData();
+    //     // formData.append("name",id);
+    //     // formData.append("image",{uri: imagePath, name: `${id}.jpg`, type: 'image/jpg'})
   
-        console.log(formData)
-        fetch(this.api.entry.saveImage(),{
-          method: 'POST',
-          headers: {
-            Accept: '*/*',
-            'Content-Type': 'multipart/form-data'
-          },
-          body:formData
-        })
-        .then((response)=>response.json())
-        .then(json=>{
-          resolve(json)
-        })
-        .catch(error=>
-          reject(error))
-      });
+    //     // console.log(formData)
+    //     // fetch(this.api.entry.saveImage(),{
+    //     //   method: 'POST',
+    //     //   headers: {
+    //     //     Accept: '*/*',
+    //     //     'Content-Type': 'multipart/form-data'
+    //     //   },
+    //     //   body:formData
+    //     // })
+    //     // .then((response)=>response.json())
+    //     // .then(json=>{
+    //     //   resolve(json)
+    //     // })
+    //     // .catch(error=>
+    //     //   reject(error))
+
+        
+    //     Storage.put(`${id}.jpg`, blob, {
+    //       contentType: "image/jpeg", // contentType is optional
+    //     }).then(result => {
+    //       console.log(result)
+    //       resolve(result)
+    //     }).catch(error=>{
+    //       reject(error)
+    //     });
+    //   });
     // })
   }
 
-  async imageExists(id) {
-    return new Promise((resolve, reject) => {
-      console.log('Check if image exists for ID '+id);
-      fetch(`${this.api.entry.checkImageExists()}${id}`)
-      .then((response)=>response.json())
-      .then(json=>{
-        resolve(json)
-      })
-      .catch(error=>
-        reject(error))
-    });
-  }
+  // async imageExists(id) {
+  //   return new Promise((resolve, reject) => {
+  //     console.log('Check if image exists for ID '+id);
+  //     fetch(`${this.api.entry.checkImageExists()}${id}`)
+  //     .then((response)=>response.json())
+  //     .then(json=>{
+  //       resolve(json)
+  //     })
+  //     .catch(error=>
+  //       reject(error))
+  //   });
+  // }
 
   async deleteImage(id) {
-    return new Promise((resolve, reject) => {
-    console.log('Delete image '+id);
-    fetch(`${this.api.entry.deleteImage()}${id}`,{
-      method: 'DELETE',
-    })
-    .then((response)=>response.json())
-    .then(json=>{
-      resolve(json)
-    })
-    .catch(error=>
-      reject(error))
-  });
+    await Storage.remove(`images/${id}.jpg`);
   }
 
   async updateImage(id, imagePath) {

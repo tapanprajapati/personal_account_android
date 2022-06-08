@@ -27,9 +27,9 @@ router
   .route("/:id")
   .delete(validate(entrySchema.deleteEntry), entryController.deleteEntry);
 
-router.route("/image/save").post(entryController.saveImage);
-router.route("/image/get").get(entryController.retrieveImage);
-router.route("/image/exists").get(entryController.checkImageExists);
-router.route("/image/delete").delete(entryController.deleteImage);
+// router.route("/image/save").post(entryController.saveImage);
+// router.route("/image/get").get(entryController.retrieveImage);
+// router.route("/image/exists").get(entryController.checkImageExists);
+// router.route("/image/delete").delete(entryController.deleteImage);
 
 module.exports = router;

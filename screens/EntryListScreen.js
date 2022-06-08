@@ -77,8 +77,7 @@ export default class EntryList extends Component {
       });
   };
 
-  openImage = (id) => {
-    const path = this.cameraImageHandler.getImageURL(id);
+  openImage = (path) => {
     this.setState({
       showImage: true,
       imageURL: path,

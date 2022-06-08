@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start-env": "node -r dotenv/config index.js",
     "start": "node index.js"
   },
   "author": "Tapan Prajapati",
@@ -12,6 +13,7 @@
   "dependencies": {
     "body-parser": "^1.19.1",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
     "express": "^4.17.2",
     "express-fileupload": "^1.3.1",
     "express-validation": "^3.0.8",

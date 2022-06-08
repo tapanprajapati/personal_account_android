@@ -1,8 +1,8 @@
 module.exports = {
-  host: "localhost",
-  user: "tapan",
-  password: "Tapan@24598",
-  database: "personalaccount",
-  port: 3306,
+  host: process.env.RDS_HOSTNAME,
+  user: process.env.RDS_USERNAME,
+  password: process.env.RDS_PASSWORD,
+  database: process.env.RDS_DATABASE,
+  port: process.env.RDS_PORT,
   ssl: true,
 };

@@ -16,10 +16,10 @@ export default class Entry extends Component {
     this.cameraHandler = new CameraImageHandler();
 
     this.state = {
-      imageExists: false,
+      imageURL: null,
     };
 
-    this.imageExists();
+    this.getImageURL();
   }
 
   confirmAndDelete = () => {
@@ -59,15 +59,13 @@ Type: ${entry.category.type.toUpperCase()}`;
     ]);
   };
 
-  imageExists = () => {
+  getImageURL = () => {
 
-    this.cameraHandler.imageExists(this.props.entry.id).then(response=>{
-      if(response.success)
-      {
-        this.setState({
-          imageExists: true
-        })
-      }
+    const id = this.props.entry.id
+    this.cameraHandler.getImageURL(id).then(url=>{
+      this.setState({
+        imageURL: url
+      })
     })
   };
 
@@ -75,14 +73,14 @@ Type: ${entry.category.type.toUpperCase()}`;
     return (
       <View style={styles.container}>
         <View style={styles.controlButtonsContainer}>
-          {this.state.imageExists && (
+          {this.state.imageURL && (
             <Icon
               name="photo-camera"
               type="material"
               size={this.controlButtonSize}
               containerStyle={styles.controlButton}
               onPress={() => {
-                this.props.openImage(this.props.entry.id);
+                this.props.openImage(this.state.imageURL);
               }}
               color={ButtonColors.entryControl.edit}></Icon>
           )}
