@@ -1,9 +1,8 @@
 const mysql = require("mysql");
-const Database = require("../../config/database");
-const dbConfig = require("../../app-data/dbConfig");
+const DatabaseFactory = require("../../config/databaseFactory")
 const queries = require("../../app-data/queries");
 
-const database = new Database(dbConfig);
+const database = DatabaseFactory.getInstance();
 
 function SummaryService() {}
 

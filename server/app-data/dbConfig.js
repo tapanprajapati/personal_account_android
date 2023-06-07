@@ -5,4 +5,5 @@ module.exports = {
   database: process.env.RDS_DATABASE,
   port: process.env.RDS_PORT,
   ssl: true,
+  connectionLimit: process.env.RDS_CONNECTION_LIMIT
 };
