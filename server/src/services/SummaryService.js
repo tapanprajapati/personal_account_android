@@ -185,12 +185,20 @@ SummaryService.prototype.getYears = async function getYears(query) {
   try {
     let result = await database.query(get);
 
-    let years = result.map((year) => year.year);
+    const transformed = Object.values(
+      result.reduce((acc, { year, month, total }) => {
+        if (!acc[year]) {
+          acc[year] = { year, months: [] };
+        }
+        acc[year].months.push({ month, total });
+        return acc;
+      }, {})
+    );
 
     return {
       success: true,
       statusCode: 200,
-      message: years,
+      message: transformed,
     };
   } catch (error) {
     return {

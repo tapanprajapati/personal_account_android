@@ -49,7 +49,7 @@ module.exports = {
     getAllYears:
       "select distinct DATE_FORMAT(`date`,'%Y') as year from entries order by year desc",
     getYears:
-      "select distinct DATE_FORMAT(`date`,'%Y') as year from entries where title like ? and categoryid in (?) order by year desc",
+      "select DATE_FORMAT(`date`,'%Y') as `year`, DATE_FORMAT(`date`,'%m') as `month`, sum(amount) as total from entries where title like ? and categoryid in (?) group by DATE_FORMAT(`date`,'%Y/%m') order BY DATE_FORMAT(`date`,'%Y/%m') desc",
     getAllMonths:
       "select distinct DATE_FORMAT(`date`,'%m') as month from entries where DATE_FORMAT(`date`,'%Y') = ? order by month",
     getMonths:
