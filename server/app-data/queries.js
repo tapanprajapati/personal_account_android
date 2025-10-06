@@ -27,7 +27,7 @@ module.exports = {
   },
   entry: {
     getEntriesOfDate:
-      "select e.id, e.title, e.`description`, e.amount, DATE_FORMAT(e.`date`, '%Y-%m-%d') as `date`, e.categoryid as cId, e.username, c.title as cTitle, c.type as cType from entries as e,categories as c where e.categoryid=c.id and e.title like ? and DATE_FORMAT(e.`date`, '%d/%m/%Y') = ? and e.categoryid in (?)",
+      "select e.id, e.title, e.`description`, e.amount, DATE_FORMAT(e.`date`, '%d') as `date`, e.categoryid as cId, e.username, c.title as cTitle, c.type as cType from entries as e,categories as c where e.categoryid=c.id and e.title like ? and DATE_FORMAT(e.`date`, '%m/%Y') = ? and e.categoryid in (?) order by `date`",
     createEntry: "insert into entries values(?,?,?,?,?,?,?)",
     updateEntry:
       "update entries set title = ?, description = ?, amount = ?, date = ?, categoryid = ?, username = ? where id = ?",
