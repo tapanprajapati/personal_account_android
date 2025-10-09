@@ -46,9 +46,9 @@ export function getSelectedCategories(categories) {
   categories.forEach((category) => {
     if (category.status) {
       selectedCats.push(category.category.id);
+    } else {
     }
   });
-
   return selectedCats;
 }
 

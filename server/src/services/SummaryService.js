@@ -193,7 +193,11 @@ SummaryService.prototype.getYears = async function getYears(query) {
         acc[year].months.push({ month, total });
         return acc;
       }, {})
-    );
+    )
+    .map(yearObj => ({
+      ...yearObj,
+      months: yearObj.months.sort((a, b) => a.month - b.month) // sort months descending
+    })).sort((a, b) => b.year - a.year);;
 
     return {
       success: true,
