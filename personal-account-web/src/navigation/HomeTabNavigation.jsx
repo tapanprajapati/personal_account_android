@@ -25,9 +25,6 @@ export default function HomeTabNavigation() {
       case 'recent':
         navigate('/recent-entries');
         break;
-      case 'graphs':
-        navigate('/graphs');
-        break;
       case 'categories':
         navigate('/manage-categories');
         break;
@@ -61,13 +58,6 @@ export default function HomeTabNavigation() {
             title="Recent Entries"
           >
             📋
-          </button>
-          <button 
-            className="header-btn"
-            onClick={() => handleMenuAction('graphs')}
-            title="Graphs"
-          >
-            📊
           </button>
           <div className="dropdown">
             <button className="header-btn dropdown-btn" title="More Options">

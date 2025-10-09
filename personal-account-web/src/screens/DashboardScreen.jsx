@@ -5,7 +5,6 @@ import { getMonthName } from '../utils/converters';
 import MonthYearPicker from '../modals/MonthYearPicker';
 import DashboardCategoryTotal from '../components/DashboardCategoryTotal';
 import CategoryDBHandler from '../databasehandler/categoryhandler';
-import { HeaderColors } from '../styles/colors';
 import './DashboardScreen.css';
 
 export default function DashboardScreen() {
@@ -85,32 +84,22 @@ export default function DashboardScreen() {
 
   return (
     <Container>
-      <div className="refresh-container">
-        <button
-          className="refresh-btn"
-          onClick={refresh}
-          title="Refresh"
-        >
-          🔄
-        </button>
-      </div>
-      
       <div className="dashboard-first">
         <div
           className="date-container"
           onClick={() => setIsDatePickerVisible(true)}
         >
-          <div className="month-container">
+          {/* <div className="month-container"> */}
             <span className="month">
               {getMonthName(
                 date.getMonth() + 1,
                 'short',
               ).toUpperCase()}
             </span>
-          </div>
-          <div className="year-container">
+          {/* </div> */}
+          {/* <div className="year-container"> */}
             <span className="year">{date.getFullYear()}</span>
-          </div>
+          {/* </div> */}
         </div>
 
         <div className="pie-chart">
@@ -119,7 +108,7 @@ export default function DashboardScreen() {
       </div>
 
       <div className="category-container">
-        <div className="category-total">
+        <div className="category">
           <DashboardCategoryTotal
             type={"Income"}
             data={incomeData}
@@ -127,7 +116,7 @@ export default function DashboardScreen() {
           />
         </div>
 
-        <div className="category-total">
+        <div className="category">
           <DashboardCategoryTotal
             type={"Expense"}
             data={expenseData}

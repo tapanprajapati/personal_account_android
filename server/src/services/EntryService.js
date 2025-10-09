@@ -21,10 +21,20 @@ EntryService.prototype.getEntries = async function getEntries(query) {
   try {
     let result = await database.query(get);
 
+    const transformed = Object.values(
+      result.reduce((acc, entry) => {
+        if (!acc[entry.date]) {
+          acc[entry.date] = { date: entry.date, entries:[] };
+        }
+        acc[entry.date].entries.push(entry);
+        return acc;
+      }, {})
+    ).sort((a, b) => a.date - b.date);
+
     return {
       success: true,
       statusCode: 200,
-      message: result,
+      message: transformed,
     };
   } catch (error) {
     return {

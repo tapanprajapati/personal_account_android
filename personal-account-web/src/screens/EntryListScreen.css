@@ -4,17 +4,17 @@
   margin-bottom: 20px;
 }
 
-.date-container {
+.dates-container {
   display: flex;
   flex-direction: column;
-  width: 120px;
   height: fit-content;
   flex: 0.5;
+  width: 50%;
   cursor: pointer;
   margin: auto;
   border-radius: 15px;
   padding-bottom: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
   transition: transform 0.2s ease;
 }
 
