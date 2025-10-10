@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import WebStorage from './databasehandler/WebStorage';
 import MainNavigation from './navigation/MainNavigation';
 import './App.css';
+import './styles/AppLayout.css';
 
 function App() {
   const [isInitialized, setIsInitialized] = useState(false);
