@@ -50,7 +50,7 @@ export default function Year({
   };
 
   return (
-    <div className="year-container">
+    <div className="y-container">
           <h3 className="y-title">{year.year}</h3>
       
       <div className="year-months-list">
