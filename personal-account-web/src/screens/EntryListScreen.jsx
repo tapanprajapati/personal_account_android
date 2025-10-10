@@ -63,6 +63,7 @@ export default function EntryListScreen() {
             </div>
           )}
         </div>
+        <div className='total-bottom'>Total: {total}</div>
       </div>
     </Container>
   );

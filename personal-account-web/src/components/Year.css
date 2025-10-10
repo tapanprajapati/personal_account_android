@@ -1,20 +1,22 @@
-.year-container {
-  background-color: white;
+.y-container {
+  background-color: steelblue;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-  margin: 5px;
-  padding: 10px;
+  /* margin: 5px; */
+  /* padding: 5px; */
 }
 
 .y-title {
   font-weight: bold;
   margin: 0;
   margin-left: 10px;
-  font-size: 26px;
+  font-size: 24px;
+  color: white;
+  margin: 5px;
 }
 
 .year-months-list {
-  /* padding: 5px; */
+  padding: 5px;
   background-color: white;
 }
 
@@ -22,7 +24,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 4px 2px;
+  margin: 4px 10px;
   /* padding: 8px; */
   border-radius: 5px;
   cursor: pointer;
@@ -54,8 +56,8 @@
   font-weight: bold;
   margin-bottom: 5px;
   margin-right: 5px;
-  color: #758698;
-  font-size: 22px;
+  color: white;
+  font-size: 20px;
 }
 
 /* Animation classes for future use */
