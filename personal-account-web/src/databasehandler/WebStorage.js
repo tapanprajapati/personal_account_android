@@ -9,7 +9,7 @@ export default class WebStorage {
         console.log("Initializing Web Storage");
 
         WebStorage._instance = this;
-        this.IP = "localhost:8081";
+        this.IP = "10.0.0.172:8081";
         this.user = "";
         this.KEYS = {
             IP: "IP",
