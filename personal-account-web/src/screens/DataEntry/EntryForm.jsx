@@ -3,7 +3,6 @@ import EntryDBHandler from '../../databasehandler/entryhandler';
 import CategoryDBHandler from '../../databasehandler/categoryhandler';
 import UserDBHandler from '../../databasehandler/userhandler';
 import CategoryFormModal from '../../modals/CategoryFormModal';
-import DatePicker from '../../modals/DatePicker';
 import ImageUpload from '../../modals/ImageUpload';
 import './EntryForm.css';
 
@@ -25,7 +24,6 @@ export default function EntryForm({ handleFormData, type, entry = null }) {
     imageFile: null
   });
 
-  const [entryHandler] = useState(new EntryDBHandler());
   const [categoryHandler] = useState(new CategoryDBHandler());
   const [userHandler] = useState(new UserDBHandler());
 
@@ -35,9 +33,9 @@ export default function EntryForm({ handleFormData, type, entry = null }) {
     if (entry) {
       setFormData(prev => ({
         ...prev,
-        date: new Date(entry.date),
-        selectedType: entry.category.type,
-        selectedCategoryId: entry.category.id,
+        date: new Date(entry.fulldate),
+        selectedType: entry.cType,
+        selectedCategoryId: entry.cId,
         title: entry.title,
         amount: entry.amount.toString(),
         description: entry.description,
@@ -99,17 +97,7 @@ export default function EntryForm({ handleFormData, type, entry = null }) {
   const handleDateChange = (date) => {
     setFormData(prev => ({
       ...prev,
-      date: date,
-      showDatePicker: false
-    }));
-  };
-
-  const handleImageUpload = (file, path) => {
-    setFormData(prev => ({
-      ...prev,
-      imageFile: file,
-      imagePath: path,
-      showImageUpload: false
+      date: (new Date(date.target.value))
     }));
   };
 
@@ -169,21 +157,21 @@ export default function EntryForm({ handleFormData, type, entry = null }) {
     if (error) {
       alert('ERROR: ' + errorMessage);
     } else {
-      const entry = {
+      const newEntry = {
         title: title,
         description: description,
         amount: amount,
         date: date.toISOString().slice(0, 10),
-        category: { id: selectedCategoryId },
+        category: { id: selectedCategoryId.toString() },
         username: selectedUser
       };
 
-      if (entry) {
-        entry.id = entry.id;
+      if (newEntry) {
+        newEntry.id = entry.id;
       }
 
-      console.log(entry);
-      handleFormData(entry, formData.imagePath, formData.imageFile);
+      console.log(newEntry);
+      handleFormData(newEntry);
       resetInputs();
     }
   };
@@ -239,11 +227,11 @@ export default function EntryForm({ handleFormData, type, entry = null }) {
         <div className="input-group">
           <label className="input-label">Date</label>
           <input
-            type="text"
+            type="date"
             className="form-input"
             value={formData.date.toISOString().slice(0, 10)}
-            readOnly
-            onClick={() => handleInputChange('showDatePicker', true)}
+            // readOnly
+            onChange={handleDateChange}
             placeholder="Select date"
           />
         </div>
@@ -300,29 +288,6 @@ export default function EntryForm({ handleFormData, type, entry = null }) {
           </select>
         </div>
 
-        <div className="input-group">
-          <label className="input-label">Add Image</label>
-          <div className="image-upload-container">
-            <button
-              className="image-upload-btn"
-              onClick={() => handleInputChange('showImageUpload', true)}
-            >
-              📷 Add Photo
-            </button>
-            {formData.imagePath && (
-              <div className="image-preview">
-                <span className="image-name">Image selected</span>
-                <button
-                  className="remove-image-btn"
-                  onClick={() => handleInputChange('imagePath', '')}
-                >
-                  ✕
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-
         <div className="submit-section">
           <button
             className="submit-btn"
@@ -340,21 +305,6 @@ export default function EntryForm({ handleFormData, type, entry = null }) {
           submitData={addCategory}
           closeModal={() => handleInputChange('showCategoryModal', false)}
           buttonTitle="Add"
-        />
-      )}
-
-      {formData.showDatePicker && (
-        <DatePicker
-          date={formData.date}
-          onDateChange={handleDateChange}
-          onClose={() => handleInputChange('showDatePicker', false)}
-        />
-      )}
-
-      {formData.showImageUpload && (
-        <ImageUpload
-          onImageUpload={handleImageUpload}
-          onClose={() => handleInputChange('showImageUpload', false)}
         />
       )}
     </div>

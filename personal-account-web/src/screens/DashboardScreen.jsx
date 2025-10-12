@@ -89,17 +89,15 @@ export default function DashboardScreen() {
           className="date-container"
           onClick={() => setIsDatePickerVisible(true)}
         >
-          {/* <div className="month-container"> */}
+          <div className='date'>
             <span className="month">
               {getMonthName(
                 date.getMonth() + 1,
                 'short',
               ).toUpperCase()}
             </span>
-          {/* </div> */}
-          {/* <div className="year-container"> */}
             <span className="year">{date.getFullYear()}</span>
-          {/* </div> */}
+          </div>
         </div>
 
         <div className="pie-chart">

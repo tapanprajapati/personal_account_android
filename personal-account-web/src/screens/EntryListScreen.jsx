@@ -5,6 +5,7 @@ import { getMonthName, getSelectedCategories } from '../utils/converters';
 import EntryDBHandler from '../databasehandler/entryhandler';
 import Date from '../components/Date'
 import './EntryListScreen.css';
+import { formatLargeNumber } from '../utils/converters';
 
 export default function EntryListScreen() {
   const location = useLocation();
@@ -43,7 +44,9 @@ export default function EntryListScreen() {
   return (
     <Container>
       <div className="entry-list-screen">
-        <h2>{type}: {getMonthName(month)} {year}</h2>
+        <div className='entry-title'>
+          <h2>{type}: {getMonthName(month)} {year}</h2>
+        </div>
         
         <div className="dates-container">
         {data.length === 0 ? (
@@ -63,7 +66,7 @@ export default function EntryListScreen() {
             </div>
           )}
         </div>
-        <div className='total-bottom'>Total: {total}</div>
+        <div className='total-bottom'>Total: $ {formatLargeNumber(total)}</div>
       </div>
     </Container>
   );
