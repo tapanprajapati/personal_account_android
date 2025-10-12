@@ -71,7 +71,7 @@ export default function MainNavigation() {
             <AddEntry />
           </Layout>
         } />
-        <Route path="/update-entry/:id" element={
+        <Route path="/update-entry" element={
           <Layout>
             <UpdateEntry />
           </Layout>

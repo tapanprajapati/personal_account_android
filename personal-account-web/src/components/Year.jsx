@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import EntryDBHandler from '../databasehandler/entryhandler';
-import { ListColors } from '../styles/colors';
 import { formatLargeNumber, getSelectedCategories } from '../utils/converters';
 import { getMonthName } from '../utils/converters';
 import './Year.css';
