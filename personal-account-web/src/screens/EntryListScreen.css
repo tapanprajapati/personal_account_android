@@ -123,3 +123,17 @@
     flex: 1;
   }
 }
+
+@media (max-width: 480px) {
+  .dates-container {
+    flex: 1;
+  }
+
+  .dates-list {
+    margin-top: 0;
+  }
+
+  .total-bottom {
+    width: 95%;
+  }
+}

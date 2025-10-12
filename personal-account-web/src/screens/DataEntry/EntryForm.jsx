@@ -27,7 +27,7 @@ export default function EntryForm({ handleFormData, type, entry = null }) {
   const [categoryHandler] = useState(new CategoryDBHandler());
   const [userHandler] = useState(new UserDBHandler());
 
-  const buttonText = entry ? 'UPDATE' : 'ADD';
+  const buttonText = entry ? 'Update' : 'Add';
 
   useEffect(() => {
     if (entry) {
@@ -166,7 +166,7 @@ export default function EntryForm({ handleFormData, type, entry = null }) {
         username: selectedUser
       };
 
-      if (newEntry) {
+      if (entry) {
         newEntry.id = entry.id;
       }
 
