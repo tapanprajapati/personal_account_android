@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Container } from '../../styles/global';
 import EntryForm from './EntryForm';
 import './AddScreen.css';
