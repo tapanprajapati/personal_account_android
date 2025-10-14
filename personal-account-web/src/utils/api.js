@@ -30,7 +30,7 @@ class UserAPI {
     }
 
     getAllUsers() { 
-        return `http://${this.storage.IP}/api/user?`;
+        return `${this.storage.IP}/api/user?`;
     }
 }
 
@@ -45,20 +45,20 @@ class SummaryAPI {
         return SummaryAPI._instance;
     }
 
-    getYears() { return `http://${this.storage.IP}/api/summary/year?`; }
-    getAllYears() { return `http://${this.storage.IP}/api/summary/year/all`; }
-    getYearTotal() { return `http://${this.storage.IP}/api/summary/year/total?`; }
-    getYearTotalAllCategories() { return `http://${this.storage.IP}/api/summary/year/total/allcategories?`; }
-    getMonths() { return `http://${this.storage.IP}/api/summary/month?`; }
-    getAllMonths() { return `http://${this.storage.IP}/api/summary/month/all?`; }
-    getMonthTotal() { return `http://${this.storage.IP}/api/summary/month/total?`; }
-    getMonthTotalAllCategories() { return `http://${this.storage.IP}/api/summary/month/total/allcategories?`; }
-    getDates() { return `http://${this.storage.IP}/api/summary/date?`; }
-    getDateTotal() { return `http://${this.storage.IP}/api/summary/date/total?`; }
-    getTypeTotal() { return `http://${this.storage.IP}/api/summary/total/`; }
-    getAllCategoriesTotal() { return `http://${this.storage.IP}/api/summary/category/all/total/`; }
-    getAllCategoriesTotalMonth() { return `http://${this.storage.IP}/api/summary/category/all/total/month/`; }
-    getAllCategoriesTotalYear() { return `http://${this.storage.IP}/api/summary/category/all/total/year/`; }
+    getYears() { return `${this.storage.IP}/api/summary/year?`; }
+    getAllYears() { return `${this.storage.IP}/api/summary/year/all`; }
+    getYearTotal() { return `${this.storage.IP}/api/summary/year/total?`; }
+    getYearTotalAllCategories() { return `${this.storage.IP}/api/summary/year/total/allcategories?`; }
+    getMonths() { return `${this.storage.IP}/api/summary/month?`; }
+    getAllMonths() { return `${this.storage.IP}/api/summary/month/all?`; }
+    getMonthTotal() { return `${this.storage.IP}/api/summary/month/total?`; }
+    getMonthTotalAllCategories() { return `${this.storage.IP}/api/summary/month/total/allcategories?`; }
+    getDates() { return `${this.storage.IP}/api/summary/date?`; }
+    getDateTotal() { return `${this.storage.IP}/api/summary/date/total?`; }
+    getTypeTotal() { return `${this.storage.IP}/api/summary/total/`; }
+    getAllCategoriesTotal() { return `${this.storage.IP}/api/summary/category/all/total/`; }
+    getAllCategoriesTotalMonth() { return `${this.storage.IP}/api/summary/category/all/total/month/`; }
+    getAllCategoriesTotalYear() { return `${this.storage.IP}/api/summary/category/all/total/year/`; }
 }
 
 class EntryAPI {
@@ -72,15 +72,15 @@ class EntryAPI {
         return EntryAPI._instance;
     }
 
-    getEntries() { return `http://${this.storage.IP}/api/entry?`; }
-    createEntry() { return `http://${this.storage.IP}/api/entry/create/`; }
-    updateEntry() { return `http://${this.storage.IP}/api/entry/update/`; }
-    deleteEntry() { return `http://${this.storage.IP}/api/entry/`; }
-    recentEntries() { return `http://${this.storage.IP}/api/entry/recent?limit=`; }
-    saveImage() { return `http://${this.storage.IP}/api/entry/image/save/`; }
-    getImage() { return `http://${this.storage.IP}/api/entry/image/get?id=`; }
-    checkImageExists() { return `http://${this.storage.IP}/api/entry/image/exists?id=`; }
-    deleteImage() { return `http://${this.storage.IP}/api/entry/image/delete?id=`; }
+    getEntries() { return `${this.storage.IP}/api/entry?`; }
+    createEntry() { return `${this.storage.IP}/api/entry/create/`; }
+    updateEntry() { return `${this.storage.IP}/api/entry/update/`; }
+    deleteEntry() { return `${this.storage.IP}/api/entry/`; }
+    recentEntries() { return `${this.storage.IP}/api/entry/recent?limit=`; }
+    saveImage() { return `${this.storage.IP}/api/entry/image/save/`; }
+    getImage() { return `${this.storage.IP}/api/entry/image/get?id=`; }
+    checkImageExists() { return `${this.storage.IP}/api/entry/image/exists?id=`; }
+    deleteImage() { return `${this.storage.IP}/api/entry/image/delete?id=`; }
 }
 
 class CategoryAPI {
@@ -94,11 +94,11 @@ class CategoryAPI {
         return CategoryAPI._instance;
     }
 
-    getByType() { return `http://${this.storage.IP}/api/category/1640932481964?type=`; }
-    create() { return `http://${this.storage.IP}/api/category/create/`; }
-    update() { return `http://${this.storage.IP}/api/category/update/`; }
-    delete() { return `http://${this.storage.IP}/api/category/`; }
-    transfer() { return `http://${this.storage.IP}/api/category/transfer/`; }
+    getByType() { return `${this.storage.IP}/api/category/1640932481964?type=`; }
+    create() { return `${this.storage.IP}/api/category/create/`; }
+    update() { return `${this.storage.IP}/api/category/update/`; }
+    delete() { return `${this.storage.IP}/api/category/`; }
+    transfer() { return `${this.storage.IP}/api/category/transfer/`; }
 }
 
 export default API;
