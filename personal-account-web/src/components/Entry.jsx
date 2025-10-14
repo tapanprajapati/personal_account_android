@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { FaCamera, FaEdit, FaTrash } from 'react-icons/fa';
+import React from 'react';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import './Entry.css';
 import EntryDBHandler from '../databasehandler/entryhandler';

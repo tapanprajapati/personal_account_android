@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Shadow } from '../styles/global';
+import { Container } from '../styles/global';
 import TypePieChart from '../components/graph/DashboardComponents/TypePieChart';
 import { getMonthName } from '../utils/converters';
 import MonthYearPicker from '../modals/MonthYearPicker';

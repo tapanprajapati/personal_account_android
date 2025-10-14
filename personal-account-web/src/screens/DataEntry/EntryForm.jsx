@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import EntryDBHandler from '../../databasehandler/entryhandler';
 import CategoryDBHandler from '../../databasehandler/categoryhandler';
 import UserDBHandler from '../../databasehandler/userhandler';
 import CategoryFormModal from '../../modals/CategoryFormModal';
-import ImageUpload from '../../modals/ImageUpload';
 import './EntryForm.css';
 
 export default function EntryForm({ handleFormData, type, entry = null }) {

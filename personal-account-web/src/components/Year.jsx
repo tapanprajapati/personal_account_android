@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { formatLargeNumber, getSelectedCategories } from '../utils/converters';
+import { formatLargeNumber } from '../utils/converters';
 import { getMonthName } from '../utils/converters';
 import './Year.css';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, useParams } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Header from '../components/Header';
 import DashboardScreen from '../screens/DashboardScreen';
 import AddEntry from '../screens/DataEntry/AddScreen';
@@ -11,12 +11,6 @@ import RecentEntries from '../screens/RecentEntries';
 import ManageCategoriesScreen from '../screens/CategoryFunctions/ManageCategoriesScreen';
 import ConfigScreen from '../screens/Config/ConfigScreen';
 import ReportScreen from '../screens/Report/ReportScreen';
-
-// Wrapper component to handle URL params for AccountTypeScreen
-function AccountTypeWrapper() {
-  const { type } = useParams();
-  return <AccountType type={type} />;
-}
 
 // Layout component that includes the header
 function Layout({ children }) {
