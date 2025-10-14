@@ -22,7 +22,8 @@ export default class EntryDBHandler {
         method: 'POST',
         headers: {
           Accept: 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true'
         },
         body:JSON.stringify({
           title: entry.title,
@@ -49,7 +50,8 @@ export default class EntryDBHandler {
         method: 'PUT',
         headers: {
           Accept: 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true'
         },
         body:JSON.stringify({
           id: entry.id,
@@ -75,6 +77,9 @@ export default class EntryDBHandler {
       console.log('Delete entry '+entry);
       fetch(`${this.api.entry.deleteEntry()}${entry.id}`,{
         method: 'DELETE',
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
       })
       .then((response)=>response.json())
       .then(json=>{
@@ -89,7 +94,11 @@ export default class EntryDBHandler {
     return new Promise((resolve, reject) => {
       console.log('Fetching All Years from Database');
       console.log(this.api.summary.getAllYears())
-      fetch(`${this.api.summary.getAllYears()}`)
+      fetch(`${this.api.summary.getAllYears()}`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
       .then((response)=>response.json())
       .then(json=>{
         console.log(json.message);
@@ -105,7 +114,11 @@ export default class EntryDBHandler {
     return new Promise((resolve, reject) => {
       console.log('Fetching All Months from Database for year: '+year);
       console.log(`${this.api.summary.getAllMonths()}date=${year}`);
-      fetch(`${this.api.summary.getAllMonths()}date=${year}`)
+      fetch(`${this.api.summary.getAllMonths()}date=${year}`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
       .then((response)=>response.json())
       .then(json=>{
         console.log(json.message)
@@ -120,7 +133,11 @@ export default class EntryDBHandler {
   getSearchYears(searchString, categories) {
     return new Promise((resolve, reject) => {
       console.log('Fetching Years from Database');
-      fetch(`${this.api.summary.getYears()}search=${searchString}&categories=${categories}`)
+      fetch(`${this.api.summary.getYears()}search=${searchString}&categories=${categories}`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
       .then((response)=>response.json())
       .then(json=>{
         resolve(json)
@@ -136,7 +153,11 @@ export default class EntryDBHandler {
     return new Promise((resolve, reject) => {
       console.log('Fetching months from Database');
       console.log(getAPI)
-      fetch(getAPI)
+      fetch(getAPI, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
       .then((response)=>response.json())
       .then(json=>{
         console.log(json)
@@ -153,7 +174,11 @@ export default class EntryDBHandler {
     return new Promise((resolve, reject) => {
       console.log('Fetching dates from Database');
       console.log(getAPI);
-      fetch(getAPI)
+      fetch(getAPI, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
       .then((response)=>response.json())
       .then(json=>{
         console.log(json)
@@ -170,7 +195,11 @@ export default class EntryDBHandler {
     return new Promise((resolve, reject) => {
       console.log('Fetching recent entries from Database');
       console.log(getAPI)
-      fetch(getAPI)
+      fetch(getAPI, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
       .then((response)=>response.json())
       .then(json=>{
         if(json.success)
@@ -194,7 +223,11 @@ export default class EntryDBHandler {
     return new Promise((resolve, reject) => {
       console.log('Fetching entries from Database');
       console.log(getAPI)
-      fetch(getAPI)
+      fetch(getAPI, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
       .then((response)=>response.json())
       .then(json=>{
         resolve(json)
@@ -210,7 +243,11 @@ export default class EntryDBHandler {
     return new Promise((resolve, reject) => {
       console.log('Fetching year total from Database');
       console.log(getAPI)
-      fetch(getAPI)
+      fetch(getAPI, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
       .then((response)=>response.json())
       .then(json=>{
         console.log(json)
@@ -227,7 +264,11 @@ export default class EntryDBHandler {
     return new Promise((resolve, reject) => {
       console.log('Fetching month total from Database');
       console.log(getAPI)
-      fetch(getAPI)
+      fetch(getAPI, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
       .then((response)=>response.json())
       .then(json=>{
         console.log(json)
@@ -244,7 +285,11 @@ export default class EntryDBHandler {
     return new Promise((resolve, reject) => {
       console.log('Fetching date total from Database');
       console.log(getAPI)
-      fetch(getAPI)
+      fetch(getAPI, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
       .then((response)=>response.json())
       .then(json=>{
         console.log(json)
@@ -262,7 +307,11 @@ export default class EntryDBHandler {
     return new Promise((resolve, reject) => {
       console.log('Fetching month total for all categories from Database');
       console.log(getAPI)
-      fetch(getAPI)
+      fetch(getAPI, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
       .then((response)=>response.json())
       .then(json=>{
         console.log(json)
@@ -279,7 +328,11 @@ export default class EntryDBHandler {
     return new Promise((resolve, reject) => {
       console.log('Fetching year total for all categories from Database');
       console.log(getAPI)
-      fetch(getAPI)
+      fetch(getAPI, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
       .then((response)=>response.json())
       .then(json=>{
         console.log(json)
