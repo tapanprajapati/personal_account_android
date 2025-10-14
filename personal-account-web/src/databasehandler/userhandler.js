@@ -17,7 +17,11 @@ export default class UserDBHandler {
         console.log('Fetching users from group '+groupid);
         const getAPI = `${this.api.user.getAllUsers()}groupid=${groupid}`
         return new Promise((resolve, reject) => {
-            fetch(getAPI)
+            fetch(getAPI, {
+                headers: {
+                    'ngrok-skip-browser-warning': 'true'
+                }
+            })
             .then((response)=>response.json())
             .then(json=>{
                 resolve(json)

@@ -19,7 +19,8 @@ export default class CategoryDBHandler {
         method: 'POST',
         headers: {
           Accept: 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true'
         },
         body: JSON.stringify({
           title: category.title,
@@ -44,6 +45,9 @@ export default class CategoryDBHandler {
       console.log(updateAPI);
       fetch(updateAPI, {
         method: 'put',
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
       })
         .then((response) => response.json())
         .then(json => {
@@ -60,6 +64,9 @@ export default class CategoryDBHandler {
       console.log('Delete category: ' + id);
       fetch(`${this.api.category.delete()}${id}`, {
         method: 'delete',
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
       })
         .then((response) => response.json())
         .then(json => {
@@ -77,6 +84,9 @@ export default class CategoryDBHandler {
       console.log(transferAPI);
       fetch(transferAPI, {
         method: 'put',
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
       })
         .then((response) => response.json())
         .then(json => {
@@ -94,7 +104,11 @@ export default class CategoryDBHandler {
     console.log(`${getAPI}`);
 
     return new Promise((resolve, reject) => {
-      fetch(getAPI)
+      fetch(getAPI, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
         .then((response) => response.json())
         .then(json => {
           resolve(json);
@@ -111,7 +125,11 @@ export default class CategoryDBHandler {
     console.log(`${getAPI}`);
 
     return new Promise((resolve, reject) => {
-      fetch(getAPI)
+      fetch(getAPI, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
         .then((response) => response.json())
         .then(json => {
           console.log(json);
@@ -129,7 +147,11 @@ export default class CategoryDBHandler {
     console.log(`${getAPI}`);
 
     return new Promise((resolve, reject) => {
-      fetch(getAPI)
+      fetch(getAPI, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
         .then((response) => response.json())
         .then(json => {
           console.log(json);
@@ -147,7 +169,11 @@ export default class CategoryDBHandler {
     console.log(`${getAPI}`);
 
     return new Promise((resolve, reject) => {
-      fetch(getAPI)
+      fetch(getAPI, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
         .then((response) => response.json())
         .then(json => {
           console.log(json);
@@ -165,7 +191,11 @@ export default class CategoryDBHandler {
     console.log(`${getAPI}`);
 
     return new Promise((resolve, reject) => {
-      fetch(getAPI)
+      fetch(getAPI, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
         .then((response) => response.json())
         .then(json => {
           console.log(json);
