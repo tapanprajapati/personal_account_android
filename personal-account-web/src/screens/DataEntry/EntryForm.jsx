@@ -254,7 +254,6 @@ export default function EntryForm({ handleFormData, type, entry = null }) {
               value={formData.selectedCategoryId}
               onChange={(e) => handleInputChange('selectedCategoryId', parseInt(e.target.value))}
             >
-              <option value={0}>Select Category</option>
               {formData.categories.map((item) => (
                 <option key={item.id} value={item.id}>
                   {item.title}
