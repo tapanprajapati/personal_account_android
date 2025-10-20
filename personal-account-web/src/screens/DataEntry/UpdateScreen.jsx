@@ -36,7 +36,7 @@ export default function UpdateScreen(
         <EntryForm
           handleFormData={updateEntry}
           entry={entry}
-          type={entry.type}
+          type={entry.cType}
         />
       </div>
     </Container>
