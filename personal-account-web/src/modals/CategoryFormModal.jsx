@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './CategoryFormModal.css';
 
 export default function CategoryFormModal({ 
@@ -6,11 +6,20 @@ export default function CategoryFormModal({
   checkCategory, 
   submitData, 
   closeModal, 
-  buttonTitle = "Add" 
+  buttonTitle = "Add",
+  initialData = null
 }) {
-  const [categoryName, setCategoryName] = useState('');
-  const [allowance, setAllowance] = useState('');
+  const [categoryName, setCategoryName] = useState(initialData?.title || '');
+  const [allowance, setAllowance] = useState(initialData?.allowance?.toString() || '');
   const [isLoading, setIsLoading] = useState(false);
+
+  // Update state when initialData changes
+  useEffect(() => {
+    if (initialData) {
+      setCategoryName(initialData.title || '');
+      setAllowance(initialData.allowance?.toString() || '');
+    }
+  }, [initialData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
