@@ -19,7 +19,7 @@ export default function TypePieChart({ income = 0, expense = 0 }) {
     { name: 'Income', value: testIncome, color: Graph.income },
   ];
 
-  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
+  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, value }) => {
     if (percent < 0.05) return null; // Don't show labels for very small slices
     
     const RADIAN = Math.PI / 180;
@@ -37,7 +37,7 @@ export default function TypePieChart({ income = 0, expense = 0 }) {
         fontSize={12}
         fontWeight="bold"
       >
-        {`${(percent * 100).toFixed(0)}%`}
+        {`$${formatLargeNumber(value)}`}
       </text>
     );
   };
@@ -76,7 +76,6 @@ export default function TypePieChart({ income = 0, expense = 0 }) {
               formatter={(value) => [`$${formatLargeNumber(value)}`, '']}
               labelFormatter={(label) => label}
             />
-            <Legend />
           </PieChart>
         </ResponsiveContainer>
         <div style={{
