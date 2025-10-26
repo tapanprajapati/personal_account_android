@@ -19,7 +19,29 @@ const server = express();
  * Application configuration
  *
  */
-server.use(cors());
+
+const allowedOrigins = ['https://personal-account-8464830477.us-central1.run.app'];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  // You might also need to specify allowed methods and headers
+  // depending on what your web app is sending.
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true // allow session cookie from browser to pass through
+};
+
+// Use the configured cors middleware
+server.use(cors(corsOptions));
+
 server.use(bodyParser.json());
 server.use(fileupload());
 
