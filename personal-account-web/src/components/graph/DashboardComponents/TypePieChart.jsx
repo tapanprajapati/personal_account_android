@@ -23,7 +23,7 @@ export default function TypePieChart({ income = 0, expense = 0 }) {
     if (percent < 0.05) return null; // Don't show labels for very small slices
     
     const RADIAN = Math.PI / 180;
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.25;
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.05;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
@@ -80,7 +80,7 @@ export default function TypePieChart({ income = 0, expense = 0 }) {
         </ResponsiveContainer>
         <div style={{
           position: 'absolute',
-          top: '45%',
+          top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
           textAlign: 'center',

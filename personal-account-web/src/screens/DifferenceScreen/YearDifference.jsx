@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import EntryDBHandler from '../../databasehandler/entryhandler';
 import { TextBackground } from '../../styles/colors';
 import { formatLargeNumber } from '../../utils/converters';
 import MonthDifference from './MonthDifference';
@@ -7,49 +6,31 @@ import './YearDifference.css';
 
 export default function YearDifference({
   year,
-  incomeCategories,
-  expenseCategories,
   addToIncome,
-  edit,
-  selectedUser,
   addToExpense
 }) {
-  const [months, setMonths] = useState([]);
   const [income, setIncome] = useState(0);
   const [expense, setExpense] = useState(0);
-
-  const entryHandler = new EntryDBHandler();
-
-  useEffect(() => {
-    getMonths();
-  }, []);
-
-  useEffect(() => {
-    if (edit) {
-      setIncome(0);
-      setExpense(0);
-      getMonths();
-    }
-  }, [edit]);
-
-  const getMonths = () => {
-    entryHandler.getMonths(year).then((result) => {
-      if (result.success) {
-        const monthsData = result.message;
-        console.log(`Months: ${year}`);
-        console.log(monthsData);
-        setMonths(monthsData);
-      } else {
-        alert(`ERROR: ${result.message.toUpperCase()}`);
-      }
-    });
-  };
 
   const handleAddToIncome = (amount) => {
     amount = parseFloat(amount);
     setIncome(prevIncome => prevIncome + amount);
     addToIncome(amount);
   };
+
+  useEffect(() => {
+    let incomeTotal = 0;
+    let expenseTotal = 0;
+    year.months.forEach((month, index) => {
+      incomeTotal+=month.incomeTotal;
+      expenseTotal+=month.expenseTotal;
+    })
+    setIncome(incomeTotal);
+    setExpense(expenseTotal);
+    addToIncome(incomeTotal);
+    addToExpense(expenseTotal);
+  }, []);
+
 
   const handleAddToExpense = (amount) => {
     amount = parseFloat(amount);
@@ -65,7 +46,7 @@ export default function YearDifference({
 
   return (
     <div className="year-difference">
-      <div className="year-title">{year}</div>
+      <div className="year-title">{year.year}</div>
       
       <div className="header-row">
         <div className="header-month">Month</div>
@@ -75,17 +56,10 @@ export default function YearDifference({
       </div>
 
       <div className="months-container">
-        {months.map((month) => (
+        {year.months.map((month,index) => (
           <MonthDifference
-            key={month}
+            key={index}
             month={month}
-            year={year}
-            edit={edit}
-            selectedUser={selectedUser}
-            incomeCategories={incomeCategories}
-            expenseCategories={expenseCategories}
-            addToIncome={handleAddToIncome}
-            addToExpense={handleAddToExpense}
           />
         ))}
       </div>

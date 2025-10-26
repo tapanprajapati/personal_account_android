@@ -59,6 +59,7 @@ class SummaryAPI {
     getAllCategoriesTotal() { return `${this.storage.IP}/api/summary/category/all/total/`; }
     getAllCategoriesTotalMonth() { return `${this.storage.IP}/api/summary/category/all/total/month/`; }
     getAllCategoriesTotalYear() { return `${this.storage.IP}/api/summary/category/all/total/year/`; }
+    getDifferenceData() {return `${this.storage.IP}/api/summary/differenceData?`;}
 }
 
 class EntryAPI {

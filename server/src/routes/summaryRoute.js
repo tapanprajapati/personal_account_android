@@ -55,6 +55,10 @@ router
   .get(validate(summarySchema.getTotal), summaryController.getTypeTotal);
 
 router
+  .route("/differenceData")
+  .get(validate(summarySchema.getDifferenceData), summaryController.getDifferenceData);
+
+router
   .route("/category/all/total/month/:type")
   .get(
     validate(summarySchema.getAllCategoriesTotal),
