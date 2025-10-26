@@ -148,6 +148,24 @@ export default class EntryDBHandler {
     });
   }
 
+  getDifferenceData(incomeCategories, expenseCategories) {
+    return new Promise((resolve, reject) => {
+      console.log('Fetching DifferenceData from Database');
+      fetch(`${this.api.summary.getDifferenceData()}incomeCategories=${incomeCategories}&expenseCategories=${expenseCategories}`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
+      .then((response)=>response.json())
+      .then(json=>{
+        resolve(json)
+      })
+      .catch(error=>{
+        reject(error)
+      })
+    });
+  }
+
   getSearchMonthsOfYear(searchString, year, categories) {
     const getAPI = `${this.api.summary.getMonths()}search=${searchString}&categories=${categories}&date=${year}`
     return new Promise((resolve, reject) => {

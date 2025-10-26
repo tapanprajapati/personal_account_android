@@ -6,7 +6,7 @@ import UserDBHandler from '../../databasehandler/userhandler';
 import CategoryFilterModal from '../../modals/CategoryFilterModal';
 import YearDifference from './YearDifference';
 import { TextBackground } from '../../styles/colors';
-import { formatLargeNumber } from '../../utils/converters';
+import { formatLargeNumber, getSelectedCategories } from '../../utils/converters';
 import './DifferenceScreen.css';
 
 export default function DifferenceScreen() {
@@ -36,16 +36,17 @@ export default function DifferenceScreen() {
     setExpense(prevExpense => prevExpense + amount);
   };
 
-  const getYears = () => {
-    setEdit(false);
-    entryHandler.getYears().then((result) => {
+  const getData = (iCategories, eCategories) => {
+    //setEdit(false);
+    entryHandler.getDifferenceData(getSelectedCategories(iCategories), getSelectedCategories(eCategories)).then((result) => {
       if (result.success) {
         const yearsData = result.message;
-        console.log(yearsData);
+        // console.log(yearsData);
         setYears(yearsData);
+        // yearsData.map(year=>console.log(year));
         setRefresh(false);
       } else {
-        alert(`ERROR: ${result.message.toUpperCase()}`);
+        alert(`ERROR: ${result.message}`);
       }
     });
   };
@@ -62,24 +63,40 @@ export default function DifferenceScreen() {
     });
   };
 
-  const getCategories = (type) => {
-    categoryHandler.getCategories(type).then((result) => {
+  const getCategories = () => {
+    categoryHandler.getCategories('income').then((result) => {
       if (result.success) {
-        const categories = result.message;
-        let temp = [];
+        let iCategories = [];
 
-        categories.forEach((category) => {
-          temp.push({
+        result.message.forEach((category) => {
+          iCategories.push({
             category: category,
             status: true,
           });
         });
+        console.log(iCategories);
 
-        if (type === 'income') {
-          setIncomeCategories(temp);
-        } else {
-          setExpenseCategories(temp);
-        }
+        setIncomeCategories(iCategories);
+        categoryHandler.getCategories('expense').then((result) => {
+          if (result.success) {
+            let eCategories = [];
+    
+            result.message.forEach((category) => {
+              eCategories.push({
+                category: category,
+                status: true,
+              });
+            });
+            console.log(eCategories);
+    
+            setExpenseCategories(eCategories);
+            getData(iCategories, eCategories);        
+          } else {
+            alert(`ERROR: ${result.message.toUpperCase()}`);
+          }
+        });
+
+
       } else {
         alert(`ERROR: ${result.message.toUpperCase()}`);
       }
@@ -87,10 +104,7 @@ export default function DifferenceScreen() {
   };
 
   useEffect(() => {
-    getYears();
-    getUsers();
-    getCategories('income');
-    getCategories('expense');
+    getCategories();
   }, []);
 
   const handleRefresh = () => {
@@ -108,7 +122,7 @@ export default function DifferenceScreen() {
     setIncome(0);
     setExpense(0);
     setSelectedUser(user);
-    setTimeout(getYears, 10);
+    getData(categories, expenseCategories);
   };
 
   const saveExpenseCategories = (categories, user = "ALL") => {
@@ -117,7 +131,7 @@ export default function DifferenceScreen() {
     setIncome(0);
     setExpense(0);
     setSelectedUser(user);
-    setTimeout(getYears, 10);
+    getData(incomeCategories, categories);
   };
 
   const difference = income - expense;
@@ -152,15 +166,11 @@ export default function DifferenceScreen() {
           {refresh && (
             <div className="loading-spinner">Loading...</div>
           )}
-          {years.map((year) => (
+          {years.map((year,index) => (
             <YearDifference
-              key={year}
+              key={index}
               year={year}
-              incomeCategories={incomeCategories}
-              expenseCategories={expenseCategories}
               addToIncome={addToIncome}
-              edit={edit}
-              selectedUser={selectedUser}
               addToExpense={addToExpense}
             />
           ))}

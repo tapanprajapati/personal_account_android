@@ -50,6 +50,12 @@ module.exports = {
       groupid: Joi.string().required(),
     }),
   },
+  getDifferenceData: {
+    query: Joi.object({
+      incomeCategories: Joi.string().required(),
+      expenseCategories: Joi.string().required(),
+    }),
+  },
   getAllCategoriesTotal: {
     params: Joi.object({
       type: Joi.string().required().equal("income", "expense"),

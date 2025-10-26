@@ -64,5 +64,23 @@ module.exports = {
       "select c.id, c.title, sum(e.amount) as total, c.allowance from categories as c left join (select amount,categoryid from entries where DATE_FORMAT(date,'%m/%Y') = ?) as e on e.categoryid=c.id where type=? and groupid=? group by id",
     getAllCategoriesTotalYear:
       "select c.id, c.title, sum(e.amount) as total, c.allowance from categories as c left join (select amount,categoryid from entries where DATE_FORMAT(date,'%Y') = ?) as e on e.categoryid=c.id where type=? and groupid=? group by id",
-  },
+    getDifferenceData:
+      `SELECT
+          EXTRACT(YEAR FROM t.date) AS year,
+          LPAD(EXTRACT(MONTH FROM t.date), 2, '0') AS month,
+          SUM(CASE WHEN c.type = 'expense' THEN t.amount ELSE 0 END) AS expenseTotal,
+          SUM(CASE WHEN c.type = 'income' THEN t.amount ELSE 0 END) AS incomeTotal
+        FROM entries t
+        JOIN categories c ON t.categoryid = c.id
+        WHERE
+          (c.type = 'expense' AND c.id IN (?))
+            OR
+            (c.type = 'income' AND c.id IN (?))
+        GROUP BY
+          EXTRACT(YEAR FROM t.date),
+          EXTRACT(MONTH FROM t.date)
+        ORDER BY
+          year DESC,
+          month;`
+    },
 };

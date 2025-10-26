@@ -14,6 +14,7 @@ function SummaryController(service) {
   this.getAllCategoriesTotal = this.getAllCategoriesTotal.bind(this);
   this.getAllCategoriesTotalMonth = this.getAllCategoriesTotalMonth.bind(this);
   this.getAllCategoriesTotalYear = this.getAllCategoriesTotalYear.bind(this);
+  this.getDifferenceData = this.getDifferenceData.bind(this);
 }
 
 SummaryController.prototype.getYearTotal = async function getYearTotal(
@@ -95,6 +96,15 @@ SummaryController.prototype.getTypeTotal = async function getTypeTotal(
   res
 ) {
   let response = await this.service.getTypeTotal(req.params, req.query);
+  console.log(response);
+  res.status(response.statusCode).send(response);
+};
+
+SummaryController.prototype.getDifferenceData = async function getDifferenceData(
+  req,
+  res
+) {
+  let response = await this.service.getDifferenceData(req.query);
   console.log(response);
   res.status(response.statusCode).send(response);
 };

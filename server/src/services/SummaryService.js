@@ -214,6 +214,49 @@ SummaryService.prototype.getYears = async function getYears(query) {
   }
 };
 
+SummaryService.prototype.getDifferenceData = async function getDifferenceData(query) {
+  console.log(query);
+  const get = mysql.format(queries.summary.getDifferenceData, [
+    query.expenseCategories.split(","),
+    query.incomeCategories.split(","),
+  ]);
+
+  console.log(`Query to get difference data: ${get}`);
+
+  try {
+    let result = await database.query(get);
+
+    const transformed = Object.values(
+      result.reduce((acc, { year, month, expenseTotal, incomeTotal }) => {
+        if (!acc[year]) {
+          acc[year] = { year, months: [] };
+        }
+        acc[year].months.push({ month, expenseTotal, incomeTotal });
+        return acc;
+      }, {})
+    )
+    // .map(yearObj => ({
+      // ...yearObj,
+      // months: yearObj.months.sort((a, b) => a.month - b.month) // sort months descending
+    // }))
+    .sort((a, b) => b.year - a.year);;
+
+    return {
+      success: true,
+      statusCode: 200,
+      message: transformed,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      statusCode: 500,
+      message: "Unexpected error. Please try again after sometime.",
+      error,
+    };
+  }
+};
+
+
 SummaryService.prototype.getAllYears = async function getAllYears(query) {
   const get = mysql.format(queries.summary.getAllYears, []);
 
