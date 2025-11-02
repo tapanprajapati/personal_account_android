@@ -27,7 +27,7 @@ export default function Entry({
 <div className="entry-container">
       <div className="control-buttons">
         <FaEdit
-          size={10}
+          size={15}
           className="control-button"
           color="green"
           onClick={() => {
@@ -37,7 +37,7 @@ export default function Entry({
           }}
         />
         <FaTrash
-          size={10}
+          size={15}
           className="control-button"
           color="red"
           onClick={confirmAndDelete}

@@ -33,27 +33,28 @@ export default function RecentEntries() {
 
   const createEntryComponent = (entry) => {
     let color = TextColors.income;
-    if (entry.category.type.toLowerCase() === 'expense') {
+    if (entry.cType.toLowerCase() === 'expense') {
       color = TextColors.expense;
     }
     
     return (
-      <div key={entry.id} className="entry-container">
+      <div key={entry.id} className="recent-entries-container">
         <div className="slash1"></div>
         <div className="slash2"></div>
         <div className="slash3"></div>
         <div className="slash4"></div>
-        <div className="entry">
+        <div className="recent-entries">
           <div className="details">
-            <div className="entry-title">{entry.title}</div>
-            <div className="entry-category">{entry.category.title}</div>
-            <div className="entry-amount" style={{ color: color }}>
+            <div className="recent-entries-title">{entry.title}</div>
+            <div className="recent-entries-category">{entry.cTitle}</div>
+            <div className="user-text">{entry.username}</div>
+            
+          </div>
+          <div className="recent-entries-date">
+            <div className="date-text">{entry.date}</div>
+            <div className="recent-entries-amount" style={{ color: color }}>
               $ {entry.amount}
             </div>
-          </div>
-          <div className="date">
-            <div className="date-text">{entry.date}</div>
-            <div className="user-text">{entry.username}</div>
           </div>
         </div>
       </div>

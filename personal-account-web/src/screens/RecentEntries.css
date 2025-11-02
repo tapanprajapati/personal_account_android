@@ -11,18 +11,19 @@
   text-align: center;
 }
 
-.entry-list {
+.recent-entries-list {
   margin: 0 5px;
   flex: 1;
 }
 
-.entry-container {
+.recent-entries-container {
   padding: 10px;
-  margin: 5px;
   position: relative;
   overflow: hidden;
   background: white;
   border: 1px solid #ddd;
+  margin: 5px auto;
+  width: 50%;
   border-bottom-width: 0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
@@ -72,39 +73,43 @@
   z-index: 1;
 }
 
-.entry {
+.recent-entries {
   display: flex;
   flex-direction: row;
-  flex: 1;
   padding: 5px;
+  margin: 0 10px;
   position: relative;
   z-index: 2;
 }
 
 .details {
   flex: 2;
+  align-self: left;justify-items: left;
 }
 
-.entry-title {
+.recent-entries-title {
   font-size: 20px;
   color: steelblue;
   font-weight: bold;
   margin-bottom: 5px;
+  text-align: left;
 }
 
-.entry-amount {
+.recent-entries-amount {
   font-size: 17px;
   font-weight: bold;
   margin-top: 5px;
+  text-align: left;
 }
 
-.entry-category {
+.recent-entries-category {
   color: grey;
   font-size: 14px;
+  text-align: left;
   margin-bottom: 5px;
 }
 
-.date {
+.recent-entries-date {
   align-self: center;
   text-align: right;
 }
@@ -116,6 +121,7 @@
 
 .user-text {
   color: grey;
+  text-align: left;
   font-size: 14px;
 }
 
@@ -148,18 +154,22 @@
   .entry {
     flex-direction: column;
   }
+
+  .recent-entries-container {
+    width: 80%;
+  }
   
-  .date {
+  .recent-entries-date {
     align-self: flex-start;
     text-align: left;
     margin-top: 10px;
   }
   
-  .entry-title {
+  .recent-entries-title {
     font-size: 18px;
   }
   
-  .entry-amount {
+  .recent-entries-amount {
     font-size: 16px;
   }
 }

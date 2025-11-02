@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Header.css';
+import { FaEllipsisV, FaHistory, FaPlus } from 'react-icons/fa';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -80,28 +81,28 @@ export default function Header() {
         </nav>
 
         <div className="header-actions">
-          <button 
+          <FaPlus 
+            size={15}
             className="action-btn"
+            color='white'
             onClick={() => handleMenuAction('add-entry')}
             title="Add Entry"
-          >
-            ➕
-          </button>
-          <button 
+          />
+          <FaHistory 
+            size={15}
+            color='white'
             className="action-btn"
             onClick={() => handleMenuAction('recent')}
             title="Recent Entries"
-          >
-            📋
-          </button>
+          />
           <div className="dropdown">
-            <button 
+            <FaEllipsisV 
               className="action-btn dropdown-btn" 
+              size={15}
+              color='white'
               onClick={() => setShowDropdown(!showDropdown)}
               title="More Options"
-            >
-              ⋮
-            </button>
+            />
             {showDropdown && (
               <div className="dropdown-content">
                 <button onClick={() => handleMenuAction('categories')}>

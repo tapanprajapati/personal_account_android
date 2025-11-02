@@ -12,7 +12,7 @@
 }
 
 .modal-container {
-  background-color: #aaa;
+  /* background-color: #aaa; */
   margin: 50px;
   border-radius: 8px;
 }
@@ -23,7 +23,7 @@
   top: -5px;
   left: -5px;
   border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); */
   min-width: 300px;
 }
 

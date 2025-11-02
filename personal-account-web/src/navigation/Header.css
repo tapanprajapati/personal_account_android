@@ -80,9 +80,9 @@
 }
 
 .action-btn {
-  background: white;
+  /* background: white; */
   border: none;
-  color: white;
+  /* color: white; */
   padding: 10px;
   border-radius: 20px;
   font-size: 18px;
@@ -96,7 +96,7 @@
 }
 
 .action-btn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  /* background-color: rgba(255, 255, 255, 0.1); */
 }
 
 .dropdown {
@@ -183,9 +183,14 @@
     height: auto;
     padding: 10px 15px;
   }
+  
+  .header-left{
+    width: 100%;
+    justify-content: center;
+  }
 
   .header-nav {
-    order: 3;
+    order: 1;
     width: 100%;
     justify-content: center;
     margin-top: 10px;

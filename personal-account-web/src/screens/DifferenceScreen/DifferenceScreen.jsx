@@ -37,7 +37,7 @@ export default function DifferenceScreen() {
   };
 
   const getData = (iCategories, eCategories) => {
-    //setEdit(false);
+    setEdit(false);
     entryHandler.getDifferenceData(getSelectedCategories(iCategories), getSelectedCategories(eCategories)).then((result) => {
       if (result.success) {
         const yearsData = result.message;
@@ -105,6 +105,7 @@ export default function DifferenceScreen() {
 
   useEffect(() => {
     getCategories();
+    getUsers();
   }, []);
 
   const handleRefresh = () => {

@@ -222,7 +222,6 @@ export default class EntryDBHandler {
       .then(json=>{
         if(json.success)
         {
-          json.message = this.fromEntries(json.message)
           resolve(json)
         }
         else
