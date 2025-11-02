@@ -9,7 +9,7 @@ export default class WebStorage {
         console.log("Initializing Web Storage");
 
         WebStorage._instance = this;
-        this.IP = import.meta.env.VITE_API_URL;
+        this.IP = "https://untensile-carla-unentrapped.ngrok-free.dev";
         this.user = "";
         this.KEYS = {
             IP: "IP",
