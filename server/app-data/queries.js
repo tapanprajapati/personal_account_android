@@ -82,5 +82,11 @@ module.exports = {
         ORDER BY
           year DESC,
           month;`
-    },
+  },
+  recurring: {
+    createRecurring: 
+    "insert into recurring value (?,?,?,?,?,?,?,?,?,?);",
+    getRecurrings:
+    "select * from recurring;"
+  }
 };

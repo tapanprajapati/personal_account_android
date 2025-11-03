@@ -9,6 +9,7 @@ const groupRoutes = require("../src/routes/groupRoute");
 const categoryRoutes = require("../src/routes/categoryRoute");
 const entryRoutes = require("../src/routes/entryRoute");
 const summaryRoutes = require("../src/routes/summaryRoute");
+const recurringRoutes = require("../src/routes/recurringRoute");
 
 /**
  * Express server initialization
@@ -42,6 +43,7 @@ server.use("/api/group", groupRoutes);
 server.use("/api/category", categoryRoutes);
 server.use("/api/entry", entryRoutes);
 server.use("/api/summary", summaryRoutes);
+server.use("/api/recurring", recurringRoutes);
 /**
  * Handling unexpected and validation errors
  */
