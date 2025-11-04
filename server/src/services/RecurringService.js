@@ -6,10 +6,7 @@ const database = DatabaseFactory.getInstance();
 
 function RecurringService() {}
 
-RecurringService.prototype.getRecurrings = async function getRecurrings(
-  params,
-  query
-) {
+RecurringService.prototype.getRecurrings = async function getRecurrings() {
   const get = mysql.format(queries.recurring.getRecurrings, []);
 
   console.log(`Query to get all recurrings: ${get}`);
@@ -68,43 +65,78 @@ RecurringService.prototype.createRecurring = async function createRecurring(body
   }
 };
 
-RecurringService.prototype.updateRecurring = async function updateRecurring(
-  params,
-  query
-) {
-  // try {
-  //   const rename = mysql.format(queries.recurring.updateRecurring, [
-  //     query.title,
-  //     query.allowance,
-  //     params.id,
-  //   ]);
+RecurringService.prototype.updateRecurringSchedule = async function updateRecurringSchedule(recurring) {
+  try {
+    const update = mysql.format(queries.recurring.updateRecurringSchedule, [
+      recurring.last_run_date,
+      recurring.next_run_date,
+      recurring.id
+    ]);
 
-  //   console.log(`Query to rename recurring: ${rename}`);
-  //   let result = await database.query(rename);
+    console.log(`Query to update recurring schedule: ${update}`);
+    let result = await database.query(update);
 
-  //   if (result.affectedRows === 0) {
-  //     return {
-  //       success: false,
-  //       statusCode: 400,
-  //       message: "Recurring does not exist",
-  //     };
-  //   }
+    if (result.affectedRows === 0) {
+      return {
+        success: false,
+        statusCode: 400,
+        message: "Recurring does not exist",
+      };
+    }
 
-  //   return {
-  //     success: true,
-  //     statusCode: 200,
-  //     message: "recurring renamed successfully",
-  //   };
-  // } catch (error) {
-  //   return {
-  //     success: false,
-  //     statusCode: 500,
-  //     message: "Unexpected error. Please try again after sometime.",
-  //     error,
-  //   };
-  // }
+    return {
+      success: true,
+      statusCode: 200,
+      message: "recurring schedule update successfully",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      statusCode: 500,
+      message: "Unexpected error. Please try again after sometime.",
+      error,
+    };
+  }
 };
 
+RecurringService.prototype.updateRecurring = async function updateRecurring(recurring) {
+  try {
+    const update = mysql.format(queries.recurring.updateRecurringSchedule, [
+      recurring.title,
+      recurring.description,
+      recurring.amount,
+      recurring.categoryid,
+      recurring.username,
+      recurring.freq,
+      recurring.start_date,
+      recurring.id
+    ]);
+
+    console.log(`Query to update recurring: ${update}`);
+    let result = await database.query(update);
+
+    if (result.affectedRows === 0) {
+      return {
+        success: false,
+        statusCode: 400,
+        message: "Recurring does not exist",
+      };
+    }
+
+    return {
+      success: true,
+      statusCode: 200,
+      message: "recurring update successfully",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      statusCode: 500,
+      message: "Unexpected error. Please try again after sometime.",
+      error,
+    };
+  }
+};
 
 RecurringService.prototype.deleteRecurring = async function deleteRecurring(
   params

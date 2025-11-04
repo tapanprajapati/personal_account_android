@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const fileupload = require("express-fileupload");
+const cron = require("node-cron");
 
 const { ValidationError } = require("express-validation");
 const userRoutes = require("../src/routes/userRoute");
@@ -10,6 +11,13 @@ const categoryRoutes = require("../src/routes/categoryRoute");
 const entryRoutes = require("../src/routes/entryRoute");
 const summaryRoutes = require("../src/routes/summaryRoute");
 const recurringRoutes = require("../src/routes/recurringRoute");
+const RecurringEntryCreator = require("../src/services/RecurringEntryCreator");
+
+const recurringEntryCreator = new RecurringEntryCreator();
+
+cron.schedule('* * * * *', ()=>{
+  recurringEntryCreator.run();
+})
 
 /**
  * Express server initialization
