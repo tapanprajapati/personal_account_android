@@ -109,28 +109,28 @@ RecurringService.prototype.updateRecurring = async function updateRecurring(
 RecurringService.prototype.deleteRecurring = async function deleteRecurring(
   params
 ) {
-  // try {
-  //   const deleteRecurring = mysql.format(queries.recurring.deleteRecurring, [
-  //     params.id,
-  //   ]);
+  try {
+    const deleteRecurring = mysql.format(queries.recurring.deleteRecurring, [
+      params.id,
+    ]);
 
-  //   console.log(`Query to delete recurring: ${deleteRecurring}`);
+    console.log(`Query to delete recurring: ${deleteRecurring}`);
 
-  //   let result1 = await database.query(deleteRecurring);
+    let result1 = await database.query(deleteRecurring);
 
-  //   return {
-  //     success: true,
-  //     statusCode: 200,
-  //     message: "recurring delete successfully",
-  //   };
-  // } catch (error) {
-  //   return {
-  //     success: false,
-  //     statusCode: 500,
-  //     message: "Unexpected error. Please try again after sometime.",
-  //     error,
-  //   };
-  // }
+    return {
+      success: true,
+      statusCode: 200,
+      message: "recurring delete successfully",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      statusCode: 500,
+      message: "Unexpected error. Please try again after sometime.",
+      error,
+    };
+  }
 };
 
 module.exports = RecurringService;

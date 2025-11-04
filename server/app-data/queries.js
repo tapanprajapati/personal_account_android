@@ -87,6 +87,7 @@ module.exports = {
     createRecurring: 
     "insert into recurring value (?,?,?,?,?,?,?,?,?,?);",
     getRecurrings:
-    "select * from recurring;"
+    "select * from recurring;",
+    deleteRecurring: "delete from recurring where id = ?",
   }
 };
