@@ -11,6 +11,7 @@ import RecentEntries from '../screens/RecentEntries';
 import ManageCategoriesScreen from '../screens/CategoryFunctions/ManageCategoriesScreen';
 import ConfigScreen from '../screens/Config/ConfigScreen';
 import ReportScreen from '../screens/Report/ReportScreen';
+import RecurringScreen from '../screens/Recurring/RecurringScreen';
 
 // Layout component that includes the header
 function Layout({ children }) {
@@ -95,6 +96,11 @@ export default function MainNavigation() {
         <Route path="/report" element={
           <Layout>
             <ReportScreen />
+          </Layout>
+        } />
+        <Route path="/recurring" element={
+          <Layout>
+            <RecurringScreen />
           </Layout>
         } />
       </Routes>
