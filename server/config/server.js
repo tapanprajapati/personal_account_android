@@ -15,7 +15,7 @@ const RecurringEntryCreator = require("../src/services/RecurringEntryCreator");
 
 const recurringEntryCreator = new RecurringEntryCreator();
 
-cron.schedule('* * * * *', ()=>{
+cron.schedule('0 0 * * *', ()=>{
   recurringEntryCreator.run();
 })
 
