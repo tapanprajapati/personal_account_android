@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Header from '../components/Header';
+import Header from './Header';
 import DashboardScreen from '../screens/DashboardScreen';
 import AddEntry from '../screens/DataEntry/AddScreen';
 import UpdateEntry from '../screens/DataEntry/UpdateScreen';

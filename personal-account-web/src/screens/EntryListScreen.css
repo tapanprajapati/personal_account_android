@@ -12,8 +12,8 @@
   margin-top: 20px;
 }
 
-.entry-title {
-  position: fixed;
+.entry-list-title {
+  position: absolute;
   top:1;
   text-align: center;
   width:inherit;

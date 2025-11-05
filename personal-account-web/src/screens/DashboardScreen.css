@@ -40,13 +40,30 @@
   font-size: 20px;
 }
 
-.pie-chart {
-  flex: 0.5;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.dashboard-total-summary {
   width: 30%;
+  
+  padding:20px 5px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-total-income {
+  font-size: large;
+  font-weight: bold;
+  color: #16A34A;
+}
+
+
+.dashboard-total-expense {
+  font-size: large;
+  font-weight: bold;
+  color: #FF3300;
+}
+
+.dashboard-total-diff {
+  font-size: large;
+  font-weight: bold;
 }
 
 .category-container {

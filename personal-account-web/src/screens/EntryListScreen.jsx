@@ -44,7 +44,7 @@ export default function EntryListScreen() {
   return (
     <Container>
       <div className="entry-list-screen">
-        <div className='entry-title'>
+        <div className='entry-list-title'>
           <h2>{type}: {getMonthName(month)} {year}</h2>
         </div>
         

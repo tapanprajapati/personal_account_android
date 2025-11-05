@@ -13,6 +13,8 @@
 
 .input-holder {
   margin: 20px 0;
+  width: 50%;
+  margin: auto;
   padding: 15px;
   background: #f8f9fa;
   border-radius: 8px;
@@ -80,7 +82,8 @@
 
 .category-list {
   flex: 1;
-  margin: 10px 0;
+  width: 30%;
+  margin:10px auto;
 }
 
 .no-categories {
@@ -143,13 +146,18 @@
   }
   
   .input-holder {
-    margin: 15px 0;
+    /* margin: 15px 0; */
     padding: 10px;
+    width: 80%;
   }
   
   .horizontal-container {
-    flex-direction: column;
+    /* flex-direction: column; */
     gap: 15px;
+  }
+
+  .category-list {
+    width: 70%;
   }
   
   .add-button {

@@ -30,7 +30,7 @@ export default function CategoryComponent({
           onClick={() => handleEdit(data)}
           title="Edit Category"
         >
-          <FaEdit size={16} />
+          <FaEdit size={15} />
         </button>
         
         <button
@@ -38,7 +38,7 @@ export default function CategoryComponent({
           onClick={confirmAndDelete}
           title="Delete Category"
         >
-          <FaTrash size={16} />
+          <FaTrash size={15} />
         </button>
         
         <button
@@ -46,7 +46,7 @@ export default function CategoryComponent({
           onClick={() => handleTransfer(data)}
           title="Transfer Category Data"
         >
-          <FaExchangeAlt size={16} />
+          <FaExchangeAlt size={15} />
         </button>
       </div>
     </div>

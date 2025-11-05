@@ -61,7 +61,7 @@ export default function CategoryFilterModal({
       <div className="category-filter-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h3>Filter Categories</h3>
-          <button className="close-btn" onClick={close}>×</button>
+          <button className="close-btn" onClick={close}>x</button>
         </div>
 
         <div className="modal">

@@ -32,7 +32,7 @@ export default function DashboardCategoryTotal({ type, data, YTD }) {
         <div className="category-total">YTD</div>
         <div className="category-total">YTD Rem.</div>
       </div>
-      <div className="category-list">
+      <div className="dashboard-category-list">
         {data.map((item, index) => {
           const YTDValue = YTD[index] ? YTD[index].total : 0;
           const isIncome = type === "Income";

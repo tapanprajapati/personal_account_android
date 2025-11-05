@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container } from '../styles/global';
 import TypePieChart from '../components/graph/DashboardComponents/TypePieChart';
-import { getMonthName } from '../utils/converters';
+import { formatLargeNumber, getMonthName } from '../utils/converters';
 import MonthYearPicker from '../modals/MonthYearPicker';
 import DashboardCategoryTotal from '../components/DashboardCategoryTotal';
 import CategoryDBHandler from '../databasehandler/categoryhandler';
@@ -100,8 +100,13 @@ export default function DashboardScreen() {
           </div>
         </div>
 
-        <div className="pie-chart">
+        {/* <div className="pie-chart">
           <TypePieChart income={incomeTotal} expense={expenseTotal} />
+        </div> */}
+        <div className="dashboard-total-summary">
+          <div className="dashboard-total-income">Income: ${formatLargeNumber(incomeTotal)}</div>
+          <div className="dashboard-total-expense">Expense: ${formatLargeNumber(expenseTotal)}</div>
+          <div className="dashboard-total-diff">Difference: ${formatLargeNumber(incomeTotal-expenseTotal)}</div>
         </div>
       </div>
 
