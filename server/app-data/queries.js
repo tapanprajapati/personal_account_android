@@ -82,5 +82,15 @@ module.exports = {
         ORDER BY
           year DESC,
           month;`
-    },
+  },
+  recurring: {
+    createRecurring: 
+      "insert into recurring value (?,?,?,?,?,?,?,?,?,?);",
+    updateRecurringSchedule:
+      "update recurring set last_run_date = ?, next_run_date = ? where id = ?",
+    updateRecurring:
+      "update recurring set title = ?, description = ?, amount = ?, categoryid = ?, username = ?, freq = ?, start_date = ?, last_run_date = null, next_run_date = null where id = ?",
+    getRecurrings: "select * from recurring;",
+    deleteRecurring: "delete from recurring where id = ?",
+  }
 };
