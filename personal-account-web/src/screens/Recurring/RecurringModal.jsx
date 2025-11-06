@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import CategoryDBHandler from '../../databasehandler/categoryhandler';
 import UserDBHandler from '../../databasehandler/userhandler';
 import CategoryFormModal from '../../modals/CategoryFormModal';
-import './EntryForm.css';
+import './RecurringModal.css';
 
-export default function EntryForm({ handleFormData, type, entry = null }) {
+export default function RecurringModal({ isVisible, close, saveRecurring, recurring }) {
   const [formData, setFormData] = useState({
     showDatePicker: false,
     showCategoryModal: false,
-    showImageUpload: false,
     date: new Date(),
     selectedType: type?.toLowerCase() || 'expense',
     selectedCategoryId: 0,
@@ -25,19 +24,19 @@ export default function EntryForm({ handleFormData, type, entry = null }) {
   const [categoryHandler] = useState(new CategoryDBHandler());
   const [userHandler] = useState(new UserDBHandler());
 
-  const buttonText = entry ? 'Update' : 'Add';
+  const buttonText = recurring ? 'Update' : 'Add';
 
   useEffect(() => {
-    if (entry) {
+    if (recurring) {
       setFormData(prev => ({
         ...prev,
-        date: new Date(entry.fulldate),
-        selectedType: entry.cType,
-        selectedCategoryId: entry.cId,
-        title: entry.title,
-        amount: entry.amount.toString(),
-        description: entry.description,
-        selectedUser: entry.username
+        date: new Date(recurring.start_date),
+        selectedType: recurring.cType,
+        selectedCategoryId: recurring.cId,
+        title: recurring.title,
+        amount: recurring.amount.toString(),
+        description: recurring.description,
+        selectedUser: recurring.username
       }));
     }
     getCategories(formData.selectedType);
@@ -155,7 +154,7 @@ export default function EntryForm({ handleFormData, type, entry = null }) {
     if (error) {
       alert('ERROR: ' + errorMessage);
     } else {
-      const newEntry = {
+      const newRecurring = {
         title: title,
         description: description,
         amount: amount,
@@ -164,12 +163,12 @@ export default function EntryForm({ handleFormData, type, entry = null }) {
         username: selectedUser
       };
 
-      if (entry) {
-        newEntry.id = entry.id;
+      if (recurring) {
+        newRecurring.id = recurring.id;
       }
 
-      console.log(newEntry);
-      handleFormData(newEntry);
+      console.log(newRecurring);
+      handleFormData(newRecurring);
       resetInputs();
     }
   };
@@ -186,7 +185,7 @@ export default function EntryForm({ handleFormData, type, entry = null }) {
   };
 
   return (
-    <div className="entry-form-container">
+    <div className="recurring-form-container">
       <div className="form-section">
         <div className="input-group">
           <label className="input-label">Title*</label>
