@@ -1,0 +1,248 @@
+.recurring-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* background-color: rgba(0, 0, 0, 0.6); */
+  display: flex;
+  justify-content: center;;
+  align-items: center;
+  z-index: 1000;
+}
+
+.recurring-modal-container {
+  background-color:#fff;
+  margin: 50px;
+  border-radius: 8px;  
+  width: 800px;
+  overflow: scroll;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.recurring-modal-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow: scroll;
+  max-height: 600px;
+}
+
+.recurring-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.recurring-input-label {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.form-recurring-input {
+  padding: 12px 16px;
+  border: 2px solid #e1e5e9;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.2s ease;
+}
+
+.form-recurring-input:focus {
+  outline: none;
+  border-color: #0A89A7;
+  box-shadow: 0 0 0 3px rgba(10, 137, 167, 0.1);
+}
+
+.form-recurring-textarea {
+  padding: 12px 16px;
+  border: 2px solid #e1e5e9;
+  border-radius: 6px;
+  font-size: 16px;
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+}
+
+.form-recurring-textarea:focus {
+  outline: none;
+  border-color: #0A89A7;
+  box-shadow: 0 0 0 3px rgba(10, 137, 167, 0.1);
+}
+
+.form-recurring-select {
+  padding: 12px 16px;
+  border: 2px solid #e1e5e9;
+  border-radius: 6px;
+  font-size: 16px;
+  background-color: white;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.form-recurring-select:focus {
+  outline: none;
+  border-color: #0A89A7;
+  box-shadow: 0 0 0 3px rgba(10, 137, 167, 0.1);
+}
+
+.category-recurring-input-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.category-select {
+  flex: 1;
+}
+
+.add-category-btn {
+  background-color: #0A89A7;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-category-btn:hover {
+  background-color: #087a96;
+}
+
+.image-upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.image-upload-btn {
+  background-color: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 6px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 16px;
+  color: #6c757d;
+}
+
+.image-upload-btn:hover {
+  background-color: #e9ecef;
+  border-color: #0A89A7;
+  color: #0A89A7;
+}
+
+.image-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  border-radius: 6px;
+  padding: 12px 16px;
+}
+
+.image-name {
+  color: #155724;
+  font-weight: 500;
+}
+
+.remove-image-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.remove-image-btn:hover {
+  background-color: #c82333;
+}
+
+.submit-recurring-section {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  justify-content: center;
+}
+
+.submit-recurring-btn {
+  background-color: #0A89A7;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 16px 32px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-width: 120px;
+}
+
+.submit-recurring-btn:hover {
+  background-color: #087a96;
+}
+
+.submit-recurring-btn:active {
+  transform: translateY(1px);
+}
+
+.cancel-recurring-btn {
+  background-color: #ff3e51;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 16px 32px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-width: 120px;
+}
+
+.cancel-recurring-btn:hover {
+  background-color: #c82333;
+}
+
+.cancel-recurring-btn:active {
+  transform: translateY(1px);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .entry-form-container {
+    padding: 20px;
+    margin: 10px;
+  }
+  
+  .category-recurring-input-container {
+    flex-direction: column;
+  }
+  
+  .add-category-btn {
+    width: 100%;
+    height: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .submit-recurring-btn {
+    padding: 8px 16px;
+  }
+}

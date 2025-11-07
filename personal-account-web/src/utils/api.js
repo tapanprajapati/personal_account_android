@@ -13,6 +13,7 @@ class API {
         this.summary = new SummaryAPI(this.storage);
         this.category = new CategoryAPI(this.storage);
         this.user = new UserAPI(this.storage);
+        this.recurring = new RecurringAPI(this.storage)
 
         return API._instance;
     }
@@ -100,6 +101,23 @@ class CategoryAPI {
     update() { return `${this.storage.IP}/api/category/update/`; }
     delete() { return `${this.storage.IP}/api/category/`; }
     transfer() { return `${this.storage.IP}/api/category/transfer/`; }
+}
+
+class RecurringAPI {
+    constructor(_storage) {
+        if (RecurringAPI._instance) {
+            return RecurringAPI._instance;
+        }
+
+        RecurringAPI._instance = this;
+        this.storage = _storage;
+        return RecurringAPI._instance;
+    }
+
+    create() { return `${this.storage.IP}/api/recurring/create/`; }
+    update() { return `${this.storage.IP}/api/recurring/update/`; }
+    delete() { return `${this.storage.IP}/api/recurring/`; }
+    get() { return `${this.storage.IP}/api/recurring/`; }
 }
 
 export default API;

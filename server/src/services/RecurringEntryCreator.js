@@ -44,7 +44,7 @@ RecurringEntryCreator.prototype.createEntry = function createEntry(recurring) {
         description:recurring.description,
         amount:recurring.amount,
         date:new Date().toISOString().slice(0, 10),
-        categoryid:recurring.categoryid,
+        categoryid:recurring.cId,
         username:recurring.username
     }
 
