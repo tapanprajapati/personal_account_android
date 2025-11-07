@@ -22,15 +22,15 @@ export default class RecurringDBHandler {
           'Content-Type': 'application/json',
           'ngrok-skip-browser-warning': 'true'
         },
-        body: {
+        body: JSON.stringify({
           title: recurring.title,
           description: recurring.description,
           amount: recurring.amount,
           start_date: recurring.start_date,
           freq: recurring.freq,
-          categoryid: recurring.categoryid,
+          categoryid: recurring.cId,
           username: recurring.username,
-        }
+        })
       })
         .then((response) => response.json())
         .then(json => {
@@ -53,14 +53,16 @@ export default class RecurringDBHandler {
           'Content-Type': 'application/json',
           'ngrok-skip-browser-warning': 'true'
         },
-        body: {
+        body: JSON.stringify({
           title: recurring.title,
           description: recurring.description,
           amount: recurring.amount,
           freq: recurring.freq,
-          categoryid: recurring.categoryid,
+          start_date: recurring.start_date,
+          categoryid: recurring.cId,
           username: recurring.username,
-        }
+          id: recurring.id
+        })
       })
         .then((response) => response.json())
         .then(json => {

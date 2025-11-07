@@ -1,30 +1,46 @@
-.entry-form-container {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  margin: 20px 0;
+.recurring-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* background-color: rgba(0, 0, 0, 0.6); */
+  display: flex;
+  justify-content: center;;
+  align-items: center;
+  z-index: 1000;
 }
 
-.form-section {
+.recurring-modal-container {
+  background-color:#fff;
+  margin: 50px;
+  border-radius: 8px;  
+  width: 800px;
+  overflow: scroll;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.recurring-modal-content {
+  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  overflow: scroll;
+  max-height: 600px;
 }
 
-.input-group {
+.recurring-input-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.input-label {
+.recurring-input-label {
   font-weight: 600;
   color: #333;
   font-size: 14px;
 }
 
-.form-input {
+.form-recurring-input {
   padding: 12px 16px;
   border: 2px solid #e1e5e9;
   border-radius: 6px;
@@ -32,13 +48,13 @@
   transition: border-color 0.2s ease;
 }
 
-.form-input:focus {
+.form-recurring-input:focus {
   outline: none;
   border-color: #0A89A7;
   box-shadow: 0 0 0 3px rgba(10, 137, 167, 0.1);
 }
 
-.form-textarea {
+.form-recurring-textarea {
   padding: 12px 16px;
   border: 2px solid #e1e5e9;
   border-radius: 6px;
@@ -49,13 +65,13 @@
   transition: border-color 0.2s ease;
 }
 
-.form-textarea:focus {
+.form-recurring-textarea:focus {
   outline: none;
   border-color: #0A89A7;
   box-shadow: 0 0 0 3px rgba(10, 137, 167, 0.1);
 }
 
-.form-select {
+.form-recurring-select {
   padding: 12px 16px;
   border: 2px solid #e1e5e9;
   border-radius: 6px;
@@ -65,13 +81,13 @@
   transition: border-color 0.2s ease;
 }
 
-.form-select:focus {
+.form-recurring-select:focus {
   outline: none;
   border-color: #0A89A7;
   box-shadow: 0 0 0 3px rgba(10, 137, 167, 0.1);
 }
 
-.category-input-container {
+.category-recurring-input-container {
   display: flex;
   gap: 10px;
   align-items: center;
@@ -158,13 +174,15 @@
   background-color: #c82333;
 }
 
-.submit-section {
+.submit-recurring-section {
   margin-top: 30px;
   display: flex;
+  flex-direction: row;
+  gap: 5px;
   justify-content: center;
 }
 
-.submit-btn {
+.submit-recurring-btn {
   background-color: #0A89A7;
   color: white;
   border: none;
@@ -177,11 +195,32 @@
   min-width: 120px;
 }
 
-.submit-btn:hover {
+.submit-recurring-btn:hover {
   background-color: #087a96;
 }
 
-.submit-btn:active {
+.submit-recurring-btn:active {
+  transform: translateY(1px);
+}
+
+.cancel-recurring-btn {
+  background-color: #ff3e51;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 16px 32px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-width: 120px;
+}
+
+.cancel-recurring-btn:hover {
+  background-color: #c82333;
+}
+
+.cancel-recurring-btn:active {
   transform: translateY(1px);
 }
 
@@ -192,7 +231,7 @@
     margin: 10px;
   }
   
-  .category-input-container {
+  .category-recurring-input-container {
     flex-direction: column;
   }
   
@@ -203,7 +242,7 @@
 }
 
 @media (max-width: 480px) {
-  .submit-btn {
+  .submit-recurring-btn {
     padding: 8px 16px;
   }
 }

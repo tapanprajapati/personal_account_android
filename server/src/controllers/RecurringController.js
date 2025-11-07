@@ -37,7 +37,7 @@ RecurringController.prototype.updateRecurring = async function updateRecurring(
   req,
   res
 ) {
-  let response = await this.service.updateRecurring(req.params, req.query);
+  let response = await this.service.updateRecurring(req.body);
   console.log(response);
   res.status(response.statusCode).send(response);
 };

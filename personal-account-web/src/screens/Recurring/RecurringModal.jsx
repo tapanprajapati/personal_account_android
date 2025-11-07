@@ -1,25 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import CategoryDBHandler from '../../databasehandler/categoryhandler';
-import UserDBHandler from '../../databasehandler/userhandler';
 import CategoryFormModal from '../../modals/CategoryFormModal';
 import './RecurringModal.css';
+import RecurringDBHandler from '../../databasehandler/recurringhandler';
+import UserDBHandler from '../../databasehandler/userhandler';
 
-export default function RecurringModal({ isVisible, close, saveRecurring, recurring }) {
+export default function RecurringModal({ isVisible, close, handleData, recurring }) {
   const [formData, setFormData] = useState({
     showDatePicker: false,
     showCategoryModal: false,
     date: new Date(),
-    selectedType: type?.toLowerCase() || 'expense',
+    selectedType: 'income',
     selectedCategoryId: 0,
     title: '',
+    freq: '',
     amount: '',
     description: '',
-    categories: [],
+    incomeCategories: [],
+    expenseCategories: [],
     users: [],
     imagePath: '',
     selectedUser: '',
     imageFile: null
   });
+  
 
   const [categoryHandler] = useState(new CategoryDBHandler());
   const [userHandler] = useState(new UserDBHandler());
@@ -34,26 +38,36 @@ export default function RecurringModal({ isVisible, close, saveRecurring, recurr
         selectedType: recurring.cType,
         selectedCategoryId: recurring.cId,
         title: recurring.title,
+        freq: recurring.freq,
         amount: recurring.amount.toString(),
         description: recurring.description,
         selectedUser: recurring.username
       }));
     }
-    getCategories(formData.selectedType);
+  }, [recurring]);
+
+  useEffect(()=> {
+    getCategories('income');
+    getCategories('expense');
     getUsers();
-  }, []);
+  },[])
 
   const getCategories = async (type) => {
     try {
       const result = await categoryHandler.getCategories(type);
       if (result.success) {
         const categories = result.message;
-        setFormData(prev => ({
-          ...prev,
-          categories: categories,
-          selectedCategoryId: prev.selectedType !== type ? categories[0]?.id || 0 : prev.selectedCategoryId,
-          selectedType: type
-        }));
+        if(type=='income'){
+          setFormData(prev => ({
+            ...prev,
+            incomeCategories: categories
+          }));
+        } else {
+          setFormData(prev => ({
+            ...prev,
+            expenseCategories: categories
+          }));
+        }
       } else {
         alert(`ERROR: ${result.message.toUpperCase()}`);
       }
@@ -88,7 +102,11 @@ export default function RecurringModal({ isVisible, close, saveRecurring, recurr
   };
 
   const handleTypeChange = (type) => {
-    getCategories(type);
+    console.log("Handle type change");
+    setFormData(prev => ({
+      ...prev,
+      selectedType: type
+    }));
   };
 
   const handleDateChange = (date) => {
@@ -131,7 +149,7 @@ export default function RecurringModal({ isVisible, close, saveRecurring, recurr
   };
 
   const submitForm = () => {
-    const { title, description, amount, date, selectedCategoryId, selectedUser } = formData;
+    const { title, description, amount, date, freq, selectedCategoryId, selectedType, selectedUser } = formData;
     
     let error = false;
     let errorMessage = 'Correct Following';
@@ -158,8 +176,12 @@ export default function RecurringModal({ isVisible, close, saveRecurring, recurr
         title: title,
         description: description,
         amount: amount,
-        date: date.toISOString().slice(0, 10),
-        category: { id: selectedCategoryId.toString() },
+        freq: freq,
+        start_date: date.toISOString().slice(0, 10),
+        last_run_date: null,
+        next_run_date: date.toISOString().slice(0, 10),
+        cId: selectedCategoryId.toString(),
+        cType: selectedType,
         username: selectedUser
       };
 
@@ -168,7 +190,7 @@ export default function RecurringModal({ isVisible, close, saveRecurring, recurr
       }
 
       console.log(newRecurring);
-      handleFormData(newRecurring);
+      handleData(newRecurring);
       resetInputs();
     }
   };
@@ -183,126 +205,153 @@ export default function RecurringModal({ isVisible, close, saveRecurring, recurr
       imageFile: null
     }));
   };
+  if (!isVisible) return null;
+  return (    
+    <div className="recurring-modal-overlay">
+      <div className="recurring-modal-container">
+        <div className="recurring-modal-content">
+          <div className="recurring-input-group">
+            <label className="recurring-input-label">Title*</label>
+            <input
+              type="text"
+              value={formData.title}
+              className="form-recurring-input"
+              onChange={(e) => handleInputChange('title', e.target.value)}
+              placeholder="Enter title"
+            />
+          </div>
 
-  return (
-    <div className="recurring-form-container">
-      <div className="form-section">
-        <div className="input-group">
-          <label className="input-label">Title*</label>
-          <input
-            type="text"
-            value={formData.title}
-            className="form-input"
-            onChange={(e) => handleInputChange('title', e.target.value)}
-            placeholder="Enter title"
-          />
-        </div>
+          <div className="recurring-input-group">
+            <label className="recurring-input-label">Description</label>
+            <textarea
+              value={formData.description}
+              className="form-recurring-textarea"
+              onChange={(e) => handleInputChange('description', e.target.value)}
+              placeholder="Enter description"
+              rows={3}
+            />
+          </div>
 
-        <div className="input-group">
-          <label className="input-label">Description</label>
-          <textarea
-            value={formData.description}
-            className="form-textarea"
-            onChange={(e) => handleInputChange('description', e.target.value)}
-            placeholder="Enter description"
-            rows={3}
-          />
-        </div>
+          <div className="recurring-input-group">
+            <label className="recurring-input-label">Amount*</label>
+            <input
+              type="number"
+              value={formData.amount}
+              className="form-recurring-input"
+              onChange={(e) => validateAmount(e.target.value)}
+              placeholder="Enter amount"
+              step="0.01"
+            />
+          </div>
 
-        <div className="input-group">
-          <label className="input-label">Amount*</label>
-          <input
-            type="number"
-            value={formData.amount}
-            className="form-input"
-            onChange={(e) => validateAmount(e.target.value)}
-            placeholder="Enter amount"
-            step="0.01"
-          />
-        </div>
+          <div className="recurring-input-group">
+            <label className="recurring-input-label">Start Date</label>
+            <input
+              type="date"
+              className="form-recurring-input"
+              value={formData.date.toISOString().slice(0, 10)}
+              // readOnly
+              onChange={handleDateChange}
+              placeholder="Select date"
+            />
+          </div>
 
-        <div className="input-group">
-          <label className="input-label">Date</label>
-          <input
-            type="date"
-            className="form-input"
-            value={formData.date.toISOString().slice(0, 10)}
-            // readOnly
-            onChange={handleDateChange}
-            placeholder="Select date"
-          />
-        </div>
-
-        <div className="input-group">
-          <label className="input-label">Type</label>
-          <select
-            className="form-select"
-            value={formData.selectedType}
-            onChange={(e) => handleTypeChange(e.target.value)}
-          >
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
-          </select>
-        </div>
-
-        <div className="input-group">
-          <label className="input-label">Category</label>
-          <div className="category-input-container">
+          <div className="recurring-input-group">
+            <label className="recurring-input-label">Frequency</label>
             <select
-              className="form-select category-select"
-              value={formData.selectedCategoryId}
-              onChange={(e) => handleInputChange('selectedCategoryId', parseInt(e.target.value))}
+              className="form-recurring-select"
+              value={formData.freq}
+              onChange={(e) => handleInputChange("freq",e.target.value)}
             >
-              {formData.categories.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.title}
+              <option value="week">Week</option>
+              <option value="bi-week">Bi-week</option>
+              <option value="month">Month</option>
+              <option value="year">Year</option>
+            </select>
+          </div>
+
+          <div className="recurring-input-group">
+            <label className="recurring-input-label">Type</label>
+            <select
+              className="form-recurring-select"
+              value={formData.selectedType}
+              onChange={(e) => handleTypeChange(e.target.value)}
+            >
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
+            </select>
+          </div>
+
+          <div className="recurring-input-group">
+            <label className="recurring-input-label">Category</label>
+            <div className="category-recurring-input-container">
+              <select
+                className="form-recurring-select category-select"
+                value={formData.selectedCategoryId}
+                onChange={(e) => handleInputChange('selectedCategoryId', parseInt(e.target.value))}
+              >
+                {formData.selectedType=='income' && formData.incomeCategories.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.title}
+                  </option>
+                ))}
+                {formData.selectedType=='expense' && formData.expenseCategories.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.title}
+                  </option>
+                ))}
+              </select>
+              <button
+                className="add-category-btn"
+                onClick={() => handleInputChange('showCategoryModal', true)}
+                title="Add New Category"
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          <div className="recurring-input-group">
+            <label className="recurring-input-label">User</label>
+            <select
+              className="form-recurring-select"
+              value={formData.selectedUser}
+              onChange={(e) => handleInputChange('selectedUser', e.target.value)}
+            >
+              {formData.users.map((item) => (
+                <option key={item.username} value={item.username}>
+                  {item.username}
                 </option>
               ))}
             </select>
+          </div>
+
+          <div className="submit-recurring-section">
             <button
-              className="add-category-btn"
-              onClick={() => handleInputChange('showCategoryModal', true)}
-              title="Add New Category"
+              className="submit-recurring-btn"
+              onClick={submitForm}
             >
-              +
+              {buttonText}
+            </button>
+            <button
+              className="cancel-recurring-btn"
+              onClick={close}
+            >
+              Cancel
             </button>
           </div>
         </div>
 
-        <div className="input-group">
-          <label className="input-label">User</label>
-          <select
-            className="form-select"
-            value={formData.selectedUser}
-            onChange={(e) => handleInputChange('selectedUser', e.target.value)}
-          >
-            {formData.users.map((item) => (
-              <option key={item.username} value={item.username}>
-                {item.username}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="submit-section">
-          <button
-            className="submit-btn"
-            onClick={submitForm}
-          >
-            {buttonText}
-          </button>
-        </div>
+        {formData.showCategoryModal && (
+          <CategoryFormModal
+            title={`Add New ${formData.selectedType.toUpperCase()} Category`}
+            checkCategory={checkCategory}
+            submitData={addCategory}
+            closeModal={() => handleInputChange('showCategoryModal', false)}
+            buttonTitle="Add"
+          />
+        )}
       </div>
-
-      {formData.showCategoryModal && (
-        <CategoryFormModal
-          title={`Add New ${formData.selectedType.toUpperCase()} Category`}
-          checkCategory={checkCategory}
-          submitData={addCategory}
-          closeModal={() => handleInputChange('showCategoryModal', false)}
-          buttonTitle="Add"
-        />
-      )}
     </div>
   );
 }

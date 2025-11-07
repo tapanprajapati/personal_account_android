@@ -30,14 +30,15 @@ RecurringService.prototype.getRecurrings = async function getRecurrings() {
 };
 
 RecurringService.prototype.createRecurring = async function createRecurring(body) {
-  const timeStamp = new Date().getTime().toString();
+  const timeStamp = new Date();
 
-  const create = mysql.format(queries.recurring.exists, [
+  const create = mysql.format(queries.recurring.createRecurring, [
+    timeStamp.getTime().toString(),
     body.title,
     body.description,
     body.amount,
     body.start_date,
-    timeStamp,
+    timeStamp.toISOString().slice(0, 10),
     null,
     null,
     body.freq,
@@ -101,7 +102,7 @@ RecurringService.prototype.updateRecurringSchedule = async function updateRecurr
 
 RecurringService.prototype.updateRecurring = async function updateRecurring(recurring) {
   try {
-    const update = mysql.format(queries.recurring.updateRecurringSchedule, [
+    const update = mysql.format(queries.recurring.updateRecurring, [
       recurring.title,
       recurring.description,
       recurring.amount,

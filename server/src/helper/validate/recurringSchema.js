@@ -18,8 +18,10 @@ module.exports = {
       description: Joi.string().required().allow(""),
       amount: Joi.number().required(),
       freq: Joi.string().equal("month", "week", "bi-week", "year"),
+      start_date: Joi.date().required(),
       categoryid: Joi.string().required(),
       username: Joi.string().required(),
+      id: Joi.string().required()
     }),
   },
   deleteRecurring: {
