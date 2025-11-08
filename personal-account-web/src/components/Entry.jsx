@@ -28,7 +28,7 @@ export default function Entry({
       <div className="control-buttons">
         <FaEdit
           size={15}
-          className="control-button"
+          className="entry-control-button"
           color="green"
           onClick={() => {
             navigate('/update-entry', { state: {
@@ -38,7 +38,7 @@ export default function Entry({
         />
         <FaTrash
           size={15}
-          className="control-button"
+          className="entry-control-button"
           color="red"
           onClick={confirmAndDelete}
         />

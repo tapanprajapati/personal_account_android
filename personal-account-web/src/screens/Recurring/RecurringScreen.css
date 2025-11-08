@@ -12,14 +12,15 @@
 }
 
 .recurring-box {
-  width: 80%;
+  width: 60%;
   margin: auto;
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  /* display: flex; */
+  display: flex;
   z-index: 10;
   margin-bottom: 10px;
-  /* flex-direction: column; */
+  flex-direction: column;
+  gap: 10px;
   /* padding: 10px; */
 }
 
@@ -33,6 +34,7 @@
   flex: 1;
   border-radius: 8px 8px 0px 0;
   padding: 5px;
+  padding-left: 15px;
   font-weight: bold;
   background-color: #0A89A7;
   color: white;
@@ -48,6 +50,7 @@
 
 .recurring-box-amount {
   flex:1;
+  font-weight: bold;
 }
 
 .recurring-box-freq {
@@ -64,6 +67,7 @@
 
 .recurring-box-action-button {
   flex: 1;
+  margin-bottom: 10px;
 }
 
 .recurring-create-button {

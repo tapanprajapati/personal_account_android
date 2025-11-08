@@ -179,36 +179,37 @@ export default function RecurringScreen() {
 
 function Recurring({r, handleUpdate, handleDelete}) {
   
+  const amountColor = r.cType=='income' ? 'green' : 'red';
   return (
     <div className="recurring-box">
       <div className="recurring-box-row">
         <div className="recurring-box-title">
-          {r.title}
-        </div>
-      </div>
-      <div className="recurring-box-row">
-        <div className="recurring-box-desc">
-          {r.discription}
-        </div>
-        <div className="recurring-box-amount">
-          {r.amount}
+          {r.title}: {r.description}
         </div>
       </div>
       <div className="recurring-box-row">
         <div className="recurring-box-category">
-          {r.cTitle}
+          Category: {r.cTitle}
         </div>
+        <div className="recurring-box-amount" style={{color: amountColor}}>
+          Amount: {r.amount}
+        </div>
+      </div>
+      <div className="recurring-box-row">
         <div className="recurring-box-user">
-          {r.username}
+          User: {r.username.toUpperCase()}
+        </div>
+        <div className="recurring-box-freq">
+          Freq: {r.freq.toUpperCase()}
         </div>
       </div>
       
       <div className="recurring-box-row">
         <div className="recurring-box-next-date">
-          {r.next_run_date ? r.next_run_date.slice(0, 10) : r.start_date.slice(0, 10)}
+          Next Date: {r.next_run_date ? r.next_run_date.slice(0, 10) : r.start_date.slice(0, 10)}
         </div>
-        <div className="recurring-box-freq">
-        {r.freq.toUpperCase()}
+        <div className="recurring-box-next-date">
+          Last Date: {r.next_run_date ? r.last_run_date.slice(0, 10):''}
         </div>
       </div>
       <div className="recurring-box-row">
