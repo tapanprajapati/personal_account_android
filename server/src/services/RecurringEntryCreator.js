@@ -24,7 +24,7 @@ RecurringEntryCreator.prototype.run = function run() {
 
 RecurringEntryCreator.prototype.shouldCreateEntry = function shouldCreateEntry(recurring) {
     const now = new Date();
-    if(recurring.start_date.toDateString() > now.toDateString()) {
+    if(recurring.start_date > now) {
         return false;
     }
     if(recurring.last_run_date==null) {
