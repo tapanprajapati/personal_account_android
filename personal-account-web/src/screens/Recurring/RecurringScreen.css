@@ -11,71 +11,63 @@
   font-size: 28px;
 }
 
-.success-message {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-  border-radius: 4px;
-  text-align: center;
-  font-weight: 500;
-  position: fixed;
-  bottom: 0;
+.recurring-box {
+  width: 60%;
   margin: auto;
-  width: 47%;
-}
-
-.recurring-header {
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   display: flex;
-  margin: 5px;
-  padding: 10px 0;
-  border-bottom: 2px solid #ddd;
-  font-weight: bold;
-  background-color: #f8f9fa;
+  z-index: 10;
+  margin-bottom: 10px;
+  flex-direction: column;
+  gap: 10px;
+  /* padding: 10px; */
 }
 
-.recurring-row {
+.recurring-box-row {
   display: flex;
-  margin: 5px;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
-  transition: background-color 0.2s ease;
-}
-
-.recurring-row:hover {
-  background-color: #f8f9fa;
-}
-
-.recurring-title {
-  flex: 1.3;
-  font-weight: bold;
-  padding: 0 5px;
-}
-
-.recurring-total {
-  flex: 0.8;
-  /* font-weight: bold; */
-  text-align: left;
-  padding: 0 5px;
-}
-
-.recurring-actions {
-  /* position: absolute; */
-  /* top: 15px; */
-  /* right: 3px; */
-  /* z-index: 2; */
-  flex: 0.8;
-  font-weight: bold;
-  text-align: left;
-  padding: 0 5px;
-  display: flex;
+  flex: 1;
   flex-direction: row;
-  /* flex:0.2 */
 }
 
-.recurring-action-button {
-  margin-left: 8px;
-  cursor: pointer;
-  transition: transform 0.2s ease;
+.recurring-box-title {
+  flex: 1;
+  border-radius: 8px 8px 0px 0;
+  padding: 5px;
+  padding-left: 15px;
+  font-weight: bold;
+  background-color: #0A89A7;
+  color: white;
+}
+
+.recurring-box-next-date {
+  flex: 1;
+}
+
+.recurring-box-desc {
+  flex: 1;
+}
+
+.recurring-box-amount {
+  flex:1;
+  font-weight: bold;
+}
+
+.recurring-box-freq {
+  flex: 1;
+}
+
+.recurring-box-category {
+  flex: 1;
+}
+
+.recurring-box-user {
+  flex: 1;
+}
+
+.recurring-box-action-button {
+  flex: 1;
+  margin-bottom: 10px;
 }
 
 .recurring-create-button {
@@ -84,21 +76,6 @@
   right: 50px;
   cursor: pointer;
   transition: transform 0.2s ease;
-}
-
-@media (max-width: 768px) {
-  .recurring-header,
-  .recurring-row {
-    font-size: 14px;
-  }
-  
-  .recurring-title {
-    flex: 1.5;
-  }
-  
-  .recurring-total {
-    flex: 0.7;
-  }
 }
 
 
