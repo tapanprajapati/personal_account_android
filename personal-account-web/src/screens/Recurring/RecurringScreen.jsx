@@ -94,12 +94,26 @@ export default function RecurringScreen() {
     <Container>
       <div className="recurring-screen">
         <h2>Recurring Entry</h2>
-        <div className="recurring-header">
+        <div className="list">
+          {recurrings.map((r,index) => (
+            <Recurring 
+              r={r}
+              handleUpdate={()=>{
+                setSelectedRecurring(r);
+                setSelectedIndex(index)
+                setUpdateActive(true);
+              }}
+              handleDelete={()=>deleteRecurring(index)}
+              key={index}
+            />
+          ))}
+        </div>
+        {/* <div className="recurring-header">
           <div className="recurring-total">Title</div>
           <div className="recurring-total">Description</div>
           <div className="recurring-total">Amount</div>
           <div className="recurring-total">Frequency</div>
-          {/* <div className="recurring-total">Start Date</div> */}
+          <div className="recurring-total">Start Date</div>
           <div className="recurring-total">Last Entry Date</div>
           <div className="recurring-total">Next Entry Date</div>
           <div className="recurring-total">Type</div>
@@ -114,9 +128,9 @@ export default function RecurringScreen() {
                   <div className="recurring-total">{r.description}</div>
                   <div className="recurring-total">{r.amount}</div>
                   <div className="recurring-total">{r.freq.toUpperCase()}</div>
-                  {/* <div className="recurring-total">{r.start_date.slice(0, 10)}</div> */}
+                  <div className="recurring-total">{r.start_date.slice(0, 10)}</div>
                   <div className="recurring-total">{r.last_run_date && r.last_run_date.slice(0, 10)}</div>
-                  <div className="recurring-total">{r.next_run_date && r.next_run_date.slice(0, 10)}</div>
+                  <div className="recurring-total">{r.next_run_date ? r.next_run_date.slice(0, 10) : r.start_date.slice(0, 10)}</div>
                   <div className="recurring-total">{r.cType}</div>
                   <div className="recurring-total">{r.cTitle}</div>
                   <div className="recurring-total">{r.username}</div>
@@ -140,8 +154,8 @@ export default function RecurringScreen() {
                   </div>
                 </div>
               ))}
-        </div>
-      </div>
+        </div> */}
+      </div> 
       <FaPlusCircle
           size={50}
           className="recurring-create-button"
@@ -160,5 +174,57 @@ export default function RecurringScreen() {
         handleData={createRecurring}
       />
     </Container>
+  );
+}
+
+function Recurring({r, handleUpdate, handleDelete}) {
+  
+  return (
+    <div className="recurring-box">
+      <div className="recurring-box-row">
+        <div className="recurring-box-title">
+          {r.title}
+        </div>
+      </div>
+      <div className="recurring-box-row">
+        <div className="recurring-box-desc">
+          {r.discription}
+        </div>
+        <div className="recurring-box-amount">
+          {r.amount}
+        </div>
+      </div>
+      <div className="recurring-box-row">
+        <div className="recurring-box-category">
+          {r.cTitle}
+        </div>
+        <div className="recurring-box-user">
+          {r.username}
+        </div>
+      </div>
+      
+      <div className="recurring-box-row">
+        <div className="recurring-box-next-date">
+          {r.next_run_date ? r.next_run_date.slice(0, 10) : r.start_date.slice(0, 10)}
+        </div>
+        <div className="recurring-box-freq">
+        {r.freq.toUpperCase()}
+        </div>
+      </div>
+      <div className="recurring-box-row">
+        <FaEdit
+            size={15}
+            className="recurring-box-action-button"
+            color="green"
+            onClick={handleUpdate}
+          />
+          <FaTrash
+            size={15}
+            className="recurring-box-action-button"
+            color="red"
+            onClick={handleDelete}
+        />
+      </div>
+    </div>
   );
 }
