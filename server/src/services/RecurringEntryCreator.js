@@ -24,7 +24,7 @@ RecurringEntryCreator.prototype.run = function run() {
 
 RecurringEntryCreator.prototype.shouldCreateEntry = function shouldCreateEntry(recurring) {
     const now = new Date();
-    if(recurring.start_date > now) {
+    if(recurring.start_date.toDateString() > now.toDateString()) {
         return false;
     }
     if(recurring.last_run_date==null) {
@@ -62,20 +62,24 @@ RecurringEntryCreator.prototype.createEntry = function createEntry(recurring) {
 RecurringEntryCreator.prototype.updateRecurring = function updateRecurring(recurring) {
     const now = new Date();
     recurring.last_run_date = new Date();
+    const d = now.getDate();
     
     switch(recurring.freq) {
         case 'week':
             now.setDate(now.getDate() +7)
-       	    break;
-	case 'bi-week':
+            break;
+        case 'bi-week':
             now.setDate(now.getDate() +14)
-	    break;
+            break;
         case 'month':
             now.setMonth(now.getMonth() +1)
-	    break;
+            if(d > now.getDate()) {
+                now.setDate(-1);
+            }
+            break;
         case 'year':
             now.setFullYear(now.getFullYear() +1)
-	    break;
+            break;
         default:
             console.log("Nothing");
     }
