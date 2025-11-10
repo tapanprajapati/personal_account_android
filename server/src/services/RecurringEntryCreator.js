@@ -66,12 +66,16 @@ RecurringEntryCreator.prototype.updateRecurring = function updateRecurring(recur
     switch(recurring.freq) {
         case 'week':
             now.setDate(now.getDate() +7)
-        case 'bi-week':
+       	    break;
+	case 'bi-week':
             now.setDate(now.getDate() +14)
+	    break;
         case 'month':
             now.setMonth(now.getMonth() +1)
+	    break;
         case 'year':
             now.setFullYear(now.getFullYear() +1)
+	    break;
         default:
             console.log("Nothing");
     }

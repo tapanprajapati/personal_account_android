@@ -29,7 +29,7 @@ const server = express();
  *
  */
 
-const allowedOrigins = ['https://personal-account-8464830477.us-central1.run.app', '10.0.0.183'];
+const allowedOrigins = ['https://personal-account-8464830477.us-central1.run.app', 'http://10.0.0.183:5173'];
 
 const corsOptions = {
   origin: (origin, callback) => {
