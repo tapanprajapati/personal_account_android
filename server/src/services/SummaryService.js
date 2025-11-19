@@ -500,4 +500,41 @@ SummaryService.prototype.getAllCategoriesTotalYear =
     }
   };
 
+SummaryService.prototype.getAllCategoriesSummary =
+  async function getAllCategoriesSummary(params, query) {
+    const get = mysql.format(queries.summary.getAllCategoriesSummary, [
+      params.type,
+      query.year,
+    ]);
+  
+    console.log(`Query to get all categories summary: ${get}`);
+
+    try {
+    let result = await database.query(get);
+
+    const transformed = Object.values(
+      result.reduce((acc, { title, month, total }) => {
+        if (!acc[title]) {
+          acc[title] = { title, months: new Array(12).fill(0) };
+        }
+        acc[title].months[parseInt(month) - 1] = total;
+        return acc;
+      }, {})
+    );
+
+    return {
+      success: true,
+      statusCode: 200,
+      message: transformed,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      statusCode: 500,
+      message: "Unexpected error. Please try again after sometime.",
+      error,
+    };
+  }
+};
+
 module.exports = SummaryService;

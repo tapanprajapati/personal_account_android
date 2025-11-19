@@ -78,4 +78,11 @@ router
     validate(summarySchema.getAllCategoriesTotal),
     summaryController.getAllCategoriesTotalYear
   );
+
+router
+  .route("/category/all/:type")
+  .get(
+    validate(summarySchema.getAllCategoriesSummary),
+    summaryController.getAllCategoriesSummary
+  );
 module.exports = router;

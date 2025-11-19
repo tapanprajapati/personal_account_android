@@ -74,4 +74,12 @@ module.exports = {
       groupid: Joi.string().required(),
     }),
   },
+  getAllCategoriesSummary: {
+    params: Joi.object({
+      type: Joi.string().required().equal("income", "expense"),
+    }),
+    query: Joi.object({
+      year: Joi.string().required(),
+    }),
+  },
 };

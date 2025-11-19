@@ -81,6 +81,23 @@ module.exports = {
           EXTRACT(MONTH FROM t.date)
         ORDER BY
           year DESC,
+          month;`,
+    getAllCategoriesSummary:
+      `SELECT 
+          c.title ,
+          DATE_FORMAT(e.date , '%m') AS month,
+          SUM(e.amount ) AS total
+      FROM 
+          entries e
+      JOIN categories c 
+      WHERE e.categoryid = c.id 
+      AND c.type = ?
+      AND DATE_FORMAT(e.date , '%Y') = ?
+      GROUP BY 
+          c.title , 
+          DATE_FORMAT(e.date , '%m')
+      ORDER BY 
+          c.title , 
           month;`
   },
   recurring: {
