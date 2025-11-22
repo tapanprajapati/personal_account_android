@@ -80,7 +80,7 @@ export default function DashboardScreen() {
   useEffect(() => {
     getCategoryData("income");
     getCategoryData("expense");
-  }, []);
+  }, [date]);
 
   return (
     <Container>

@@ -360,4 +360,25 @@ export default class EntryDBHandler {
       })
     });
   }
+
+  getCategorySummary(type, year) {
+    const getAPI = `${this.api.summary.getCategorySummary()}${type}?year=${year}`
+    return new Promise((resolve, reject) => {
+      console.log('Fetching category summary from Database');
+      console.log(getAPI)
+      fetch(getAPI, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
+      .then((response)=>response.json())
+      .then(json=>{
+        console.log(json)
+        resolve(json)
+      })
+      .catch(error=>{
+        reject(error)
+      })
+    });
+  }
 }

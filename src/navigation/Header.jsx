@@ -30,6 +30,9 @@ export default function Header() {
       case 'recurring':
         navigate('/recurring');
         break;
+      case 'summary':
+        navigate('/summary');
+        break;
       case 'add-entry':
         navigate('/add-entry');
         break;
@@ -119,6 +122,9 @@ export default function Header() {
                 </button>
                 <button onClick={() => handleMenuAction('recurring')}>
                   Recurring
+                </button>
+                <button onClick={() => handleMenuAction('summary')}>
+                  Summary
                 </button>
               </div>
             )}
