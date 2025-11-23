@@ -83,4 +83,5 @@ amplifytools.xcconfig
 **.sample
 
 .env
+WebStorage.js
 #amplify-do-not-edit-end
