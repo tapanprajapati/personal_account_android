@@ -12,6 +12,7 @@ const entryRoutes = require("../src/routes/entryRoute");
 const summaryRoutes = require("../src/routes/summaryRoute");
 const recurringRoutes = require("../src/routes/recurringRoute");
 const RecurringEntryCreator = require("../src/services/RecurringEntryCreator");
+const smartQueryRoutes = require("../src/routes/smartQueryRoute");
 
 const recurringEntryCreator = new RecurringEntryCreator();
 
@@ -74,6 +75,7 @@ server.use("/api/category", categoryRoutes);
 server.use("/api/entry", entryRoutes);
 server.use("/api/summary", summaryRoutes);
 server.use("/api/recurring", recurringRoutes);
+server.use("/api/smartquery", smartQueryRoutes);
 /**
  * Handling unexpected and validation errors
  */
