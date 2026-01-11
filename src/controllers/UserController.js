@@ -1,7 +1,7 @@
 function UserController(service) {
   this.service = service;
   this.createUser = this.createUser.bind(this);
-  this.getUser = this.getUser.bind(this);
+  this.loginUser = this.loginUser.bind(this);
   this.getAllUsers = this.getAllUsers.bind(this);
 }
 
@@ -11,8 +11,8 @@ UserController.prototype.createUser = async function createUser(req, res) {
   res.status(response.statusCode).send(response);
 };
 
-UserController.prototype.getUser = async function getUser(req, res) {
-  let response = await this.service.getUser(req.params);
+UserController.prototype.loginUser = async function loginUser(req, res) {
+  let response = await this.service.loginUser(req.body);
   console.log(response);
   res.status(response.statusCode).send(response);
 };

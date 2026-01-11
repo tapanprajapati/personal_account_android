@@ -10,8 +10,7 @@ const userController = new UserController(new UserService());
 router.route("/").get(validate(userSchema.getAll), userController.getAllUsers);
 
 router
-  .route("/:username")
-  .get(validate(userSchema.validate), userController.getUser)
-  .post(validate(userSchema.validate), userController.createUser);
+  .route("/login")
+  .post(validate(userSchema.login), userController.loginUser);
 
 module.exports = router;

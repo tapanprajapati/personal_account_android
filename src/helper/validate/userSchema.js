@@ -1,9 +1,10 @@
 const { Joi } = require("express-validation");
 
 module.exports = {
-  validate: {
-    params: Joi.object({
+  login: {
+    body: Joi.object({
       username: Joi.string().required(),
+      password: Joi.string().required(),
     }),
   },
   getAll: {

@@ -1,7 +1,7 @@
 module.exports = {
   user: {
     createUser: "insert into users values ( ? )",
-    getUser: "select username from users where username=?",
+    getUser: "select * from users where username=?",
     getAllUsers: "select username from usergroupmap where groupid=?",
   },
   group: {
