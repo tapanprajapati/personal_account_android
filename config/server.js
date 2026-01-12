@@ -85,6 +85,7 @@ server.use((err, req, res, next) => {
       message: err,
     });
   }
+  console.log(err);
   return res.status(500).json(err);
 });
 

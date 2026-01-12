@@ -80,10 +80,6 @@ UserService.prototype.loginUser = async function loginUser(body) {
 
         if (result.length === 1) {
             const user = result[0];
-            const pass = await bcrypt.hash(body.password, 10);
-            console.log(body.password);
-            console.log(pass);
-            console.log(user);
             const isMatch = await bcrypt.compare(body.password, user.password);
             if (!isMatch) {
                 return {
