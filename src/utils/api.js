@@ -13,9 +13,30 @@ class API {
         this.summary = new SummaryAPI(this.storage);
         this.category = new CategoryAPI(this.storage);
         this.user = new UserAPI(this.storage);
-        this.recurring = new RecurringAPI(this.storage)
+        this.recurring = new RecurringAPI(this.storage);
 
         return API._instance;
+    }
+
+    headerForBody() {
+        return {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true',
+          'Authorization': 'Bearer ' + this.storage.jwtToken
+        };
+    }
+
+    header() {
+        return {
+          'ngrok-skip-browser-warning': 'true',
+          'Authorization': 'Bearer ' + this.storage.jwtToken
+        };
+    }
+
+    logout() {
+        this.storage.jwtToken = null;
+        this.storage.user = null;
     }
 }
 
@@ -33,6 +54,8 @@ class UserAPI {
     getAllUsers() { 
         return `${this.storage.IP}/api/user?`;
     }
+
+    login() { return `${this.storage.IP}/api/user/login`; }
 }
 
 class SummaryAPI {

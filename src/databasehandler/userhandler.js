@@ -8,6 +8,7 @@ export default class UserDBHandler {
         {
           return UserDBHandler._instance;
         }
+        console.log('Creating UserDBHandler instance');
         UserDBHandler._instance = this;
         this.api = new API()
         return UserDBHandler._instance;
@@ -21,6 +22,31 @@ export default class UserDBHandler {
                 headers: {
                     'ngrok-skip-browser-warning': 'true'
                 }
+            })
+            .then((response)=>response.json())
+            .then(json=>{
+                resolve(json)
+            })
+            .catch(error=>{
+                reject(error)
+            })
+        });
+    }
+
+    login(user, pass) {
+        const loginAPI = this.api.user.login()
+        return new Promise((resolve, reject) => {
+            fetch(loginAPI, {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': 'true'
+                },
+                method: 'POST',
+                body: JSON.stringify({
+                    username: user,
+                    password: pass
+                })
             })
             .then((response)=>response.json())
             .then(json=>{

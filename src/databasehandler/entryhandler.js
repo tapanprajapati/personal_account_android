@@ -20,11 +20,7 @@ export default class EntryDBHandler {
       console.log('Starting transaction');
       fetch(this.api.entry.createEntry(),{
         method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          'ngrok-skip-browser-warning': 'true'
-        },
+        headers: this.api.headerForBody(),
         body:JSON.stringify({
           title: entry.title,
           description: entry.description,
@@ -48,11 +44,7 @@ export default class EntryDBHandler {
       console.log('Starting transaction to update entry');
       fetch(this.api.entry.updateEntry(),{
         method: 'PUT',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          'ngrok-skip-browser-warning': 'true'
-        },
+        headers: this.api.headerForBody(),
         body:JSON.stringify({
           id: entry.id,
           title: entry.title,
@@ -77,9 +69,7 @@ export default class EntryDBHandler {
       console.log('Delete entry '+entry);
       fetch(`${this.api.entry.deleteEntry()}${entry.id}`,{
         method: 'DELETE',
-        headers: {
-          'ngrok-skip-browser-warning': 'true'
-        }
+        headers: this.api.header()
       })
       .then((response)=>response.json())
       .then(json=>{
@@ -95,9 +85,7 @@ export default class EntryDBHandler {
       console.log('Fetching All Years from Database');
       console.log(this.api.summary.getAllYears())
       fetch(`${this.api.summary.getAllYears()}`, {
-        headers: {
-          'ngrok-skip-browser-warning': 'true'
-        }
+        headers: this.api.header()
       })
       .then((response)=>response.json())
       .then(json=>{
@@ -115,9 +103,7 @@ export default class EntryDBHandler {
       console.log('Fetching All Months from Database for year: '+year);
       console.log(`${this.api.summary.getAllMonths()}date=${year}`);
       fetch(`${this.api.summary.getAllMonths()}date=${year}`, {
-        headers: {
-          'ngrok-skip-browser-warning': 'true'
-        }
+        headers: this.api.header()
       })
       .then((response)=>response.json())
       .then(json=>{
@@ -134,9 +120,7 @@ export default class EntryDBHandler {
     return new Promise((resolve, reject) => {
       console.log('Fetching Years from Database');
       fetch(`${this.api.summary.getYears()}search=${searchString}&categories=${categories}`, {
-        headers: {
-          'ngrok-skip-browser-warning': 'true'
-        }
+        headers: this.api.header()
       })
       .then((response)=>response.json())
       .then(json=>{
@@ -152,9 +136,7 @@ export default class EntryDBHandler {
     return new Promise((resolve, reject) => {
       console.log('Fetching DifferenceData from Database');
       fetch(`${this.api.summary.getDifferenceData()}incomeCategories=${incomeCategories}&expenseCategories=${expenseCategories}`, {
-        headers: {
-          'ngrok-skip-browser-warning': 'true'
-        }
+        headers: this.api.header()
       })
       .then((response)=>response.json())
       .then(json=>{
@@ -172,9 +154,7 @@ export default class EntryDBHandler {
       console.log('Fetching months from Database');
       console.log(getAPI)
       fetch(getAPI, {
-        headers: {
-          'ngrok-skip-browser-warning': 'true'
-        }
+        headers: this.api.header()
       })
       .then((response)=>response.json())
       .then(json=>{
@@ -193,9 +173,7 @@ export default class EntryDBHandler {
       console.log('Fetching dates from Database');
       console.log(getAPI);
       fetch(getAPI, {
-        headers: {
-          'ngrok-skip-browser-warning': 'true'
-        }
+        headers: this.api.header()
       })
       .then((response)=>response.json())
       .then(json=>{
@@ -214,9 +192,7 @@ export default class EntryDBHandler {
       console.log('Fetching recent entries from Database');
       console.log(getAPI)
       fetch(getAPI, {
-        headers: {
-          'ngrok-skip-browser-warning': 'true'
-        }
+        headers: this.api.header()
       })
       .then((response)=>response.json())
       .then(json=>{
@@ -241,9 +217,7 @@ export default class EntryDBHandler {
       console.log('Fetching entries from Database');
       console.log(getAPI)
       fetch(getAPI, {
-        headers: {
-          'ngrok-skip-browser-warning': 'true'
-        }
+        headers: this.api.header()
       })
       .then((response)=>response.json())
       .then(json=>{
@@ -261,9 +235,7 @@ export default class EntryDBHandler {
       console.log('Fetching year total from Database');
       console.log(getAPI)
       fetch(getAPI, {
-        headers: {
-          'ngrok-skip-browser-warning': 'true'
-        }
+        headers: this.api.header()
       })
       .then((response)=>response.json())
       .then(json=>{
@@ -282,9 +254,7 @@ export default class EntryDBHandler {
       console.log('Fetching month total from Database');
       console.log(getAPI)
       fetch(getAPI, {
-        headers: {
-          'ngrok-skip-browser-warning': 'true'
-        }
+        headers: this.api.header()
       })
       .then((response)=>response.json())
       .then(json=>{
@@ -303,9 +273,7 @@ export default class EntryDBHandler {
       console.log('Fetching date total from Database');
       console.log(getAPI)
       fetch(getAPI, {
-        headers: {
-          'ngrok-skip-browser-warning': 'true'
-        }
+        headers: this.api.header()
       })
       .then((response)=>response.json())
       .then(json=>{
@@ -325,9 +293,7 @@ export default class EntryDBHandler {
       console.log('Fetching month total for all categories from Database');
       console.log(getAPI)
       fetch(getAPI, {
-        headers: {
-          'ngrok-skip-browser-warning': 'true'
-        }
+        headers: this.api.header()
       })
       .then((response)=>response.json())
       .then(json=>{
@@ -346,9 +312,7 @@ export default class EntryDBHandler {
       console.log('Fetching year total for all categories from Database');
       console.log(getAPI)
       fetch(getAPI, {
-        headers: {
-          'ngrok-skip-browser-warning': 'true'
-        }
+        headers: this.api.header()
       })
       .then((response)=>response.json())
       .then(json=>{
@@ -367,9 +331,7 @@ export default class EntryDBHandler {
       console.log('Fetching category summary from Database');
       console.log(getAPI)
       fetch(getAPI, {
-        headers: {
-          'ngrok-skip-browser-warning': 'true'
-        }
+        headers: this.api.header()
       })
       .then((response)=>response.json())
       .then(json=>{
