@@ -6,39 +6,8 @@ import './YearDifference.css';
 
 export default function YearDifference({
   year,
-  addToIncome,
-  addToExpense
 }) {
-  const [income, setIncome] = useState(0);
-  const [expense, setExpense] = useState(0);
-
-  const handleAddToIncome = (amount) => {
-    amount = parseFloat(amount);
-    setIncome(prevIncome => prevIncome + amount);
-    addToIncome(amount);
-  };
-
-  useEffect(() => {
-    let incomeTotal = 0;
-    let expenseTotal = 0;
-    year.months.forEach((month, index) => {
-      incomeTotal+=month.incomeTotal;
-      expenseTotal+=month.expenseTotal;
-    })
-    setIncome(incomeTotal);
-    setExpense(expenseTotal);
-    addToIncome(incomeTotal);
-    addToExpense(expenseTotal);
-  }, []);
-
-
-  const handleAddToExpense = (amount) => {
-    amount = parseFloat(amount);
-    setExpense(prevExpense => prevExpense + amount);
-    addToExpense(amount);
-  };
-
-  const difference = income - expense;
+  const difference = year.income - year.expense;
   let diffColor = TextBackground.savingGreen;
   if (difference < 0) {
     diffColor = TextBackground.savingRed;
@@ -67,10 +36,10 @@ export default function YearDifference({
       <div className="year-total">
         <div className="year-total-title">Total</div>
         <div className="year-total-income">
-          $ {formatLargeNumber(income)}
+          $ {formatLargeNumber(year.income)}
         </div>
         <div className="year-total-expense">
-          $ {formatLargeNumber(expense)}
+          $ {formatLargeNumber(year.expense)}
         </div>
         <div className="year-total-saving" style={{ color: diffColor }}>
           $ {formatLargeNumber(difference)}

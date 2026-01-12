@@ -26,23 +26,13 @@ export default function DifferenceScreen() {
   const categoryHandler = new CategoryDBHandler();
   const userHandler = new UserDBHandler();
 
-  const addToIncome = (amount) => {
-    amount = parseFloat(amount);
-    setIncome(prevIncome => prevIncome + amount);
-  };
-
-  const addToExpense = (amount) => {
-    amount = parseFloat(amount);
-    setExpense(prevExpense => prevExpense + amount);
-  };
-
   const getData = (iCategories, eCategories) => {
     setEdit(false);
     entryHandler.getDifferenceData(getSelectedCategories(iCategories), getSelectedCategories(eCategories)).then((result) => {
       if (result.success) {
         const yearsData = result.message;
         // console.log(yearsData);
-        setYears(yearsData);
+        formatAndSetYears(yearsData);
         // yearsData.map(year=>console.log(year));
         setRefresh(false);
       } else {
@@ -108,13 +98,21 @@ export default function DifferenceScreen() {
     getUsers();
   }, []);
 
-  const handleRefresh = () => {
-    setEdit(true);
-    setIncome(0);
-    setExpense(0);
-    setRefresh(true);
-    getYears();
-  };
+  const formatAndSetYears = (yearsData) => {
+    let totalIncome = 0;
+    let totalExpense = 0;
+    yearsData.forEach(year => {
+      const income = year.months.reduce((total, month) => total + month.incomeTotal, 0);
+      const expense = year.months.reduce((total, month) => total + month.expenseTotal, 0);
+      year.income = income;
+      year.expense = expense;
+      totalIncome += income;
+      totalExpense += expense;
+    });
+    setYears(yearsData);
+    setIncome(totalIncome);
+    setExpense(totalExpense);
+  } 
 
   const saveIncomeCategories = (categories, user = "ALL") => {
     console.log("CategoryModalClosed: " + user);
@@ -171,8 +169,6 @@ export default function DifferenceScreen() {
             <YearDifference
               key={index}
               year={year}
-              addToIncome={addToIncome}
-              addToExpense={addToExpense}
             />
           ))}
         </div>
