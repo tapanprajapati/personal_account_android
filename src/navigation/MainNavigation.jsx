@@ -13,6 +13,9 @@ import ConfigScreen from '../screens/Config/ConfigScreen';
 import ReportScreen from '../screens/Report/ReportScreen';
 import RecurringScreen from '../screens/Recurring/RecurringScreen';
 import CategorySummaryScreen from '../screens/CategorySummary/CategorySummaryScreen';
+import LoginScreen from '../screens/Login/LoginScreen';
+import { AuthProvider } from './AuthContext';
+import ProtectedRoute from './ProtectedRoutes';
 
 // Layout component that includes the header
 function Layout({ children }) {
@@ -29,87 +32,93 @@ function Layout({ children }) {
 export default function MainNavigation() {
   return (
     <div className="main-navigation">
-      <Routes>
-        {/* Dashboard route */}
-        <Route path="/" element={
-          <Layout>
-            <DashboardScreen />
-          </Layout>
-        } />
-        <Route path="/dashboard" element={
-          <Layout>
-            <DashboardScreen />
-          </Layout>
-        } />
-        
-        {/* Account Type routes */}
-        <Route path="/accountType/expense" element={
-          <Layout>
-            <AccountType type="Expense" />
-          </Layout>
-        } />
-        <Route path="/accountType/income" element={
-          <Layout>
-            <AccountType type="Income" />
-          </Layout>
-        } />
-        
-        {/* Difference route */}
-        <Route path="/difference" element={
-          <Layout>
-            <Difference />
-          </Layout>
-        } />
-        
-        {/* Data Entry routes */}
-        <Route path="/add-entry" element={
-          <Layout>
-            <AddEntry />
-          </Layout>
-        } />
-        <Route path="/update-entry" element={
-          <Layout>
-            <UpdateEntry />
-          </Layout>
-        } />
-        
-        {/* Other routes */}
-        <Route path="/entry-list/" element={
-          <Layout>
-            <EntryList />
-          </Layout>
-        } />
-        <Route path="/recent-entries" element={
-          <Layout>
-            <RecentEntries />
-          </Layout>
-        } />
-        <Route path="/manage-categories" element={
-          <Layout>
-            <ManageCategoriesScreen />
-          </Layout>
-        } />
-        <Route path="/config" element={
-          <Layout>
-            <ConfigScreen />
-          </Layout>
-        } />
-        <Route path="/report" element={
-          <Layout>
-            <ReportScreen />
-          </Layout>
-        } />
-        <Route path="/recurring" element={
-          <Layout>
-            <RecurringScreen />
-          </Layout>
-        } />
-        <Route path="/summary" element={
-          <Layout>
-            <CategorySummaryScreen />
-          </Layout>
-        } />
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<LoginScreen />} />
+          <Route element={<ProtectedRoute />}>
+            {/* Dashboard route */}
+            <Route path="/" element={
+              <Layout>
+                <DashboardScreen />
+              </Layout>
+            } />
+            <Route path="/dashboard" element={
+              <Layout>
+                <DashboardScreen />
+              </Layout>
+            } />
+            
+            {/* Account Type routes */}
+            <Route path="/accountType/expense" element={
+              <Layout>
+                <AccountType type="Expense" />
+              </Layout>
+            } />
+            <Route path="/accountType/income" element={
+              <Layout>
+                <AccountType type="Income" />
+              </Layout>
+            } />
+            
+            {/* Difference route */}
+            <Route path="/difference" element={
+              <Layout>
+                <Difference />
+              </Layout>
+            } />
+            
+            {/* Data Entry routes */}
+            <Route path="/add-entry" element={
+              <Layout>
+                <AddEntry />
+              </Layout>
+            } />
+            <Route path="/update-entry" element={
+              <Layout>
+                <UpdateEntry />
+              </Layout>
+            } />
+            
+            {/* Other routes */}
+            <Route path="/entry-list/" element={
+              <Layout>
+                <EntryList />
+              </Layout>
+            } />
+            <Route path="/recent-entries" element={
+              <Layout>
+                <RecentEntries />
+              </Layout>
+            } />
+            <Route path="/manage-categories" element={
+              <Layout>
+                <ManageCategoriesScreen />
+              </Layout>
+            } />
+            <Route path="/config" element={
+              <Layout>
+                <ConfigScreen />
+              </Layout>
+            } />
+            <Route path="/report" element={
+              <Layout>
+                <ReportScreen />
+              </Layout>
+            } />
+            <Route path="/recurring" element={
+              <Layout>
+                <RecurringScreen />
+              </Layout>
+            } />
+            <Route path="/summary" element={
+              <Layout>
+                <CategorySummaryScreen />
+              </Layout>
+            } />
+          </Route>
+        </Routes>
+          
+      </AuthProvider>
     </div>
   );
 }
