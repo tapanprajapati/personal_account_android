@@ -17,7 +17,7 @@ export default function CategorySummaryScreen() {
   useEffect(() => {
     getCategorySummary("income", year);
     getCategorySummary("expense", year);
-  }, []);
+  }, [year]);
 
   const getCategorySummary = async (type, year = year) => {
     try {
@@ -54,7 +54,13 @@ export default function CategorySummaryScreen() {
     <Container>
       <div className="category-summary-screen">
         <h2>Category Summary</h2>
-        
+
+        <select value={year} onChange={(e) => setYear(e.target.value)}>
+          {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i).map((year) => (
+            <option key={year} value={year}>{year}</option>
+          ))}
+        </select>    
+
         <h3>Income Summary</h3>
         <table className="category-summary-container">
           <tr className="category-summary-header-row">
