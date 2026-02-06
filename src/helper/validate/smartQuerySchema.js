@@ -4,6 +4,7 @@ module.exports = {
   validate: {
     body: Joi.object({
       query: Joi.string().required(),
+      dryRun: Joi.boolean().optional(),
     }),
   },
 };

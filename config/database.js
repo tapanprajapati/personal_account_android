@@ -20,6 +20,23 @@ Database.prototype.query = function query(sql, args) {
     })
   });
 };
+Database.prototype.queryWithFields = function queryWithFields(sql, args) {
+  return new Promise((resolve, reject) => {
+    this.connectionPool.getConnection((err, connection) => {
+      if (err) {
+        return reject(err);
+      }
+      connection.query(sql, args, (err2, result, fields) => {
+        if (err2) {
+          connection.release();
+          return reject(err2);
+        }
+        connection.release();
+        return resolve({ rows: result, fields });
+      });
+    });
+  });
+};
 Database.prototype.connect = function connect() {
   return new Promise((resolve, reject) => {
     this.connectionPool.getConnection((err,connection) => {

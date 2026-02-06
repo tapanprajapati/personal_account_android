@@ -109,5 +109,9 @@ module.exports = {
       "update recurring set title = ?, description = ?, amount = ?, categoryid = ?, username = ?, freq = ?, start_date = ?, last_run_date = null, next_run_date = null where id = ?",
     getRecurrings: "select r.id, r.title, r.description, r.amount, r.start_date, r.creation_date, r.last_run_date, r.next_run_date, r.freq, r.username, c.id as cId, c.title as cTitle, c.Type as cType from recurring as r, categories as c where r.categoryid = c.id;",
     deleteRecurring: "delete from recurring where id = ?",
+  },
+  smartQuery: {
+    insertAudit:
+      "insert into smart_query_audit (input_text, sql_text, params_json, dry_run, status, error_message, rows_affected) values (?,?,?,?,?,?,?)",
   }
 };
